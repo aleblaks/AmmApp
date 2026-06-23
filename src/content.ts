@@ -155,3 +155,89 @@ export const privacyData: Record<string, AppPrivacy> = {
   airportshift,
   // balancelife: { ... }  // add Balance Life here when its text is ready
 }
+
+// --- Support / Assistenza (Apple requires a "Support URL") -------------------
+// Only verified facts: contact email + how the app works (from the privacy text).
+
+const airportshiftSupport: AppPrivacy = {
+  appName: 'AirportShift',
+  packageId: 'com.aleblaks.TurniAeroporto',
+  docs: {
+    it: {
+      title: 'Assistenza — AirportShift',
+      lastUpdated: 'Ultimo aggiornamento: 24 giugno 2026',
+      intro:
+        "Hai bisogno di aiuto con AirportShift? Siamo qui per aiutarti. Scrivici e ti rispondiamo il prima possibile.",
+      sections: [
+        {
+          heading: 'Come contattarci',
+          paragraphs: [
+            "Per assistenza, segnalazione di problemi o suggerimenti, scrivi all'indirizzo qui sotto. Indica il modello del telefono e una breve descrizione del problema: ci aiuta a risponderti più in fretta.",
+          ],
+        },
+        {
+          heading: 'Domande frequenti',
+          bullets: [
+            {
+              label: 'Come importo i turni',
+              text: 'Importa il PDF dei turni nell’app: viene letto ed elaborato direttamente sul tuo telefono.',
+            },
+            {
+              label: 'Come condivido i turni con un collega',
+              text: 'Genera un QR code dall’app; il collega lo inquadra e importa i turni. I dati passano direttamente da telefono a telefono.',
+            },
+            {
+              label: 'Perché l’app chiede fotocamera e calendario',
+              text: 'La fotocamera serve solo a scansionare il QR di un collega; il calendario solo, su tua richiesta, ad aggiungere i turni al calendario del telefono.',
+            },
+          ],
+        },
+      ],
+      contact: {
+        heading: 'Contatti',
+        text: 'Scrivici a:',
+        email: 'aleblaks@gmail.com',
+      },
+    },
+    en: {
+      title: 'Support — AirportShift',
+      lastUpdated: 'Last updated: 24 June 2026',
+      intro:
+        'Need help with AirportShift? We’re here for you. Get in touch and we’ll reply as soon as possible.',
+      sections: [
+        {
+          heading: 'How to reach us',
+          paragraphs: [
+            'For support, bug reports, or suggestions, write to the address below. Please include your phone model and a short description of the issue: it helps us reply faster.',
+          ],
+        },
+        {
+          heading: 'Frequently asked questions',
+          bullets: [
+            {
+              label: 'How do I import my shifts',
+              text: 'Import the shift PDF into the app: it is read and processed directly on your phone.',
+            },
+            {
+              label: 'How do I share shifts with a colleague',
+              text: 'Generate a QR code in the app; your colleague scans it and imports the shifts. The data travels directly device-to-device.',
+            },
+            {
+              label: 'Why does the app ask for camera and calendar',
+              text: "The camera is used only to scan a colleague's QR code; the calendar only, at your request, to add shifts to your phone's calendar.",
+            },
+          ],
+        },
+      ],
+      contact: {
+        heading: 'Contact',
+        text: 'Write to us at:',
+        email: 'aleblaks@gmail.com',
+      },
+    },
+  },
+}
+
+export const supportData: Record<string, AppPrivacy> = {
+  airportshift: airportshiftSupport,
+}

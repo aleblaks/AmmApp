@@ -1,15 +1,15 @@
 import { Link, useParams } from 'react-router-dom'
-import { privacyData } from './content'
+import { supportData } from './content'
 import { DocPage } from './DocPage'
 
-export function PrivacyPage() {
+export function SupportPage() {
   const { app } = useParams()
-  const entry = app ? privacyData[app] : undefined
+  const entry = app ? supportData[app] : undefined
 
   if (!entry) {
     return (
       <main className="page">
-        <h1>Privacy</h1>
+        <h1>Assistenza / Support</h1>
         <p>Pagina non trovata. / Page not found.</p>
         <p>
           <Link to="/">Home</Link>
@@ -21,7 +21,7 @@ export function PrivacyPage() {
   return (
     <DocPage
       entry={entry}
-      footerLinks={[{ to: `/${app}/support`, label: 'Assistenza · Support' }]}
+      footerLinks={[{ to: `/${app}/privacy`, label: 'Privacy' }]}
     />
   )
 }

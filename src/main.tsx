@@ -4,6 +4,7 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Home } from './Home'
 import { OpenPage } from './OpenPage'
 import { PrivacyPage } from './PrivacyPage'
+import { SupportPage } from './SupportPage'
 import './styles.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -13,6 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<Home />} />
         <Route path="/:app/open" element={<OpenPage />} />
         <Route path="/:app/privacy" element={<PrivacyPage />} />
+        <Route path="/:app/support" element={<SupportPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </HashRouter>
