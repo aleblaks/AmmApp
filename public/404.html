@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AirportShift — Privacy</title>
+    <script>
+      // Safety net for path-style deep links (e.g. /AmmApp/airportshift/privacy).
+      // The primary URLs use HashRouter (/AmmApp/#/airportshift/privacy) which
+      // GitHub Pages serves as index.html with HTTP 200 and never hits this file.
+      // If someone reaches a path-style URL, convert it to the hash form so the
+      // SPA still resolves the right page. The first path segment (the repo name)
+      // is kept, so this works regardless of the repo's name.
+      (function () {
+        var loc = window.location
+        var segments = loc.pathname.split('/').filter(Boolean)
+        var base = segments.length ? '/' + segments[0] + '/' : '/'
+        var rest = segments.slice(1).join('/')
+        var hash = rest ? '#/' + rest : loc.hash || '#/'
+        loc.replace(loc.origin + base + hash + loc.search)
+      })()
+    </script>
+  </head>
+  <body>
+    <p>Redirecting…</p>
+  </body>
+</html>
