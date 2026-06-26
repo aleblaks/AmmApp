@@ -8,8 +8,8 @@ import {
   iosStoreUrl,
   storeUrlFor,
 } from './apps'
+import { useT } from './lang'
 
-// How long to wait for the app to take over before sending the user to the store.
 const FALLBACK_MS = 1800
 
 type Phase = 'opening' | 'fallback' | 'desktop' | 'unknown'
@@ -18,6 +18,7 @@ export function OpenPage() {
   const { app } = useParams()
   const [params] = useSearchParams()
   const entry = app ? apps[app] : undefined
+  const t = useT()
 
   const os = useMemo(() => detectOS(), [])
   const deepLink = useMemo(
@@ -30,27 +31,15 @@ export function OpenPage() {
   const hiddenRef = useRef(false)
 
   useEffect(() => {
-    if (!entry) {
-      setPhase('unknown')
-      return
-    }
-    if (os === 'other') {
-      setPhase('desktop')
-      return
-    }
+    if (!entry) { setPhase('unknown'); return }
+    if (os === 'other') { setPhase('desktop'); return }
 
-    // If the app opens, the page is backgrounded; cancel the store redirect.
-    const markHidden = () => {
-      if (document.hidden) hiddenRef.current = true
-    }
-    const markHiddenHard = () => {
-      hiddenRef.current = true
-    }
+    const markHidden = () => { if (document.hidden) hiddenRef.current = true }
+    const markHiddenHard = () => { hiddenRef.current = true }
     document.addEventListener('visibilitychange', markHidden)
     window.addEventListener('pagehide', markHiddenHard)
     window.addEventListener('blur', markHiddenHard)
 
-    // Try to open the app.
     window.location.href = deepLink
 
     const timer = window.setTimeout(() => {
@@ -73,65 +62,57 @@ export function OpenPage() {
   if (!entry) {
     return (
       <main className="page open">
-        <h1>Link non valido</h1>
-        <p>Invalid link.</p>
-        <p>
-          <Link to="/">Home</Link>
-        </p>
+        <h1>{t({ it: 'Link non valido', en: 'Invalid link' })}</h1>
+        <div className="notice">
+          <p><Link to="/">{t({ it: 'Torna alla home', en: 'Back to home' })}</Link></p>
+        </div>
       </main>
     )
   }
 
+  const initials = entry.appName.split(/(?=[A-Z])/).map(s => s[0]).slice(0,2).join('')
+
   return (
-    <main className="page open">
+    <main className="open">
+      <div className="app-icon" aria-hidden>{initials}</div>
       <h1>{entry.appName}</h1>
 
       {phase !== 'desktop' ? (
         <>
+          {phase === 'opening' && <div className="spinner" aria-hidden />}
           <p className="lead">
-            Apertura dell'app in corso…
-            <br />
-            <span className="muted">Opening the app…</span>
+            {t({ it: "Apertura dell'app in corso…", en: 'Opening the app…' })}
           </p>
-          <a className="btn btn-primary" href={deepLink}>
-            Apri {entry.appName} · Open {entry.appName}
+          <a className="btn btn-primary btn-lg" href={deepLink}>
+            {t({ it: `Apri ${entry.appName}`, en: `Open ${entry.appName}` })}
           </a>
           {storeUrl && (
-            <p className="muted small">
-              Non si apre? Scaricala qui sotto.
-              <br />
-              Not opening? Get it below.
+            <p className="muted small" style={{ marginTop: 18 }}>
+              {t({ it: 'Non si apre? Scaricala qui sotto.', en: "Not opening? Get it below." })}
             </p>
           )}
         </>
       ) : (
         <p className="lead">
-          Apri questo link dal tuo telefono per importare i turni in {entry.appName}.
-          <br />
-          <span className="muted">
-            Open this link on your phone to import the shifts into {entry.appName}.
-          </span>
+          {t({
+            it: `Apri questo link dal tuo telefono per importare i turni in ${entry.appName}.`,
+            en: `Open this link on your phone to import the shifts into ${entry.appName}.`,
+          })}
         </p>
       )}
 
       <div className="stores">
         {(os === 'ios' || os === 'other') && (
-          <a className="btn" href={iosStoreUrl(entry.store.iosAppId)}>
-            App Store (iPhone)
-          </a>
+          <a className="btn" href={iosStoreUrl(entry.store.iosAppId)}>App Store · iPhone</a>
         )}
         {(os === 'android' || os === 'other') && (
-          <a className="btn" href={androidStoreUrl(entry.store.androidPackage)}>
-            Google Play (Android)
-          </a>
+          <a className="btn" href={androidStoreUrl(entry.store.androidPackage)}>Google Play · Android</a>
         )}
       </div>
 
-      <footer className="footer">
-        <p>
-          <Link to={`/${app}/privacy`}>Privacy</Link>
-        </p>
-      </footer>
+      <p className="muted small" style={{ marginTop: 28 }}>
+        <Link to={`/${app}/privacy`}>Privacy</Link> · <Link to={`/${app}/support`}>{t({ it: 'Assistenza', en: 'Support' })}</Link>
+      </p>
     </main>
   )
 }

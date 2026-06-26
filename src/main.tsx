@@ -1,22 +1,9 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { Home } from './Home'
-import { OpenPage } from './OpenPage'
-import { PrivacyPage } from './PrivacyPage'
-import { SupportPage } from './SupportPage'
-import './styles.css'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './site/App'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <HashRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/:app/open" element={<OpenPage />} />
-        <Route path="/:app/privacy" element={<PrivacyPage />} />
-        <Route path="/:app/support" element={<SupportPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </HashRouter>
-  </React.StrictMode>,
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
 )

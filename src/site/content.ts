@@ -1,10 +1,3 @@
-// Privacy content, structured as data so the same layout serves every app.
-// To add a new app (e.g. Balance Life) just add another entry to `privacyData`
-// keyed by the route slug used in /:app/privacy — no new component needed.
-//
-// IMPORTANT: the text below is the approved, verbatim privacy text. Do not
-// describe any data practice that is not stated here.
-
 export type LangCode = 'it' | 'en'
 
 export interface PrivacySection {
@@ -151,14 +144,6 @@ const airportshift: AppPrivacy = {
   },
 }
 
-export const privacyData: Record<string, AppPrivacy> = {
-  airportshift,
-  // balancelife: { ... }  // add Balance Life here when its text is ready
-}
-
-// --- Support / Assistenza (Apple requires a "Support URL") -------------------
-// Only verified facts: contact email + how the app works (from the privacy text).
-
 const airportshiftSupport: AppPrivacy = {
   appName: 'AirportShift',
   packageId: 'com.aleblaks.TurniAeroporto',
@@ -167,7 +152,7 @@ const airportshiftSupport: AppPrivacy = {
       title: 'Assistenza — AirportShift',
       lastUpdated: 'Ultimo aggiornamento: 24 giugno 2026',
       intro:
-        "Hai bisogno di aiuto con AirportShift? Siamo qui per aiutarti. Scrivici e ti rispondiamo il prima possibile.",
+        'Hai bisogno di aiuto con AirportShift? Siamo qui per aiutarti. Scrivici e ti rispondiamo il prima possibile.',
       sections: [
         {
           heading: 'Come contattarci',
@@ -236,6 +221,10 @@ const airportshiftSupport: AppPrivacy = {
       },
     },
   },
+}
+
+export const privacyData: Record<string, AppPrivacy> = {
+  airportshift,
 }
 
 export const supportData: Record<string, AppPrivacy> = {
