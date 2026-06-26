@@ -493,13 +493,9 @@ li { margin: 6px 0; }
   width: 84px;
   height: 84px;
   border-radius: 22px;
-  background: var(--gradient-brand);
-  display: grid;
-  place-items: center;
+  object-fit: cover;
+  display: block;
   margin: 0 auto 22px;
-  color: white;
-  font-weight: 800;
-  font-size: 2rem;
   box-shadow: var(--shadow-glow);
 }
 
