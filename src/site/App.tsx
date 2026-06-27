@@ -21,6 +21,7 @@ function ClientOnly({ children }: { children: ReactNode }) {
   return children
 }
 
+
 export default function App() {
   return (
     <LangProvider>

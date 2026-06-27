@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { useT } from '../lang'
 import { LangSwitch } from './LangSwitch'
+import AmmAppIcon from "../../AmmAppIcon/AmmAppIcone.png"
 
 export function Layout({ children }: { children: ReactNode }) {
   const t = useT()
@@ -10,7 +11,11 @@ export function Layout({ children }: { children: ReactNode }) {
       <header className="site-header">
         <div className="site-header-inner">
           <Link to="/" className="brand" aria-label="AmmApp home">
-            <img src="./icon-ammapp.png" alt="AmmApp" className="brand-mark" />
+            <img
+              src={AmmAppIcon}
+              alt="AmmApp"
+              className="brand-mark"
+            />
             <span>AmmApp</span>
           </Link>
           <nav className="nav-links" aria-label="Primary">

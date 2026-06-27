@@ -144,6 +144,10 @@ const airportshift: AppPrivacy = {
   },
 }
 
+export const privacyData: Record<string, AppPrivacy> = {
+  airportshift,
+}
+
 const airportshiftSupport: AppPrivacy = {
   appName: 'AirportShift',
   packageId: 'com.aleblaks.TurniAeroporto',
@@ -152,7 +156,7 @@ const airportshiftSupport: AppPrivacy = {
       title: 'Assistenza — AirportShift',
       lastUpdated: 'Ultimo aggiornamento: 24 giugno 2026',
       intro:
-        'Hai bisogno di aiuto con AirportShift? Siamo qui per aiutarti. Scrivici e ti rispondiamo il prima possibile.',
+        "Hai bisogno di aiuto con AirportShift? Siamo qui per aiutarti. Scrivici e ti rispondiamo il prima possibile.",
       sections: [
         {
           heading: 'Come contattarci',
@@ -221,10 +225,6 @@ const airportshiftSupport: AppPrivacy = {
       },
     },
   },
-}
-
-export const privacyData: Record<string, AppPrivacy> = {
-  airportshift,
 }
 
 export const supportData: Record<string, AppPrivacy> = {

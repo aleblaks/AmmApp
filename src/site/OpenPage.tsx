@@ -70,9 +70,11 @@ export function OpenPage() {
     )
   }
 
+  const initials = entry.appName.split(/(?=[A-Z])/).map(s => s[0]).slice(0,2).join('')
+
   return (
     <main className="open">
-      <img src={`./icon-${app}.png`} alt={entry.appName} className="app-icon" />
+      <div className="app-icon" aria-hidden>{initials}</div>
       <h1>{entry.appName}</h1>
 
       {phase !== 'desktop' ? (

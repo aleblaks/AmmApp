@@ -6,7 +6,7 @@ type Status = 'live' | 'soon'
 interface AppShowcase {
   slug: string
   name: string
-  icon: string
+  initial: string
   status: Status
   tagline: Bi
   features: Bi[]
@@ -16,7 +16,7 @@ const SHOWCASE: AppShowcase[] = [
   {
     slug: 'airportshift',
     name: 'AirportShift',
-    icon: './icon-airportshift.png',
+    initial: 'AS',
     status: 'live',
     tagline: {
       it: 'Gestisci e condividi i tuoi turni di lavoro in aeroporto. Tutto in locale, niente server.',
@@ -32,10 +32,10 @@ const SHOWCASE: AppShowcase[] = [
   {
     slug: 'balancelife',
     name: 'Balance Life',
-    icon: './icon-balancelife.png',
+    initial: 'BL',
     status: 'soon',
     tagline: {
-      it: 'Un compagno gentile per ritrovare equilibrio tra lavoro, riposo e cura di sé.',
+      it: "Un compagno gentile per ritrovare equilibrio tra lavoro, riposo e cura di sé.",
       en: 'A gentle companion to find balance between work, rest, and self-care.',
     },
     features: [
@@ -61,8 +61,8 @@ export function Home() {
         </h1>
         <p className="hero-sub">
           {t({
-            it: 'AmmApp è un piccolo laboratorio indipendente. Costruiamo applicazioni mobile leggere, senza account né server, dove i tuoi dati non lasciano mai il dispositivo.',
-            en: 'AmmApp is a small independent studio. We build lightweight mobile apps with no accounts and no servers — your data never leaves your device.',
+            it: "AmmApp è un piccolo laboratorio indipendente. Costruiamo applicazioni mobile leggere, senza account né server, dove i tuoi dati non lasciano mai il dispositivo.",
+            en: "AmmApp is a small independent studio. We build lightweight mobile apps with no accounts and no servers — your data never leaves your device.",
           })}
         </p>
       </section>
@@ -71,7 +71,7 @@ export function Home() {
         {SHOWCASE.map((app) => (
           <article key={app.slug} className={`app-card ${app.status === 'soon' ? 'soon' : ''}`}>
             <div className="app-card-head">
-              <img src={app.icon} alt={app.name} className="app-icon-img" />
+              <span className="brand-mark lg" aria-hidden>{app.initial}</span>
               <div style={{ flex: 1 }}>
                 <h3>{app.name}</h3>
                 <span className={`badge ${app.status === 'live' ? 'badge-live' : 'badge-soon'}`}>
