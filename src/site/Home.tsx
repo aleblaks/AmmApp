@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
 import { useT, type Bi } from './lang'
+import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
+import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
 
 type Status = 'live' | 'soon'
 
 interface AppShowcase {
   slug: string
   name: string
-  initial: string
+  icon: string
   status: Status
   tagline: Bi
   features: Bi[]
@@ -16,7 +18,7 @@ const SHOWCASE: AppShowcase[] = [
   {
     slug: 'airportshift',
     name: 'AirportShift',
-    initial: 'AS',
+    icon: AirportShiftIcon,
     status: 'live',
     tagline: {
       it: 'Gestisci e condividi i tuoi turni di lavoro in aeroporto. Tutto in locale, niente server.',
@@ -32,7 +34,7 @@ const SHOWCASE: AppShowcase[] = [
   {
     slug: 'balancelife',
     name: 'Balance Life',
-    initial: 'BL',
+    icon: BalanceLifeIcon,
     status: 'soon',
     tagline: {
       it: "Un compagno gentile per ritrovare equilibrio tra lavoro, riposo e cura di sé.",
@@ -71,7 +73,7 @@ export function Home() {
         {SHOWCASE.map((app) => (
           <article key={app.slug} className={`app-card ${app.status === 'soon' ? 'soon' : ''}`}>
             <div className="app-card-head">
-              <span className="brand-mark lg" aria-hidden>{app.initial}</span>
+              <img src={app.icon} alt={app.name} className="app-icon-img" />
               <div style={{ flex: 1 }}>
                 <h3>{app.name}</h3>
                 <span className={`badge ${app.status === 'live' ? 'badge-live' : 'badge-soon'}`}>

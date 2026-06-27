@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
+import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
+import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
+
+const appIcons: Record<string, string> = {
+  airportshift: AirportShiftIcon,
+  balancelife: BalanceLifeIcon,
+}
 import {
   apps,
   buildDeepLink,
@@ -70,11 +77,9 @@ export function OpenPage() {
     )
   }
 
-  const initials = entry.appName.split(/(?=[A-Z])/).map(s => s[0]).slice(0,2).join('')
-
   return (
     <main className="open">
-      <div className="app-icon" aria-hidden>{initials}</div>
+      <img src={appIcons[app!]} alt={entry.appName} className="app-icon" />
       <h1>{entry.appName}</h1>
 
       {phase !== 'desktop' ? (
