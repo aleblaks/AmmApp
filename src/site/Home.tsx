@@ -37,8 +37,8 @@ const SHOWCASE: AppShowcase[] = [
     icon: BalanceLifeIcon,
     status: 'soon',
     tagline: {
-      it: "Un compagno gentile per ritrovare equilibrio tra lavoro, riposo e cura di sé.",
-      en: 'A gentle companion to find balance between work, rest, and self-care.',
+      it: "Traccia ciò che fai, pianifica ciò che conta e raggiungi i tuoi obiettivi — un'attività alla volta",
+      en: '"Track what you do, plan what matters, and reach your goals — one activity at a time.',
     },
     features: [
       { it: 'In sviluppo', en: 'In development' },
