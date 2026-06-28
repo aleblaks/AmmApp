@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useT, type Bi } from './lang'
+import { apps, iosStoreUrl, androidStoreUrl } from './apps'
+import { AppStoreBadge, GooglePlayBadge } from './components/StoreBadges'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
 import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
 
@@ -95,15 +97,20 @@ export function Home() {
             <div className="app-card-actions">
               {app.status === 'live' ? (
                 <>
-                  <Link to={`/${app.slug}/open`} className="btn btn-primary">
-                    {t({ it: 'Scarica l’app', en: 'Get the app' })}
-                  </Link>
-                  <Link to={`/${app.slug}/privacy`} className="btn btn-ghost">
-                    Privacy
-                  </Link>
-                  <Link to={`/${app.slug}/support`} className="btn btn-ghost">
-                    {t({ it: 'Assistenza', en: 'Support' })}
-                  </Link>
+                  {apps[app.slug] && (
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                      <AppStoreBadge href={iosStoreUrl(apps[app.slug].store.iosAppId)} />
+                      <GooglePlayBadge href={androidStoreUrl(apps[app.slug].store.androidPackage)} />
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <Link to={`/${app.slug}/privacy`} className="btn btn-ghost">
+                      Privacy
+                    </Link>
+                    <Link to={`/${app.slug}/support`} className="btn btn-ghost">
+                      {t({ it: 'Assistenza', en: 'Support' })}
+                    </Link>
+                  </div>
                 </>
               ) : (
                 <span className="muted small">
