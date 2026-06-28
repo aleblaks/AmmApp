@@ -1,9 +1,24 @@
 import { Link } from 'react-router-dom'
 import { useT, type Bi } from './lang'
 import { apps, iosStoreUrl, androidStoreUrl } from './apps'
-import { AppStoreBadge, GooglePlayBadge } from './components/StoreBadges'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
 import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
+
+function AppleIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <path d="M11.18 8.1c-.01-1.63 1.33-2.42 1.39-2.46-.76-1.11-1.94-1.26-2.36-1.27-1-.1-1.96.59-2.47.59-.51 0-1.29-.58-2.12-.56-1.09.02-2.09.63-2.65 1.59-1.14 1.97-.29 4.87.81 6.47.54.78 1.18 1.65 2.02 1.62.81-.03 1.12-.52 2.1-.52.98 0 1.26.52 2.12.5.88-.01 1.43-.79 1.96-1.57.62-.9.87-1.78.89-1.83-.02-.01-1.69-.65-1.69-2.56zM9.77 3.56c.45-.54.75-1.3.67-2.06-.64.03-1.43.43-1.89.97-.41.47-.77 1.24-.68 1.97.72.06 1.45-.36 1.9-.88z"/>
+    </svg>
+  )
+}
+
+function AndroidIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <path d="M2.76 5.56A5.23 5.23 0 0 1 8 1.5a5.23 5.23 0 0 1 5.24 4.06H2.76zM5.5 3.06l-.88-1.5M10.5 3.06l.88-1.5M1 6.5h14v4.25A1.25 1.25 0 0 1 13.75 12h-.5v2.25a.75.75 0 0 1-1.5 0V12h-7.5v2.25a.75.75 0 0 1-1.5 0V12h-.5A1.25 1.25 0 0 1 1 10.75V6.5zM5.25 9a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zM12.25 9a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0z"/>
+    </svg>
+  )
+}
 
 type Status = 'live' | 'soon'
 
@@ -74,6 +89,16 @@ export function Home() {
       <section className="apps-grid" aria-label="Apps">
         {SHOWCASE.map((app) => (
           <article key={app.slug} className={`app-card ${app.status === 'soon' ? 'soon' : ''}`}>
+            {app.status === 'live' && apps[app.slug] && (
+              <div className="card-platforms">
+                <a href={iosStoreUrl(apps[app.slug].store.iosAppId)} target="_blank" rel="noopener noreferrer" aria-label="App Store">
+                  <AppleIcon />
+                </a>
+                <a href={androidStoreUrl(apps[app.slug].store.androidPackage)} target="_blank" rel="noopener noreferrer" aria-label="Google Play">
+                  <AndroidIcon />
+                </a>
+              </div>
+            )}
             <div className="app-card-head">
               <img src={app.icon} alt={app.name} className="app-icon-img" />
               <div style={{ flex: 1 }}>
@@ -97,20 +122,15 @@ export function Home() {
             <div className="app-card-actions">
               {app.status === 'live' ? (
                 <>
-                  {apps[app.slug] && (
-                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                      <AppStoreBadge href={iosStoreUrl(apps[app.slug].store.iosAppId)} />
-                      <GooglePlayBadge href={androidStoreUrl(apps[app.slug].store.androidPackage)} />
-                    </div>
-                  )}
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <Link to={`/${app.slug}/privacy`} className="btn btn-ghost">
-                      Privacy
-                    </Link>
-                    <Link to={`/${app.slug}/support`} className="btn btn-ghost">
-                      {t({ it: 'Assistenza', en: 'Support' })}
-                    </Link>
-                  </div>
+                  <Link to={`/${app.slug}/open`} className="btn btn-primary">
+                    {t({ it: "Scarica l'app", en: 'Get the app' })}
+                  </Link>
+                  <Link to={`/${app.slug}/privacy`} className="btn btn-ghost">
+                    Privacy
+                  </Link>
+                  <Link to={`/${app.slug}/support`} className="btn btn-ghost">
+                    {t({ it: 'Assistenza', en: 'Support' })}
+                  </Link>
                 </>
               ) : (
                 <span className="muted small">
