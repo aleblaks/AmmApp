@@ -2,6 +2,11 @@ import { Link, useParams } from 'react-router-dom'
 import { apps, iosStoreUrl, androidStoreUrl, detectOS } from './apps'
 import { useT } from './lang'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
+import MockupCalendario from '../AmmAppMockups/screen-calendario.png'
+import MockupRiepilogo from '../AmmAppMockups/screen-riepilogo.png'
+import MockupImpostazioni from '../AmmAppMockups/screen-impostazioni.png'
+import MockupCodici from '../AmmAppMockups/screen-codici.png'
+import MockupCondividi from '../AmmAppMockups/screen-condividi.png'
 
 const appIcons: Record<string, string> = {
   airportshift: AirportShiftIcon,
@@ -17,7 +22,7 @@ interface Feature {
 
 const AIRPORTSHIFT_FEATURES: Feature[] = [
   {
-    image: '/mockups/screen-calendario.png',
+    image: MockupCalendario,
     alt: { it: 'Schermata calendario turni', en: 'Shift calendar screen' },
     title: { it: 'I tuoi turni, sempre chiari', en: 'Your shifts, always clear' },
     desc: {
@@ -27,7 +32,7 @@ const AIRPORTSHIFT_FEATURES: Feature[] = [
     accent: '#3b82f6',
   },
   {
-    image: '/mockups/screen-riepilogo.png',
+    image: MockupRiepilogo,
     alt: { it: 'Schermata riepilogo ore', en: 'Hours summary screen' },
     title: { it: 'Le tue ore a colpo d\'occhio', en: 'Your hours at a glance' },
     desc: {
@@ -37,7 +42,7 @@ const AIRPORTSHIFT_FEATURES: Feature[] = [
     accent: '#f97316',
   },
   {
-    image: '/mockups/screen-impostazioni.png',
+    image: MockupImpostazioni,
     alt: { it: 'Schermata importa PDF e sincronizzazione', en: 'PDF import and sync screen' },
     title: { it: 'Importa il PDF, sincronizza tutto', en: 'Import the PDF, sync everything' },
     desc: {
@@ -47,7 +52,7 @@ const AIRPORTSHIFT_FEATURES: Feature[] = [
     accent: '#a855f7',
   },
   {
-    image: '/mockups/screen-codici.png',
+    image: MockupCodici,
     alt: { it: 'Schermata schema codici e orari', en: 'Code scheme screen' },
     title: { it: 'Converti ogni codice turno', en: 'Decode every shift code' },
     desc: {
@@ -57,7 +62,7 @@ const AIRPORTSHIFT_FEATURES: Feature[] = [
     accent: '#14b8a6',
   },
   {
-    image: '/mockups/screen-condividi.png',
+    image: MockupCondividi,
     alt: { it: 'Schermata condivisione QR turni', en: 'QR shift sharing screen' },
     title: { it: 'Condividi con un collega', en: 'Share with a colleague' },
     desc: {
