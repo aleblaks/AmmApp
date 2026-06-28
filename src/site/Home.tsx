@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useT, type Bi } from './lang'
-import { apps, iosStoreUrl, androidStoreUrl } from './apps'
+import { apps, iosStoreUrl, androidStoreUrl, detectOS } from './apps'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
 import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
 
@@ -62,6 +62,7 @@ const SHOWCASE: AppShowcase[] = [
 
 export function Home() {
   const t = useT()
+  const os = detectOS()
   return (
     <>
       <section className="hero">
@@ -118,14 +119,24 @@ export function Home() {
             <div className="app-card-actions">
               {app.status === 'live' ? (
                 <>
-                  <div className="card-cta-row">
-                    <Link to={`/${app.slug}/open`} className="btn btn-primary">
-                      {t({ it: "Scarica l'app", en: 'Get the app' })}
-                    </Link>
-                    <Link to={`/${app.slug}/open`} className="btn btn-ghost">
-                      {t({ it: 'Scopri di più', en: 'Learn more' })}
-                    </Link>
-                  </div>
+                  {apps[app.slug] && (() => {
+                    const entry = apps[app.slug]
+                    const storeUrl = os === 'ios'
+                      ? iosStoreUrl(entry.store.iosAppId)
+                      : os === 'android'
+                        ? androidStoreUrl(entry.store.androidPackage)
+                        : iosStoreUrl(entry.store.iosAppId)
+                    return (
+                      <div className="card-cta-row">
+                        <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                          {t({ it: "Scarica l'app", en: 'Get the app' })}
+                        </a>
+                        <Link to={`/${app.slug}/open`} className="btn btn-ghost">
+                          {t({ it: 'Scopri di più', en: 'Learn more' })}
+                        </Link>
+                      </div>
+                    )
+                  })()}
                   <div className="card-doc-links">
                     <Link to={`/${app.slug}/privacy`} className="card-doc-link">
                       Privacy
