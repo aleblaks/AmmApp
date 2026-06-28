@@ -45,12 +45,22 @@ src/
     components/
       Layout.tsx       # sticky header + footer
       LangSwitch.tsx   # IT/EN pill toggle
+      StoreBadges.tsx  # AppStoreBadge / GooglePlayBadge SVG components (unused in cards, kept for reference)
 public/
   404.html             # converts path-form URLs to hash-form
   icon-ammapp.png      # favicon (referenced in index.html)
   icon-airportshift.png
   icon-balancelife.png
 ```
+
+## App card structure
+
+Each live app card has:
+- **Top-right**: Apple (inline SVG) and Android (Material Symbols font) icons — direct links to their respective stores.
+- **Bottom-center**: "Scarica l'app" (primary) + "Scopri di più" (ghost). "Scarica l'app" uses `detectOS()` to link directly to App Store (iOS), Google Play (Android), or App Store as fallback (desktop). "Scopri di più" links to `/:app/open`.
+- **Bottom-right**: `Privacy · Assistenza` as plain text links.
+
+**Material Symbols** is loaded via Google Fonts CDN in `index.html` (only the `android` glyph). The Apple logo is an inline SVG path — Material Symbols does not include third-party brand logos.
 
 ## Adding a new app
 
