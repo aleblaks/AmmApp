@@ -131,7 +131,7 @@ export function Home() {
                         <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
                           {t({ it: "Scarica l'app", en: 'Get the app' })}
                         </a>
-                        <Link to={`/${app.slug}/open`} className="btn btn-ghost">
+                        <Link to={`/${app.slug}/features`} className="btn btn-ghost">
                           {t({ it: 'Scopri di più', en: 'Learn more' })}
                         </Link>
                       </div>

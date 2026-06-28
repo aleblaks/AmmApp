@@ -4,6 +4,7 @@ import { LangProvider } from './lang'
 import { Layout } from './components/Layout'
 import { Home } from './Home'
 import { OpenPage } from './OpenPage'
+import { FeaturesPage } from './FeaturesPage'
 import { PrivacyPage } from './PrivacyPage'
 import { SupportPage } from './SupportPage'
 import './styles.css'
@@ -32,6 +33,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/:app/open" element={<OpenPage />} />
+              <Route path="/:app/features" element={<FeaturesPage />} />
               <Route path="/:app/privacy" element={<PrivacyPage />} />
               <Route path="/:app/support" element={<SupportPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />

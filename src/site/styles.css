@@ -595,6 +595,154 @@ li { margin: 6px 0; }
   .page, .page-wide { padding: 28px 16px 48px; }
 }
 
+/* Features / Learn-more page */
+
+.features-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+}
+
+.features-hero {
+  text-align: center;
+  padding: 64px 0 56px;
+}
+
+.features-app-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 20px;
+  box-shadow: var(--shadow-glow);
+}
+
+.features-hero h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  margin-bottom: 12px;
+}
+
+.features-hero-sub {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 52ch;
+  margin: 0 auto 32px;
+}
+
+.features-hero-cta {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  padding: 16px 0 64px;
+}
+
+.feature-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.feature-row-reverse {
+  direction: rtl;
+}
+
+.feature-row-reverse > * {
+  direction: ltr;
+}
+
+.feature-mockup {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.feature-mockup-glow {
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--feat-accent) 30%, transparent), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.feature-mockup-img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 280px;
+  border-radius: 28px;
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.7), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+  display: block;
+}
+
+.feature-text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.feature-title {
+  font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--fg-strong);
+  margin: 0;
+}
+
+.feature-desc {
+  font-size: 1rem;
+  color: var(--muted);
+  line-height: 1.7;
+  margin: 0;
+  max-width: 48ch;
+}
+
+.features-cta-bottom {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.features-cta-label {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--fg-strong);
+  margin: 0 0 22px;
+}
+
+@media (max-width: 720px) {
+  .feature-row {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    text-align: center;
+  }
+
+  .feature-row-reverse {
+    direction: ltr;
+  }
+
+  .feature-mockup-img {
+    max-width: 220px;
+  }
+
+  .feature-desc {
+    max-width: unset;
+    margin: 0 auto;
+  }
+
+  .features-list {
+    gap: 56px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
