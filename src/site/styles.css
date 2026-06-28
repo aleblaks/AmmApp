@@ -336,6 +336,11 @@ li { margin: 6px 0; }
   transition: color 0.15s ease;
 }
 
+.card-platform-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
 .card-platforms a:hover { color: var(--fg-strong); }
 
 .app-card-head {
