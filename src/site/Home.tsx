@@ -122,15 +122,23 @@ export function Home() {
             <div className="app-card-actions">
               {app.status === 'live' ? (
                 <>
-                  <Link to={`/${app.slug}/open`} className="btn btn-primary">
-                    {t({ it: "Scarica l'app", en: 'Get the app' })}
-                  </Link>
-                  <Link to={`/${app.slug}/privacy`} className="btn btn-ghost">
-                    Privacy
-                  </Link>
-                  <Link to={`/${app.slug}/support`} className="btn btn-ghost">
-                    {t({ it: 'Assistenza', en: 'Support' })}
-                  </Link>
+                  <div className="card-cta-row">
+                    <Link to={`/${app.slug}/open`} className="btn btn-primary">
+                      {t({ it: "Scarica l'app", en: 'Get the app' })}
+                    </Link>
+                    <Link to={`/${app.slug}/open`} className="btn btn-ghost">
+                      {t({ it: 'Scopri di più', en: 'Learn more' })}
+                    </Link>
+                  </div>
+                  <div className="card-doc-links">
+                    <Link to={`/${app.slug}/privacy`} className="card-doc-link">
+                      Privacy
+                    </Link>
+                    <span className="card-doc-sep">·</span>
+                    <Link to={`/${app.slug}/support`} className="card-doc-link">
+                      {t({ it: 'Assistenza', en: 'Support' })}
+                    </Link>
+                  </div>
                 </>
               ) : (
                 <span className="muted small">
