@@ -87,6 +87,9 @@ export function Home() {
         {SHOWCASE.map((app) => (
           <article key={app.slug} className={`app-card ${app.status === 'soon' ? 'soon' : ''}`}>
             {app.status === 'live' && apps[app.slug] && (
+              <Link to={`/${app.slug}/features`} className="card-cover-link" aria-label={app.name} tabIndex={-1} />
+            )}
+            {app.status === 'live' && apps[app.slug] && (
               <div className="card-platforms">
                 <a href={iosStoreUrl(apps[app.slug].store.iosAppId)} target="_blank" rel="noopener noreferrer" aria-label="App Store">
                   <AppleIcon />
