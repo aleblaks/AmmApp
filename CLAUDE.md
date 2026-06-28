@@ -23,7 +23,7 @@ Single-page app: **React 19 + Vite 6 + react-router-dom 7 + TypeScript**, deploy
 
 ## Source layout
 
-All site-specific code lives under `src/site/`. The `src/routes/`, `src/components/ui/`, `src/lib/` directories are Lovable-generated scaffolding — **the actual site does not use them**; entry point is `src/site/App.tsx` via `src/main.tsx`.
+All site-specific code lives under `src/site/`. Entry point is `src/site/App.tsx` via `src/main.tsx`.
 
 ```
 src/
@@ -45,7 +45,6 @@ src/
     components/
       Layout.tsx       # sticky header + footer
       LangSwitch.tsx   # IT/EN pill toggle
-      StoreBadges.tsx  # AppStoreBadge / GooglePlayBadge SVG components (unused in cards, kept for reference)
 public/
   404.html             # converts path-form URLs to hash-form
   icon-ammapp.png      # favicon (referenced in index.html)
