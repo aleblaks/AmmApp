@@ -2,6 +2,18 @@ import { Link, useParams } from 'react-router-dom'
 import { apps, iosStoreUrl, androidStoreUrl, detectOS } from './apps'
 import { useT } from './lang'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
+
+function AppleIcon() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <path d="M11.18 8.1c-.01-1.63 1.33-2.42 1.39-2.46-.76-1.11-1.94-1.26-2.36-1.27-1-.1-1.96.59-2.47.59-.51 0-1.29-.58-2.12-.56-1.09.02-2.09.63-2.65 1.59-1.14 1.97-.29 4.87.81 6.47.54.78 1.18 1.65 2.02 1.62.81-.03 1.12-.52 2.1-.52.98 0 1.26.52 2.12.5.88-.01 1.43-.79 1.96-1.57.62-.9.87-1.78.89-1.83-.02-.01-1.69-.65-1.69-2.56zM9.77 3.56c.45-.54.75-1.3.67-2.06-.64.03-1.43.43-1.89.97-.41.47-.77 1.24-.68 1.97.72.06 1.45-.36 1.9-.88z"/>
+    </svg>
+  )
+}
+
+function AndroidIcon() {
+  return <span className="material-symbols-outlined" style={{ fontSize: 30, lineHeight: 1 }} aria-hidden>android</span>
+}
 import MockupCalendario from '../AmmAppMockups/screen-calendario.png'
 import MockupRiepilogo from '../AmmAppMockups/screen-riepilogo.png'
 import MockupImpostazioni from '../AmmAppMockups/screen-impostazioni.png'
@@ -143,12 +155,12 @@ export function FeaturesPage() {
         <p className="features-cta-label">
           {t({ it: 'Pronto a provarlo?', en: 'Ready to try it?' })}
         </p>
-        <div className="features-hero-cta">
-          <a href={iosStoreUrl(entry.store.iosAppId)} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg">
-            App Store · iPhone
+        <div className="features-store-icons">
+          <a href={iosStoreUrl(entry.store.iosAppId)} target="_blank" rel="noopener noreferrer" className="store-icon-btn" aria-label="App Store">
+            <AppleIcon />
           </a>
-          <a href={androidStoreUrl(entry.store.androidPackage)} target="_blank" rel="noopener noreferrer" className="btn btn-lg">
-            Google Play · Android
+          <a href={androidStoreUrl(entry.store.androidPackage)} target="_blank" rel="noopener noreferrer" className="store-icon-btn" aria-label="Google Play">
+            <AndroidIcon />
           </a>
         </div>
         <p className="muted small" style={{ marginTop: 14 }}>

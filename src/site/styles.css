@@ -718,6 +718,33 @@ li { margin: 6px 0; }
   margin: 0 0 22px;
 }
 
+.features-store-icons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.store-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--fg);
+  transition: all 0.18s ease;
+}
+
+.store-icon-btn:hover {
+  border-color: var(--accent);
+  color: var(--fg-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
 @media (max-width: 720px) {
   .feature-row {
     grid-template-columns: 1fr;
