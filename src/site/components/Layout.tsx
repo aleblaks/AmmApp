@@ -22,7 +22,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <Link to="/" className="nav-link">
               {t({ it: 'App', en: 'Apps' })}
             </Link>
-            <a href="mailto:aleblaks@gmail.com" className="nav-link">
+            <a href="mailto:ammapp.help@gmail.com" className="nav-link">
               {t({ it: 'Contatti', en: 'Contact' })}
             </a>
             <LangSwitch />
@@ -36,7 +36,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="site-footer-inner">
           <span>© {new Date().getFullYear()} AmmApp</span>
           <span>
-            <a href="mailto:aleblaks@gmail.com">aleblaks@gmail.com</a>
+            <a href="mailto:ammapp.help@gmail.com">ammapp.help@gmail.com</a>
           </span>
         </div>
       </footer>

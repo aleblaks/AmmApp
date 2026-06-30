@@ -82,7 +82,7 @@ const airportshift: AppPrivacy = {
       contact: {
         heading: 'Contatti',
         text: 'Per qualsiasi domanda su questa informativa:',
-        email: 'aleblaks@gmail.com',
+        email: 'ammapp.help@gmail.com',
       },
     },
     en: {
@@ -138,7 +138,7 @@ const airportshift: AppPrivacy = {
       contact: {
         heading: 'Contact',
         text: 'For any questions about this policy:',
-        email: 'aleblaks@gmail.com',
+        email: 'ammapp.help@gmail.com',
       },
     },
   },
@@ -185,7 +185,7 @@ const airportshiftSupport: AppPrivacy = {
       contact: {
         heading: 'Contatti',
         text: 'Scrivici a:',
-        email: 'aleblaks@gmail.com',
+        email: 'ammapp.help@gmail.com',
       },
     },
     en: {
@@ -221,7 +221,7 @@ const airportshiftSupport: AppPrivacy = {
       contact: {
         heading: 'Contact',
         text: 'Write to us at:',
-        email: 'aleblaks@gmail.com',
+        email: 'ammapp.help@gmail.com',
       },
     },
   },
