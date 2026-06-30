@@ -60,25 +60,17 @@ const SHOWCASE: AppShowcase[] = [
   },
 ]
 
-export function Home() {
+export function Apps() {
   const t = useT()
   const os = detectOS()
   return (
     <>
-      <section className="hero">
-        <span className="hero-eyebrow">
-          <span className="dot" aria-hidden />
-          {t({ it: 'App indipendenti, fatte con cura', en: 'Independent apps, crafted with care' })}
-        </span>
-        <h1>
-          {t({ it: 'App semplici, ', en: 'Simple apps, ' })}
-          <span className="grad">{t({ it: 'private', en: 'private' })}</span>
-          {t({ it: ', che restano sul tuo telefono.', en: ', that stay on your phone.' })}
-        </h1>
-        <p className="hero-sub">
+      <section className="apps-page-head">
+        <h1>{t({ it: 'Le nostre app', en: 'Our apps' })}</h1>
+        <p className="apps-page-sub">
           {t({
-            it: "AmmApp è un piccolo laboratorio indipendente. Costruiamo applicazioni mobile leggere, senza account né server, dove i tuoi dati non lasciano mai il dispositivo.",
-            en: "AmmApp is a small independent studio. We build lightweight mobile apps with no accounts and no servers — your data never leaves your device.",
+            it: 'Tutte le app AmmApp, in un unico posto.',
+            en: 'All AmmApp apps, in one place.',
           })}
         </p>
       </section>

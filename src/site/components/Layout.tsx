@@ -19,7 +19,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <span>AmmApp</span>
           </Link>
           <nav className="nav-links" aria-label="Primary">
-            <Link to="/" className="nav-link">
+            <Link to="/apps" className="nav-link">
               {t({ it: 'App', en: 'Apps' })}
             </Link>
             <a href="mailto:ammapp.help@gmail.com" className="nav-link">

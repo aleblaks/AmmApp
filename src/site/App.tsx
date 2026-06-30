@@ -2,7 +2,8 @@ import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-d
 import { useEffect, useState, type ReactNode } from 'react'
 import { LangProvider } from './lang'
 import { Layout } from './components/Layout'
-import { Home } from './Home'
+import { Landing } from './Landing'
+import { Apps } from './AppsPage'
 import { OpenPage } from './OpenPage'
 import { FeaturesPage } from './FeaturesPage'
 import { PrivacyPage } from './PrivacyPage'
@@ -31,7 +32,8 @@ export default function App() {
           <ScrollToTop />
           <Layout>
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Landing />} />
+              <Route path="/apps" element={<Apps />} />
               <Route path="/:app/open" element={<OpenPage />} />
               <Route path="/:app/features" element={<FeaturesPage />} />
               <Route path="/:app/privacy" element={<PrivacyPage />} />
