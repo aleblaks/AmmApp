@@ -5,6 +5,7 @@ import { Layout } from './components/Layout'
 import { Landing } from './Landing'
 import { Apps } from './AppsPage'
 import { OpenPage } from './OpenPage'
+import { StorePage } from './StorePage'
 import { FeaturesPage } from './FeaturesPage'
 import { PrivacyPage } from './PrivacyPage'
 import { SupportPage } from './SupportPage'
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="/" element={<Landing />} />
               <Route path="/apps" element={<Apps />} />
               <Route path="/:app/open" element={<OpenPage />} />
+              <Route path="/:app/store" element={<StorePage />} />
               <Route path="/:app/features" element={<FeaturesPage />} />
               <Route path="/:app/privacy" element={<PrivacyPage />} />
               <Route path="/:app/support" element={<SupportPage />} />
