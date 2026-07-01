@@ -609,7 +609,12 @@ li { margin: 6px 0; }
   flex-direction: column;
   gap: 10px;
   max-width: 320px;
+  width: 100%;
   margin: 24px auto 0;
+}
+
+.stores .btn {
+  width: 100%;
 }
 
 .spinner {
@@ -641,9 +646,19 @@ li { margin: 6px 0; }
   .nav-links { gap: 14px; }
   .nav-link { display: none; }
   .hero { padding: 48px 16px 32px; }
-  .apps-grid { padding: 16px 16px 48px; gap: 16px; }
+  .apps-grid { grid-template-columns: 1fr; padding: 16px 16px 48px; gap: 16px; }
   .app-card { padding: 22px; border-radius: var(--radius-lg); }
   .page, .page-wide { padding: 28px 16px 48px; }
+  .apps-page-head { padding: 40px 16px 8px; }
+  .open { padding: 40px 16px 48px; }
+  .landing-hero { padding-top: 56px; padding-bottom: 48px; }
+  .brand-mark.landing-logo { width: 44px; height: 44px; border-radius: 12px; font-size: 1.1rem; }
+}
+
+@media (max-width: 380px) {
+  .hero h1 { font-size: 1.9rem; }
+  .hero-sub, .open .lead { font-size: 0.98rem; }
+  .stores { max-width: 100%; }
 }
 
 /* Features / Learn-more page */
