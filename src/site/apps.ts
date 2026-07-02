@@ -3,6 +3,7 @@ export interface StoreLinks {
   importPath: string
   androidPackage: string
   iosAppId: string
+  androidComingSoon?: boolean
 }
 
 export interface AppEntry {
@@ -17,9 +18,15 @@ export const apps: Record<string, AppEntry> = {
       scheme: 'airportshift',
       importPath: 'c',
       androidPackage: 'com.aleblaks.TurniAeroporto',
-      iosAppId: '0000000000',
+      iosAppId: '6783308412',
+      androidComingSoon: true,
     },
   },
+}
+
+export const androidComingSoonText = {
+  it: 'Disponibile su Android dal 20 luglio',
+  en: 'Coming to Android on July 20',
 }
 
 export type OS = 'ios' | 'android' | 'other'
@@ -49,6 +56,6 @@ export function buildDeepLink(entry: AppEntry, d: string | null): string {
 
 export function storeUrlFor(os: OS, entry: AppEntry): string | null {
   if (os === 'ios') return iosStoreUrl(entry.store.iosAppId)
-  if (os === 'android') return androidStoreUrl(entry.store.androidPackage)
+  if (os === 'android' && !entry.store.androidComingSoon) return androidStoreUrl(entry.store.androidPackage)
   return null
 }

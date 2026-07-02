@@ -545,6 +545,26 @@ li { margin: 6px 0; }
 
 .btn-lg { padding: 14px 22px; font-size: 1rem; }
 
+.btn-disabled {
+  cursor: default;
+  opacity: 0.65;
+  color: var(--muted);
+  background: var(--surface);
+}
+
+.btn-disabled:hover {
+  border-color: var(--line);
+  color: var(--muted);
+  background: var(--surface);
+}
+
+.card-platform-disabled {
+  color: var(--muted-2);
+  display: inline-flex;
+  align-items: center;
+  cursor: default;
+}
+
 /* Doc page (privacy/support) */
 
 .doc section { margin-top: 6px; }
@@ -809,6 +829,19 @@ li { margin: 6px 0; }
   color: var(--fg-strong);
   transform: translateY(-2px);
   box-shadow: var(--shadow);
+}
+
+.store-icon-btn.store-icon-disabled {
+  color: var(--muted-2);
+  cursor: default;
+  opacity: 0.65;
+}
+
+.store-icon-btn.store-icon-disabled:hover {
+  border-color: var(--line);
+  color: var(--muted-2);
+  transform: none;
+  box-shadow: none;
 }
 
 @media (max-width: 720px) {

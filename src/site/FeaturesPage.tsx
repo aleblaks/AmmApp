@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { apps, iosStoreUrl, androidStoreUrl, detectOS } from './apps'
+import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS } from './apps'
 import { useT } from './lang'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
 
@@ -159,10 +159,21 @@ export function FeaturesPage() {
           <a href={iosStoreUrl(entry.store.iosAppId)} target="_blank" rel="noopener noreferrer" className="store-icon-btn" aria-label="App Store">
             <AppleIcon />
           </a>
-          <a href={androidStoreUrl(entry.store.androidPackage)} target="_blank" rel="noopener noreferrer" className="store-icon-btn" aria-label="Google Play">
-            <AndroidIcon />
-          </a>
+          {entry.store.androidComingSoon ? (
+            <span className="store-icon-btn store-icon-disabled" aria-label={t(androidComingSoonText)} title={t(androidComingSoonText)}>
+              <AndroidIcon />
+            </span>
+          ) : (
+            <a href={androidStoreUrl(entry.store.androidPackage)} target="_blank" rel="noopener noreferrer" className="store-icon-btn" aria-label="Google Play">
+              <AndroidIcon />
+            </a>
+          )}
         </div>
+        {entry.store.androidComingSoon && (
+          <p className="muted small" style={{ marginTop: 10 }}>
+            {t(androidComingSoonText)}
+          </p>
+        )}
         <p className="muted small" style={{ marginTop: 14 }}>
           <Link to={`/${app}/privacy`}>Privacy</Link>
           {' · '}

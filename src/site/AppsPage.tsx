@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useT, type Bi } from './lang'
-import { apps, iosStoreUrl, androidStoreUrl, detectOS } from './apps'
+import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS } from './apps'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
 import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
 
@@ -86,9 +86,15 @@ export function Apps() {
                 <a href={iosStoreUrl(apps[app.slug].store.iosAppId)} target="_blank" rel="noopener noreferrer" aria-label="App Store">
                   <AppleIcon />
                 </a>
-                <a href={androidStoreUrl(apps[app.slug].store.androidPackage)} target="_blank" rel="noopener noreferrer" aria-label="Google Play">
-                  <AndroidIcon />
-                </a>
+                {apps[app.slug].store.androidComingSoon ? (
+                  <span className="card-platform-disabled" aria-label={t(androidComingSoonText)} title={t(androidComingSoonText)}>
+                    <AndroidIcon />
+                  </span>
+                ) : (
+                  <a href={androidStoreUrl(apps[app.slug].store.androidPackage)} target="_blank" rel="noopener noreferrer" aria-label="Google Play">
+                    <AndroidIcon />
+                  </a>
+                )}
               </div>
             )}
             <div className="app-card-head">
@@ -116,16 +122,23 @@ export function Apps() {
                 <>
                   {apps[app.slug] && (() => {
                     const entry = apps[app.slug]
-                    const storeUrl = os === 'ios'
-                      ? iosStoreUrl(entry.store.iosAppId)
+                    const androidUnavailable = os === 'android' && entry.store.androidComingSoon
+                    const storeUrl = androidUnavailable
+                      ? null
                       : os === 'android'
                         ? androidStoreUrl(entry.store.androidPackage)
                         : iosStoreUrl(entry.store.iosAppId)
                     return (
                       <div className="card-cta-row">
-                        <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-                          {t({ it: "Scarica l'app", en: 'Get the app' })}
-                        </a>
+                        {androidUnavailable ? (
+                          <span className="btn btn-primary btn-disabled" aria-disabled="true">
+                            {t(androidComingSoonText)}
+                          </span>
+                        ) : (
+                          <a href={storeUrl!} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                            {t({ it: "Scarica l'app", en: 'Get the app' })}
+                          </a>
+                        )}
                         <Link to={`/${app.slug}/features`} className="btn btn-ghost">
                           {t({ it: 'Scopri di più', en: 'Learn more' })}
                         </Link>

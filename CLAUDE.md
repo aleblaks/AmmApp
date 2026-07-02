@@ -85,9 +85,12 @@ https://aleblaks.github.io/AmmApp/#/airportshift/open?d=<payload>
 
 `OpenPage.tsx` on mobile: fires the custom-scheme deep link, listens for `visibilitychange`/`blur`/`pagehide`. After 1800 ms, if the page is still visible, redirects to the store. On desktop: shows a "open on your phone" message.
 
+## Android coming-soon flag
+
+`apps.ts`'s `airportshift.store.androidComingSoon = true` disables all Android store links site-wide (cards, features page, QR fallback, `/store` route) and shows `androidComingSoonText` ("Disponibile su Android dal 20 luglio") instead. `storeUrlFor()` returns `null` for Android while the flag is set, so nothing auto-redirects to the (not yet live) Play Store listing. **Set it to `false`** in `src/site/apps.ts` once AirportShift is published on Google Play.
+
 ## Pending TODOs
 
-- Replace `iosAppId: '0000000000'` in `src/site/apps.ts` with the real App Store numeric ID when AirportShift is published.
 - Add `balancelife` entry to `privacyData`, `supportData`, `apps`, and `appIcons`.
 - Real-device test: QR scan → app opens / app absent → correct store.
 - Custom domain `www.ammapp.it` (not yet registered): add `public/CNAME`, make `404.html` host-aware, configure DNS.

@@ -13,6 +13,7 @@ import {
   detectOS,
   androidStoreUrl,
   iosStoreUrl,
+  androidComingSoonText,
   storeUrlFor,
 } from './apps'
 import { useT } from './lang'
@@ -91,7 +92,11 @@ export function OpenPage() {
           <a className="btn btn-primary btn-lg" href={deepLink}>
             {t({ it: `Apri ${entry.appName}`, en: `Open ${entry.appName}` })}
           </a>
-          {storeUrl && (
+          {os === 'android' && entry.store.androidComingSoon ? (
+            <p className="muted small" style={{ marginTop: 18 }}>
+              {t(androidComingSoonText)}
+            </p>
+          ) : storeUrl && (
             <p className="muted small" style={{ marginTop: 18 }}>
               {t({ it: 'Non si apre? Scaricala qui sotto.', en: "Not opening? Get it below." })}
             </p>
@@ -111,7 +116,13 @@ export function OpenPage() {
           <a className="btn" href={iosStoreUrl(entry.store.iosAppId)}>App Store · iPhone</a>
         )}
         {(os === 'android' || os === 'other') && (
-          <a className="btn" href={androidStoreUrl(entry.store.androidPackage)}>Google Play · Android</a>
+          entry.store.androidComingSoon ? (
+            <span className="btn btn-disabled" aria-disabled="true">
+              {t(androidComingSoonText)}
+            </span>
+          ) : (
+            <a className="btn" href={androidStoreUrl(entry.store.androidPackage)}>Google Play · Android</a>
+          )
         )}
       </div>
 

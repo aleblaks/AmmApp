@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { apps, detectOS, androidStoreUrl, iosStoreUrl } from './apps'
+import { apps, detectOS, androidStoreUrl, iosStoreUrl, androidComingSoonText } from './apps'
 import { useT } from './lang'
 
 export function StorePage() {
@@ -9,8 +9,9 @@ export function StorePage() {
   const t = useT()
   const os = useMemo(() => detectOS(), [])
 
+  const androidAvailable = entry ? !entry.store.androidComingSoon : false
   const iosUrl = entry ? iosStoreUrl(entry.store.iosAppId) : null
-  const androidUrl = entry ? androidStoreUrl(entry.store.androidPackage) : null
+  const androidUrl = entry && androidAvailable ? androidStoreUrl(entry.store.androidPackage) : null
 
   useEffect(() => {
     if (!entry) return
@@ -33,7 +34,9 @@ export function StorePage() {
     <main className="open">
       <h1>{entry.appName}</h1>
 
-      {os === 'other' ? (
+      {os === 'android' && entry.store.androidComingSoon ? (
+        <p className="lead">{t(androidComingSoonText)}</p>
+      ) : os === 'other' ? (
         <p className="lead">
           {t({ it: 'Scegli la tua piattaforma:', en: 'Choose your platform:' })}
         </p>
@@ -48,7 +51,13 @@ export function StorePage() {
 
       <div className="stores">
         {iosUrl && <a className="btn" href={iosUrl}>App Store · iPhone</a>}
-        {androidUrl && <a className="btn" href={androidUrl}>Google Play · Android</a>}
+        {entry.store.androidComingSoon ? (
+          <span className="btn btn-disabled" aria-disabled="true">
+            {t(androidComingSoonText)}
+          </span>
+        ) : (
+          androidUrl && <a className="btn" href={androidUrl}>Google Play · Android</a>
+        )}
       </div>
     </main>
   )
