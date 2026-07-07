@@ -769,6 +769,24 @@ li { margin: 6px 0; }
   display: block;
 }
 
+.feature-mockup-placeholder {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 9 / 18;
+  border-radius: 28px;
+  border: 2px dashed var(--line);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
 .feature-text {
   display: flex;
   flex-direction: column;
@@ -855,7 +873,8 @@ li { margin: 6px 0; }
     direction: ltr;
   }
 
-  .feature-mockup-img {
+  .feature-mockup-img,
+  .feature-mockup-placeholder {
     max-width: 220px;
   }
 

@@ -1,7 +1,8 @@
 import { Link, useParams } from 'react-router-dom'
 import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS } from './apps'
-import { useT } from './lang'
+import { useT, type Bi } from './lang'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
+import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
 
 function AppleIcon() {
   return (
@@ -22,13 +23,14 @@ import MockupCondividi from '../AmmAppMockups/screen-condividi.png'
 
 const appIcons: Record<string, string> = {
   airportshift: AirportShiftIcon,
+  balancelife: BalanceLifeIcon,
 }
 
 interface Feature {
-  image: string
-  alt: { it: string; en: string }
-  title: { it: string; en: string }
-  desc: { it: string; en: string }
+  image?: string
+  alt: Bi
+  title: Bi
+  desc: Bi
   accent: string
 }
 
@@ -85,18 +87,71 @@ const AIRPORTSHIFT_FEATURES: Feature[] = [
   },
 ]
 
-const FEATURES: Record<string, Feature[]> = {
-  airportshift: AIRPORTSHIFT_FEATURES,
+// TODO: sostituisci tagline e features con i contenuti reali di Balance Life
+// quando saranno pronti. Segui lo stesso schema di AIRPORTSHIFT_FEATURES: se
+// hai già gli screenshot, aggiungili in src/AmmAppMockups/ e passali come
+// `image` (altrimenti lascia `image` non impostato per il placeholder).
+const BALANCELIFE_FEATURES: Feature[] = [
+  {
+    alt: { it: '[Da compilare] Schermata 1', en: '[TODO] Screen 1' },
+    title: { it: '[Da compilare] Titolo funzionalità 1', en: '[TODO] Feature title 1' },
+    desc: {
+      it: '[Da compilare] Descrizione della prima funzionalità di Balance Life.',
+      en: '[TODO] Description of the first Balance Life feature.',
+    },
+    accent: '#3b82f6',
+  },
+  {
+    alt: { it: '[Da compilare] Schermata 2', en: '[TODO] Screen 2' },
+    title: { it: '[Da compilare] Titolo funzionalità 2', en: '[TODO] Feature title 2' },
+    desc: {
+      it: '[Da compilare] Descrizione della seconda funzionalità di Balance Life.',
+      en: '[TODO] Description of the second Balance Life feature.',
+    },
+    accent: '#f97316',
+  },
+  {
+    alt: { it: '[Da compilare] Schermata 3', en: '[TODO] Screen 3' },
+    title: { it: '[Da compilare] Titolo funzionalità 3', en: '[TODO] Feature title 3' },
+    desc: {
+      it: '[Da compilare] Descrizione della terza funzionalità di Balance Life.',
+      en: '[TODO] Description of the third Balance Life feature.',
+    },
+    accent: '#a855f7',
+  },
+]
+
+interface AppFeaturesContent {
+  tagline: Bi
+  features: Feature[]
+}
+
+const CONTENT: Record<string, AppFeaturesContent> = {
+  airportshift: {
+    tagline: {
+      it: 'Gestisci e condividi i tuoi turni di lavoro in aeroporto. Tutto in locale, niente server.',
+      en: 'Manage and share your airport work shifts. Fully on-device, no servers.',
+    },
+    features: AIRPORTSHIFT_FEATURES,
+  },
+  // TODO: sostituisci la tagline con la vera descrizione di Balance Life.
+  balancelife: {
+    tagline: {
+      it: '[Da compilare] Breve descrizione di Balance Life.',
+      en: '[TODO] Short description of Balance Life.',
+    },
+    features: BALANCELIFE_FEATURES,
+  },
 }
 
 export function FeaturesPage() {
   const { app } = useParams()
   const entry = app ? apps[app] : undefined
-  const features = app ? FEATURES[app] : undefined
+  const content = app ? CONTENT[app] : undefined
   const t = useT()
   const os = detectOS()
 
-  if (!entry || !features) {
+  if (!entry || !content) {
     return (
       <main className="page">
         <h1>{t({ it: 'Pagina non trovata', en: 'Page not found' })}</h1>
@@ -104,6 +159,8 @@ export function FeaturesPage() {
       </main>
     )
   }
+
+  const { tagline, features } = content
 
   const storeUrl =
     os === 'android'
@@ -116,10 +173,7 @@ export function FeaturesPage() {
         <img src={appIcons[app!]} alt={entry.appName} className="features-app-icon" />
         <h1>{entry.appName}</h1>
         <p className="features-hero-sub">
-          {t({
-            it: 'Gestisci e condividi i tuoi turni di lavoro in aeroporto. Tutto in locale, niente server.',
-            en: 'Manage and share your airport work shifts. Fully on-device, no servers.',
-          })}
+          {t(tagline)}
         </p>
         <div className="features-hero-cta">
           <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg">
@@ -136,12 +190,18 @@ export function FeaturesPage() {
           <section key={i} className={`feature-row ${i % 2 === 1 ? 'feature-row-reverse' : ''}`}>
             <div className="feature-mockup">
               <div className="feature-mockup-glow" style={{ '--feat-accent': feat.accent } as React.CSSProperties} />
-              <img
-                src={feat.image}
-                alt={t(feat.alt)}
-                className="feature-mockup-img"
-                loading="lazy"
-              />
+              {feat.image ? (
+                <img
+                  src={feat.image}
+                  alt={t(feat.alt)}
+                  className="feature-mockup-img"
+                  loading="lazy"
+                />
+              ) : (
+                <div className="feature-mockup-placeholder">
+                  {t({ it: 'Screenshot da inserire', en: 'Screenshot placeholder' })}
+                </div>
+              )}
             </div>
             <div className="feature-text">
               <h2 className="feature-title">{t(feat.title)}</h2>
