@@ -2,6 +2,10 @@
 
 Guida passo-passo per aggiungere il Play Store ad AirportShift e attivare Balance Life.
 
+> Per riempire con i contenuti reali la pagina "Scopri di più" di Balance Life
+> (`/balancelife/features`, attualmente con placeholder), vedi
+> **[MODIFICA_PAGINA_BALANCE_LIFE.md](./MODIFICA_PAGINA_BALANCE_LIFE.md)**.
+
 ---
 
 ## PARTE 1: Aggiungere il Play Store ad AirportShift
@@ -192,6 +196,7 @@ const appIcons: Record<string, string> = {
 - [ ] Parte 2: Card Balance Life aggiunta in `SHOWCASE` di `AppsPage.tsx`
 - [ ] Parte 2: Privacy e support text aggiunti in `content.ts`
 - [ ] Parte 2: Icone aggiunte in `OpenPage.tsx` e `FeaturesPage.tsx`
+- [ ] Parte 2: Contenuti della pagina "Scopri di più" compilati — vedi [MODIFICA_PAGINA_BALANCE_LIFE.md](./MODIFICA_PAGINA_BALANCE_LIFE.md)
 - [ ] File PNG `BalanceLife.png` in `src/AmmAppIcon/`
 - [ ] Build e test: `npm run build` non ha errori
 - [ ] Commit e push su `main`
