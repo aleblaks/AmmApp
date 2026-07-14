@@ -5,6 +5,7 @@
       "name": "ammapp-dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/alessandroneri/Documents/ClaudeApp/AmmApp",
       "port": 5173
     }
   ]

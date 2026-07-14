@@ -19,7 +19,7 @@ export const apps: Record<string, AppEntry> = {
       importPath: 'c',
       androidPackage: 'com.aleblaks.TurniAeroporto',
       iosAppId: '6783308412',
-      androidComingSoon: true,
+      androidComingSoon: false,
     },
   },
   // TODO: sostituisci scheme/importPath/androidPackage/iosAppId con i valori
