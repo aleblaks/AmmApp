@@ -17,6 +17,7 @@ function AndroidIcon() {
 }
 import MockupCalendario from '../AmmAppMockups/screen-calendario.png'
 import MockupRiepilogo from '../AmmAppMockups/screen-riepilogo.png'
+import MockupColori from '../AmmAppMockups/screen-colori.png'
 import MockupImpostazioni from '../AmmAppMockups/screen-impostazioni.png'
 import MockupCodici from '../AmmAppMockups/screen-codici.png'
 import MockupCondividi from '../AmmAppMockups/screen-condividi.png'
@@ -48,12 +49,22 @@ const AIRPORTSHIFT_FEATURES: Feature[] = [
   {
     image: MockupRiepilogo,
     alt: { it: 'Schermata riepilogo ore', en: 'Hours summary screen' },
-    title: { it: 'Le tue ore a colpo d\'occhio', en: 'Your hours at a glance' },
+    title: { it: 'Scomponi i turni', en: 'Break down your shifts' },
     desc: {
-      it: 'Ore lavorate, giorni di lavoro, riposi, ferie e FNL del mese in un unico pannello. Il grafico a ciambella mostra la distribuzione dei turni per fascia oraria: mattine, pomeriggi, sere e notti.',
-      en: 'Hours worked, work days, rest, vacation, and FNL for the month in one panel. The donut chart shows shift distribution by time slot: mornings, afternoons, evenings, and nights.',
+      it: 'Per avere un quadro più analitico puoi controllare il riepilogo per le statistiche: ore diurne e notturne, giorni di lavoro, riposi, FNL e la distribuzione dei turni per fascia oraria in un grafico a ciambella.',
+      en: 'For a more detailed picture, check the summary for the statistics: daytime and nighttime hours, work days, rest days, FNL, and the shift distribution by time slot in a donut chart.',
     },
     accent: '#f97316',
+  },
+  {
+    image: MockupColori,
+    alt: { it: 'Schermata personalizzazione colori', en: 'Color customization screen' },
+    title: { it: 'Imposta i tuoi colori preferiti per ogni turno', en: 'Set your favorite colors for every shift' },
+    desc: {
+      it: 'Personalizza il colore di ogni tipo di giorno e degli orari dei colleghi: turni, riposi, ferie, ADD e FNL, con una palette dedicata e indipendente per i turni condivisi dai colleghi.',
+      en: 'Customize the color of every day type and of your colleagues\' shifts: shifts, rest days, vacation, ADD, and FNL, with a dedicated palette for shifts shared by colleagues.',
+    },
+    accent: '#14b8a6',
   },
   {
     image: MockupImpostazioni,
@@ -73,7 +84,7 @@ const AIRPORTSHIFT_FEATURES: Feature[] = [
       it: 'Digita un codice (es. 509, 824, RIP…) e scopri subito orario e durata. La prima cifra è la durata in ore, le ultime due indicano lo slot di inizio (slot 01 = 04:00, ogni slot +30 minuti). I codici speciali FNL, RIP, ADD e FR sono riconosciuti automaticamente.',
       en: 'Type a code (e.g. 509, 824, RIP…) and instantly see the time and duration. The first digit is the duration in hours, the last two indicate the start slot (slot 01 = 04:00, each slot +30 min). Special codes FNL, RIP, ADD, and FR are recognized automatically.',
     },
-    accent: '#14b8a6',
+    accent: '#ec4899',
   },
   {
     image: MockupCondividi,
