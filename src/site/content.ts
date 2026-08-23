@@ -255,9 +255,117 @@ const balancelife: AppPrivacy = {
   },
 }
 
+const resoconto: AppPrivacy = {
+  appName: 'Resoconto',
+  packageId: 'com.aleblaks.Resoconto',
+  docs: {
+    it: {
+      title: 'Informativa sulla Privacy — Resoconto',
+      lastUpdated: 'Ultimo aggiornamento: 3 luglio 2026',
+      intro:
+        "Resoconto è un'app per tenere il conto di cassa, POS, fornitori ed esterni. La tua privacy è una priorità: l'app funziona interamente sul tuo dispositivo e non raccoglie alcun dato personale.",
+      sections: [
+        {
+          heading: 'Nessuna raccolta dati',
+          paragraphs: [
+            "Resoconto non raccoglie, non invia e non condivide alcun dato personale. Non ci sono server: l'app non effettua alcuna connessione di rete per trasmettere i tuoi dati. Non utilizziamo strumenti di analisi, tracciamento, pubblicità o segnalazione errori di terze parti.",
+          ],
+        },
+        {
+          heading: 'Dove restano i tuoi dati',
+          paragraphs: [
+            'Entrate, uscite, cassaforte e i resoconti delle giornate (comprese quelle in modalità esterno) sono salvati esclusivamente in locale, in un database sul tuo telefono. Restano sul dispositivo e non lasciano mai il telefono.',
+          ],
+        },
+        {
+          heading: 'Condivisione di un resoconto (QR code)',
+          paragraphs: [
+            "Puoi condividere un resoconto con un collega generando un QR code: tutti i dati sono contenuti direttamente nel codice, che il collega scansiona o importa da uno screenshot. Non passano attraverso alcun server: il trasferimento avviene interamente fuori rete, da dispositivo a dispositivo (anche via terzi come screenshot su WhatsApp).",
+          ],
+        },
+        {
+          heading: 'Permessi',
+          bullets: [
+            {
+              label: 'Fotocamera',
+              text: "usata unicamente per scansionare il QR di un resoconto condiviso da un collega. Non vengono salvate o trasmesse foto.",
+            },
+            {
+              label: 'Foto',
+              text: 'usato solo per leggere il QR di un resoconto da uno screenshot che scegli tu dalla galleria. Nessuna foto viene caricata o inviata altrove.',
+            },
+          ],
+        },
+        {
+          heading: 'Nessun account',
+          paragraphs: [
+            "Non è richiesta alcuna registrazione, nessun account e nessun login per usare l'app.",
+          ],
+        },
+      ],
+      contact: {
+        heading: 'Contatti',
+        text: 'Per qualsiasi domanda su questa informativa:',
+        email: 'ammapp.help@gmail.com',
+      },
+    },
+    en: {
+      title: 'Privacy Policy — Resoconto',
+      lastUpdated: 'Last updated: 3 July 2026',
+      intro:
+        'Resoconto is an app for tracking cash, POS, suppliers, and off-site work. Your privacy is a priority: the app runs entirely on your device and does not collect any personal data.',
+      sections: [
+        {
+          heading: 'No data collection',
+          paragraphs: [
+            'Resoconto does not collect, send, or share any personal data. There are no servers: the app makes no network connection to transmit your data. We do not use any third-party analytics, tracking, advertising, or crash-reporting tools.',
+          ],
+        },
+        {
+          heading: 'Where your data stays',
+          paragraphs: [
+            "Income, expenses, your safe balance, and daily reports (including off-site days) are stored only locally, in a database on your phone. They stay on your device and never leave your phone.",
+          ],
+        },
+        {
+          heading: 'Sharing a report (QR code)',
+          paragraphs: [
+            'You can share a report with a colleague by generating a QR code: all the data is contained directly in the code, which your colleague scans or imports from a screenshot. It never passes through any server: the transfer happens entirely off-network, device-to-device (even via a third-party step like a WhatsApp screenshot).',
+          ],
+        },
+        {
+          heading: 'Permissions',
+          bullets: [
+            {
+              label: 'Camera',
+              text: "used solely to scan a report's QR code shared by a colleague. No photos are saved or transmitted.",
+            },
+            {
+              label: 'Photos',
+              text: "used solely to read a report's QR code from a screenshot you choose from your gallery. No photo is uploaded or sent anywhere.",
+            },
+          ],
+        },
+        {
+          heading: 'No account',
+          paragraphs: [
+            'No registration, account, or login is required to use the app.',
+          ],
+        },
+      ],
+      contact: {
+        heading: 'Contact',
+        text: 'For any questions about this policy:',
+        email: 'ammapp.help@gmail.com',
+      },
+    },
+  },
+}
+
 export const privacyData: Record<string, AppPrivacy> = {
   airportshift,
   balancelife,
+  resoconto,
 }
 
 const airportshiftSupport: AppPrivacy = {
@@ -434,7 +542,95 @@ const balancelifeSupport: AppPrivacy = {
   },
 }
 
+const resocontoSupport: AppPrivacy = {
+  appName: 'Resoconto',
+  packageId: 'com.aleblaks.Resoconto',
+  docs: {
+    it: {
+      title: 'Assistenza — Resoconto',
+      lastUpdated: 'Ultimo aggiornamento: 3 luglio 2026',
+      intro:
+        "Hai bisogno di aiuto con Resoconto? Siamo qui per aiutarti. Scrivici e ti rispondiamo il prima possibile.",
+      sections: [
+        {
+          heading: 'Come contattarci',
+          paragraphs: [
+            "Per assistenza, segnalazione di problemi o suggerimenti, scrivi all'indirizzo qui sotto. Indica il modello del telefono e una breve descrizione del problema: ci aiuta a risponderti più in fretta.",
+          ],
+        },
+        {
+          heading: 'Domande frequenti',
+          bullets: [
+            {
+              label: 'Come registro entrate e uscite',
+              text: 'Dalla vista a calendario apri la giornata e registra i movimenti di cassa: quello che entra, quello che esce e, se lavori fuori sede, la modalità esterno.',
+            },
+            {
+              label: "Cos'è la cassaforte",
+              text: 'È l\'accantonamento da cui vengono sottratte le uscite, così vedi sempre quanto ti resta davvero disponibile.',
+            },
+            {
+              label: 'Come condivido un resoconto con un collega',
+              text: "Genera un QR code dall'app: il collega lo inquadra con la fotocamera, oppure lo importa da uno screenshot ricevuto (ad esempio su WhatsApp) tramite \"Leggi un QR\". Il resoconto si apre in sola lettura, senza passare da alcun server.",
+            },
+            {
+              label: 'Perché l\'app chiede fotocamera e foto',
+              text: 'La fotocamera serve solo a scansionare il QR di un resoconto condiviso da un collega; l\'accesso alle foto serve solo a leggere lo stesso QR da uno screenshot che scegli tu dalla galleria.',
+            },
+          ],
+        },
+      ],
+      contact: {
+        heading: 'Contatti',
+        text: 'Scrivici a:',
+        email: 'ammapp.help@gmail.com',
+      },
+    },
+    en: {
+      title: 'Support — Resoconto',
+      lastUpdated: 'Last updated: 3 July 2026',
+      intro:
+        'Need help with Resoconto? We’re here for you. Get in touch and we’ll reply as soon as possible.',
+      sections: [
+        {
+          heading: 'How to reach us',
+          paragraphs: [
+            'For support, bug reports, or suggestions, write to the address below. Please include your phone model and a short description of the issue: it helps us reply faster.',
+          ],
+        },
+        {
+          heading: 'Frequently asked questions',
+          bullets: [
+            {
+              label: 'How do I log income and expenses',
+              text: 'Open a day from the calendar view and record cash movements: what comes in, what goes out, and, if you worked off-site, the off-site mode.',
+            },
+            {
+              label: 'What is the safe',
+              text: "It's the reserve that outgoing amounts are subtracted from, so you always see what's actually available.",
+            },
+            {
+              label: 'How do I share a report with a colleague',
+              text: 'Generate a QR code in the app: your colleague scans it with the camera, or imports it from a received screenshot (e.g. on WhatsApp) via "Read a QR". The report opens read-only, without going through any server.',
+            },
+            {
+              label: 'Why does the app ask for camera and photos',
+              text: "The camera is used only to scan a report's QR code shared by a colleague; photo access is used only to read that same QR code from a screenshot you choose from your gallery.",
+            },
+          ],
+        },
+      ],
+      contact: {
+        heading: 'Contact',
+        text: 'Write to us at:',
+        email: 'ammapp.help@gmail.com',
+      },
+    },
+  },
+}
+
 export const supportData: Record<string, AppPrivacy> = {
   airportshift: airportshiftSupport,
   balancelife: balancelifeSupport,
+  resoconto: resocontoSupport,
 }
