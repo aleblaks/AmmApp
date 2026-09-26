@@ -1,6 +1,8 @@
 # Modifica pagina "Scopri di più" di Balance Life
 
-Istruzioni per riempire con i contenuti reali la pagina placeholder creata a
+> Contenuti reali e 10 screenshot inseriti il 2026-09-26 (in `src/AmmAppMockups/balancelife/`). Questa guida resta valida per modificarli.
+
+Istruzioni per modificare i contenuti della pagina
 **`https://aleblaks.github.io/AmmApp/#/balancelife/features`**.
 
 Tutti i contenuti si trovano in un unico file: **`src/site/FeaturesPage.tsx`**.
@@ -9,7 +11,7 @@ Tutti i contenuti si trovano in un unico file: **`src/site/FeaturesPage.tsx`**.
 
 ## 1. La tagline sotto il titolo (hero)
 
-**File:** `src/site/FeaturesPage.tsx` — dentro `CONTENT.balancelife.tagline` (righe 138-144)
+**File:** `src/site/FeaturesPage.tsx` — dentro `CONTENT.balancelife.tagline`
 
 ```typescript
 balancelife: {
@@ -27,7 +29,7 @@ Sostituisci le due stringhe `it`/`en` con la vera descrizione breve dell'app (qu
 
 ## 2. Le sezioni funzionalità (le 3 righe con screenshot + testo)
 
-**File:** `src/site/FeaturesPage.tsx` — array `BALANCELIFE_FEATURES` (righe 94-122)
+**File:** `src/site/FeaturesPage.tsx` — array `BALANCELIFE_FEATURES`
 
 Ogni elemento dell'array è una sezione della pagina. Per ognuna aggiorna:
 
@@ -50,7 +52,7 @@ Ogni elemento dell'array è una sezione della pagina. Per ognuna aggiorna:
 Finché un elemento di `BALANCELIFE_FEATURES` non ha la proprietà `image`, al suo posto compare un box tratteggiato con scritto "Screenshot da inserire". Per sostituirlo:
 
 1. Metti il file PNG dello screenshot in **`src/AmmAppMockups/`** (stessa cartella degli screenshot di AirportShift)
-2. In cima a `src/site/FeaturesPage.tsx`, dopo le righe 18-22 (gli import `MockupCalendario`, `MockupRiepilogo`, ecc.), aggiungi un import per il tuo file:
+2. In cima a `src/site/FeaturesPage.tsx`, dopo gli import `BlHome`, `BlTrends`, ecc., aggiungi un import per il tuo file:
    ```typescript
    import MockupNomeSchermata from '../AmmAppMockups/nome-file.png'
    ```
@@ -60,7 +62,7 @@ Finché un elemento di `BALANCELIFE_FEATURES` non ha la proprietà `image`, al s
 
 ## 4. Icona dell'app nell'hero
 
-L'icona in cima alla pagina viene già da `appIcons.balancelife` (riga 26 di `FeaturesPage.tsx`), che punta a `src/AmmAppIcon/BalanceLife.png`. Se vuoi cambiarla, sostituisci quel file PNG — non serve toccare il codice.
+L'icona in cima alla pagina viene già da `appIcons.balancelife` (in `FeaturesPage.tsx`), che punta a `src/AmmAppIcon/BalanceLife.png`. Se vuoi cambiarla, sostituisci quel file PNG — non serve toccare il codice.
 
 ---
 

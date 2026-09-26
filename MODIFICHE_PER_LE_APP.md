@@ -48,6 +48,8 @@ Se cambia, aggiorna qui. Il link Play Store sarà generato automaticamente come:
 
 ## PARTE 2: Attivare Balance Life come card attiva
 
+> **Completata il 2026-09-26:** Balance Life è live su iOS (App Store id `6789879676`), Android ancora `androidComingSoon: true`. Quando esce su Google Play basta mettere `androidComingSoon: false` nella entry `balancelife` di `src/site/apps.ts`.
+
 Per rendere Balance Life una card funzionante come AirportShift:
 
 ### Step 1: Modifica `src/site/apps.ts` (linee 14-25)

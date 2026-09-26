@@ -22,23 +22,21 @@ export const apps: Record<string, AppEntry> = {
       androidComingSoon: false,
     },
   },
-  // TODO: sostituisci scheme/importPath/androidPackage/iosAppId con i valori
-  // reali quando Balance Life sarà pubblicata (vedi MODIFICHE_PER_LE_APP.md).
   balancelife: {
     appName: 'Balance Life',
     store: {
       scheme: 'balancelife',
       importPath: 'b',
-      androidPackage: 'com.aleblaks.BalanceLife',
-      iosAppId: '0000000000',
+      androidPackage: 'com.aleblaks.balancelife',
+      iosAppId: '6789879676',
       androidComingSoon: true,
     },
   },
 }
 
 export const androidComingSoonText = {
-  it: 'Disponibile su Android dal 20 luglio',
-  en: 'Coming to Android on July 20',
+  it: 'Presto disponibile su Android',
+  en: 'Coming soon to Android',
 }
 
 export type OS = 'ios' | 'android' | 'other'

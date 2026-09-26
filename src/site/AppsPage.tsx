@@ -48,14 +48,16 @@ const SHOWCASE: AppShowcase[] = [
     slug: 'balancelife',
     name: 'Balance Life',
     icon: BalanceLifeIcon,
-    status: 'soon',
+    status: 'live',
     tagline: {
       it: "Traccia ciò che fai, pianifica ciò che conta e raggiungi i tuoi obiettivi, un'attività alla volta.",
       en: 'Track what you do, plan what matters, and reach your goals, one activity at a time.',
     },
     features: [
-      { it: 'In sviluppo', en: 'In development' },
-      { it: 'Stessa filosofia: privato, locale, semplice', en: 'Same philosophy: private, local, simple' },
+      { it: 'Timer live per ogni attività', en: 'Live timer for every activity' },
+      { it: 'Obiettivi e orari settimanali', en: 'Weekly goals and schedules' },
+      { it: 'Trends e statistiche', en: 'Trends and statistics' },
+      { it: '100% offline, nessun account', en: '100% offline, no account' },
     ],
   },
 ]

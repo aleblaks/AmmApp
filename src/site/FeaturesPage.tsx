@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS } from './apps'
+import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS, storeUrlFor } from './apps'
 import { useT, type Bi } from './lang'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
 import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
@@ -21,6 +21,16 @@ import MockupColori from '../AmmAppMockups/screen-colori.png'
 import MockupImpostazioni from '../AmmAppMockups/screen-impostazioni.png'
 import MockupCodici from '../AmmAppMockups/screen-codici.png'
 import MockupCondividi from '../AmmAppMockups/screen-condividi.png'
+import BlHome from '../AmmAppMockups/balancelife/home.png'
+import BlTrends from '../AmmAppMockups/balancelife/trends.png'
+import BlOrari from '../AmmAppMockups/balancelife/orari.png'
+import BlCalendario from '../AmmAppMockups/balancelife/calendario.png'
+import BlTimer from '../AmmAppMockups/balancelife/timer.png'
+import BlPromemoria from '../AmmAppMockups/balancelife/promemoria.png'
+import BlProfilo from '../AmmAppMockups/balancelife/profilo.png'
+import BlParcheggio from '../AmmAppMockups/balancelife/parcheggio.png'
+import BlStile from '../AmmAppMockups/balancelife/stile.png'
+import BlPrivacy from '../AmmAppMockups/balancelife/privacy.png'
 
 const appIcons: Record<string, string> = {
   airportshift: AirportShiftIcon,
@@ -98,37 +108,106 @@ const AIRPORTSHIFT_FEATURES: Feature[] = [
   },
 ]
 
-// TODO: sostituisci tagline e features con i contenuti reali di Balance Life
-// quando saranno pronti. Segui lo stesso schema di AIRPORTSHIFT_FEATURES: se
-// hai già gli screenshot, aggiungili in src/AmmAppMockups/ e passali come
-// `image` (altrimenti lascia `image` non impostato per il placeholder).
 const BALANCELIFE_FEATURES: Feature[] = [
   {
-    alt: { it: '[Da compilare] Schermata 1', en: '[TODO] Screen 1' },
-    title: { it: '[Da compilare] Titolo funzionalità 1', en: '[TODO] Feature title 1' },
+    image: BlHome,
+    alt: { it: 'Schermata Oggi con la timeline della giornata', en: 'Today screen with the daily timeline' },
+    title: { it: 'La tua giornata in una schermata', en: 'Your day on one screen' },
     desc: {
-      it: '[Da compilare] Descrizione della prima funzionalità di Balance Life.',
-      en: '[TODO] Description of the first Balance Life feature.',
+      it: "La timeline mostra a colpo d'occhio cosa hai fatto e cosa è in corso: lettura, lavoro, palestra, gaming. Tocca il + e registra una nuova attività in un attimo.",
+      en: "The timeline shows at a glance what you did and what's running: reading, work, gym, gaming. Tap + and log a new activity in seconds.",
     },
-    accent: '#3b82f6',
+    accent: '#34d399',
   },
   {
-    alt: { it: '[Da compilare] Schermata 2', en: '[TODO] Screen 2' },
-    title: { it: '[Da compilare] Titolo funzionalità 2', en: '[TODO] Feature title 2' },
+    image: BlTrends,
+    alt: { it: 'Schermata Trends con il grafico a ciambella', en: 'Trends screen with the donut chart' },
+    title: { it: 'Tieni traccia delle tue attività', en: 'Keep track of your activities' },
     desc: {
-      it: '[Da compilare] Descrizione della seconda funzionalità di Balance Life.',
-      en: '[TODO] Description of the second Balance Life feature.',
+      it: "Ore totali, sessioni, giorni attivi e categoria principale, per settimana, mese o anno. Il grafico ti dice subito dove va il tuo tempo.",
+      en: 'Total hours, sessions, active days and top category, by week, month or year. The chart tells you right away where your time goes.',
+    },
+    accent: '#2dd4bf',
+  },
+  {
+    image: BlOrari,
+    alt: { it: 'Schermate obiettivi e organizzazione settimanale', en: 'Goals and weekly planning screens' },
+    title: { it: 'I tuoi orari, i tuoi tempi', en: 'Your schedule, your pace' },
+    desc: {
+      it: "Imposta obiettivi e orari preferiti per ogni attività e scegli come dividere il carico nella settimana. L'Agenda organizza ogni giorno di conseguenza.",
+      en: 'Set goals and preferred times for each activity and choose how to spread the load across the week. The Agenda plans each day around it.',
+    },
+    accent: '#fb923c',
+  },
+  {
+    image: BlCalendario,
+    alt: { it: 'Calendario con le attività di luglio e agosto', en: 'Calendar with July and August activities' },
+    title: { it: 'Passato e futuro in un unico posto', en: 'Past and future in one place' },
+    desc: {
+      it: 'Guarda cosa hai fatto ieri e cosa ti aspetta domani: il calendario raccoglie attività svolte e programmate, giorno per giorno.',
+      en: "See what you did yesterday and what's waiting tomorrow: the calendar collects done and planned activities, day by day.",
+    },
+    accent: '#fb7185',
+  },
+  {
+    image: BlTimer,
+    alt: { it: 'Timer live di una sessione in palestra', en: 'Live timer of a gym session' },
+    title: { it: 'Avvia e aggiorna in tempo reale', en: 'Start and update in real time' },
+    desc: {
+      it: 'Fai partire il timer e segna i progressi mentre li fai: esercizi, serie e carichi in palestra. Il timer resta visibile anche dalla schermata di blocco.',
+      en: 'Start the timer and log progress as you go: gym exercises, sets and weights. The timer stays visible on the lock screen too.',
+    },
+    accent: '#ef4444',
+  },
+  {
+    image: BlPromemoria,
+    alt: { it: 'Creazione di un promemoria per il veterinario', en: 'Creating a vet reminder' },
+    title: { it: 'Promemoria ed eventi, sempre al passo', en: 'Reminders and events, always on time' },
+    desc: {
+      it: 'Visite, esami, scadenze, appuntamenti per i tuoi animali: scegli quando e con quanto anticipo ricevere l’avviso.',
+      en: 'Checkups, exams, deadlines, appointments for your pets: choose when and how early to be notified.',
     },
     accent: '#f97316',
   },
   {
-    alt: { it: '[Da compilare] Schermata 3', en: '[TODO] Screen 3' },
-    title: { it: '[Da compilare] Titolo funzionalità 3', en: '[TODO] Feature title 3' },
+    image: BlProfilo,
+    alt: { it: 'Profilo con veicoli e animali', en: 'Profile with vehicles and pets' },
+    title: { it: 'I tuoi dati, in un unico posto', en: 'Your details, in one place' },
     desc: {
-      it: '[Da compilare] Descrizione della terza funzionalità di Balance Life.',
-      en: '[TODO] Description of the third Balance Life feature.',
+      it: 'Auto, moto, abbonamenti e animali nel profilo, con bollo e assicurazione sotto controllo prima che scadano.',
+      en: 'Cars, scooters, passes and pets in your profile, with road tax and insurance tracked before they expire.',
     },
-    accent: '#a855f7',
+    accent: '#a8a29e',
+  },
+  {
+    image: BlParcheggio,
+    alt: { it: 'Mappa con la posizione del parcheggio', en: 'Map with the parking spot' },
+    title: { it: 'Torna dove hai parcheggiato', en: 'Find where you parked' },
+    desc: {
+      it: "Salva il punto in cui hai lasciato l'auto con un tocco e ritrovalo sulla mappa quando ti serve.",
+      en: 'Save where you left the car with one tap and find it on the map when you need it.',
+    },
+    accent: '#38bdf8',
+  },
+  {
+    image: BlStile,
+    alt: { it: 'Tema chiaro e scuro a confronto', en: 'Light and dark theme side by side' },
+    title: { it: 'Scegli il tuo stile', en: 'Pick your style' },
+    desc: {
+      it: "Chiaro o scuro, l'app si adatta a te e al tuo telefono.",
+      en: 'Light or dark, the app adapts to you and your phone.',
+    },
+    accent: '#78716c',
+  },
+  {
+    image: BlPrivacy,
+    alt: { it: 'Schermata di benvenuto di Balance Life', en: 'Balance Life welcome screen' },
+    title: { it: '100% offline, 100% privato', en: '100% offline, 100% private' },
+    desc: {
+      it: 'Niente cloud, niente server, nessun account: i tuoi dati rimangono sul tuo telefono.',
+      en: 'No cloud, no servers, no account: your data stays on your phone.',
+    },
+    accent: '#f97316',
   },
 ]
 
@@ -145,11 +224,10 @@ const CONTENT: Record<string, AppFeaturesContent> = {
     },
     features: AIRPORTSHIFT_FEATURES,
   },
-  // TODO: sostituisci la tagline con la vera descrizione di Balance Life.
   balancelife: {
     tagline: {
-      it: '[Da compilare] Breve descrizione di Balance Life.',
-      en: '[TODO] Short description of Balance Life.',
+      it: "Traccia ciò che fai, pianifica ciò che conta e raggiungi i tuoi obiettivi, un'attività alla volta.",
+      en: 'Track what you do, plan what matters, and reach your goals, one activity at a time.',
     },
     features: BALANCELIFE_FEATURES,
   },
@@ -173,10 +251,7 @@ export function FeaturesPage() {
 
   const { tagline, features } = content
 
-  const storeUrl =
-    os === 'android'
-      ? androidStoreUrl(entry.store.androidPackage)
-      : iosStoreUrl(entry.store.iosAppId)
+  const storeUrl = storeUrlFor(os === 'other' ? 'ios' : os, entry)
 
   return (
     <main className="features-page">
@@ -187,9 +262,13 @@ export function FeaturesPage() {
           {t(tagline)}
         </p>
         <div className="features-hero-cta">
-          <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg">
-            {t({ it: "Scarica l'app", en: 'Get the app' })}
-          </a>
+          {storeUrl ? (
+            <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg">
+              {t({ it: "Scarica l'app", en: 'Get the app' })}
+            </a>
+          ) : (
+            <span className="btn btn-lg btn-disabled" aria-disabled="true">{t(androidComingSoonText)}</span>
+          )}
           <Link to="/" className="btn btn-ghost btn-lg">
             {t({ it: 'Torna alla home', en: 'Back to home' })}
           </Link>

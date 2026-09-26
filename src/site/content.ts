@@ -146,7 +146,7 @@ const airportshift: AppPrivacy = {
 
 const balancelife: AppPrivacy = {
   appName: 'Balance Life',
-  packageId: 'com.aleblaks.BalanceLife',
+  packageId: 'com.aleblaks.balancelife',
   docs: {
     it: {
       title: 'Informativa sulla Privacy — Balance Life',
@@ -449,7 +449,7 @@ const airportshiftSupport: AppPrivacy = {
 
 const balancelifeSupport: AppPrivacy = {
   appName: 'Balance Life',
-  packageId: 'com.aleblaks.BalanceLife',
+  packageId: 'com.aleblaks.balancelife',
   docs: {
     it: {
       title: 'Assistenza — Balance Life',

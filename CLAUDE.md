@@ -87,7 +87,7 @@ https://aleblaks.github.io/AmmApp/#/airportshift/open?d=<payload>
 
 ## Android coming-soon flag
 
-`apps.ts`'s `airportshift.store.androidComingSoon = true` disables all Android store links site-wide (cards, features page, QR fallback, `/store` route) and shows `androidComingSoonText` ("Disponibile su Android dal 20 luglio") instead. `storeUrlFor()` returns `null` for Android while the flag is set, so nothing auto-redirects to the (not yet live) Play Store listing. **Set it to `false`** in `src/site/apps.ts` once AirportShift is published on Google Play.
+Per-app `store.androidComingSoon = true` in `apps.ts` (currently only `balancelife`) disables that app's Android store links (cards, features page, QR fallback, `/store` route) and shows `androidComingSoonText` ("Presto disponibile su Android") instead. `storeUrlFor()` returns `null` for Android while the flag is set, so nothing auto-redirects to the (not yet live) Play Store listing. **Set it to `false`** in `src/site/apps.ts` once the app is published on Google Play.
 
 ## Pending TODOs
 
