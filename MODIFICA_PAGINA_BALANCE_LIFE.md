@@ -37,7 +37,7 @@ Ogni elemento dell'array è una sezione della pagina. Per ognuna aggiorna:
   alt: { it: '...', en: '...' },    // testo alternativo dell'immagine (accessibilità)
   title: { it: '...', en: '...' },  // titolo della funzionalità
   desc: { it: '...', en: '...' },   // descrizione della funzionalità
-  accent: '#3b82f6',                // colore del bagliore dietro lo screenshot (hex)
+  accent: '#3b82f6',                // colore dell'ombra sotto lo screenshot (hex)
 },
 ```
 

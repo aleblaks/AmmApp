@@ -22,7 +22,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <Link to="/apps" className="nav-link">
               {t({ it: 'App', en: 'Apps' })}
             </Link>
-            <a href="mailto:ammapp.help@gmail.com" className="nav-link">
+            <a href="mailto:ammapp.help@gmail.com" className="nav-link nav-link-secondary">
               {t({ it: 'Contatti', en: 'Contact' })}
             </a>
             <LangSwitch />

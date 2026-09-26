@@ -50,8 +50,8 @@ const SHOWCASE: AppShowcase[] = [
     icon: BalanceLifeIcon,
     status: 'soon',
     tagline: {
-      it: "Traccia ciò che fai, pianifica ciò che conta e raggiungi i tuoi obiettivi — un'attività alla volta",
-      en: '"Track what you do, plan what matters, and reach your goals — one activity at a time.',
+      it: "Traccia ciò che fai, pianifica ciò che conta e raggiungi i tuoi obiettivi, un'attività alla volta.",
+      en: 'Track what you do, plan what matters, and reach your goals, one activity at a time.',
     },
     features: [
       { it: 'In sviluppo', en: 'In development' },

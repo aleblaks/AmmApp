@@ -36,7 +36,7 @@ src/
     lang.tsx           # bilingual context: LangProvider, useLang, useT, Bi type
     apps.ts            # QR router config + detectOS/buildDeepLink/storeUrlFor
     content.ts         # privacy & support text (privacyData, supportData)
-    styles.css         # Midnight Indigo design system — pure CSS, no Tailwind
+    styles.css         # design tokens (off-black + logo yellow, light/dark) — pure CSS, no Tailwind
     Home.tsx           # hero + app cards grid
     OpenPage.tsx       # QR deep-link router (/:app/open)
     PrivacyPage.tsx    # thin wrapper → DocPage

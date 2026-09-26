@@ -198,9 +198,8 @@ export function FeaturesPage() {
 
       <div className="features-list">
         {features.map((feat, i) => (
-          <section key={i} className={`feature-row ${i % 2 === 1 ? 'feature-row-reverse' : ''}`}>
-            <div className="feature-mockup">
-              <div className="feature-mockup-glow" style={{ '--feat-accent': feat.accent } as React.CSSProperties} />
+          <section key={i} className={`feature-row ${['', 'feature-row-reverse', 'feature-row-stack'][i % 3]}`}>
+            <div className="feature-mockup" style={{ '--feat-accent': feat.accent } as React.CSSProperties}>
               {feat.image ? (
                 <img
                   src={feat.image}
