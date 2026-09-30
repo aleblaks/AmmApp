@@ -1,5 +1,7 @@
 # Modifica pagina "Scopri di più" di Balance Life
 
+> ⚠️ Dal 2026-09-27 la pagina è stata rifatta in stile Apple: i testi stanno nella mappa `PAGES` di `FeaturesPage.tsx` (voce `balancelife`), e gli screenshot si aggiungono copiandoli in `src/AmmAppMockups/shots/` con i nomi di `BalanceLife-screenshot.md` sul Desktop — nessuna modifica al codice. Le istruzioni sotto sono della versione precedente.
+
 > Contenuti reali e 10 screenshot inseriti il 2026-09-26 (in `src/AmmAppMockups/balancelife/`). Questa guida resta valida per modificarli.
 
 Istruzioni per modificare i contenuti della pagina

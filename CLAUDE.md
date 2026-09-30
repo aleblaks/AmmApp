@@ -29,7 +29,7 @@ React 19 + react-router-dom 7 + TypeScript, pure CSS (no Tailwind, no UI library
 |---|---|---|
 | `/` | `Landing.tsx` | studio landing |
 | `/apps` | `AppsPage.tsx` | app cards (`SHOWCASE` array) |
-| `/:app/features` | `FeaturesPage.tsx` | "Scopri di più": hero + screenshot sections (`CONTENT` map) |
+| `/:app/features` | `FeaturesPage.tsx` | "Scopri di più": Apple-style page (`PAGES` map) |
 | `/:app/open` | `OpenPage.tsx` | QR deep-link router |
 | `/:app/store` | `StorePage.tsx` | redirects to App Store / Play Store by device |
 | `/:app/privacy`, `/:app/support` | `PrivacyPage` / `SupportPage` → `DocPage` | texts from `content.ts` |
@@ -38,12 +38,12 @@ React 19 + react-router-dom 7 + TypeScript, pure CSS (no Tailwind, no UI library
 
 Page data requirements differ:
 - `privacy` / `support` need only a `privacyData` / `supportData` entry in `content.ts` (Resoconto has these but no `apps.ts` entry).
-- `features` needs both an `apps.ts` entry and a `CONTENT` entry in `FeaturesPage.tsx`; otherwise it renders "not found".
+- `features` needs both an `apps.ts` entry and a `PAGES` entry in `FeaturesPage.tsx`; otherwise it renders "not found".
 - App icons are duplicated in `appIcons` maps in `OpenPage.tsx` and `FeaturesPage.tsx`, and imported in `AppsPage.tsx`.
 
 `content.ts` holds the privacy/support copy that App Store listings link to. Treat it as legal text: change it only when asked.
 
-Feature sections on `/:app/features` take `{ image?, alt, title, desc, accent }`. Screenshots live in `src/AmmAppMockups/` (Balance Life in `balancelife/`). `accent` tints the screenshot's shadow; a missing `image` renders a dashed placeholder. Row layout cycles normal / reversed / stacked (`i % 3`).
+`FeaturesPage.tsx` is Apple-style: a `PAGES` map per app with hero, `chapters` (1–2 phones each, alternating), `tiles` (secondary features, optional screenshot), privacy block and CTA. Screenshots are raw simulator shots (1206×2622) dropped into `src/AmmAppMockups/shots/` with the names listed in the owner's `*-screenshot.md` (e.g. `as-hero.png`, `bl-live.png`); `import.meta.glob` picks them up by name and `Phone` draws the iPhone frame in CSS. A missing shot falls back to the old framed mockup, or to an empty frame labeled with the expected filename. Scroll reveal is the CSS `.fx-reveal` class.
 
 ## Bilingual copy
 
