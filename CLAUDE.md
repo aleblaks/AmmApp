@@ -43,7 +43,7 @@ Page data requirements differ:
 
 `content.ts` holds the privacy/support copy that App Store listings link to. Treat it as legal text: change it only when asked.
 
-`FeaturesPage.tsx` is Apple-style: a `PAGES` map per app with hero, `chapters` (1–2 phones each, alternating), `tiles` (secondary features, optional screenshot), privacy block and CTA. Screenshots are raw simulator shots (1206×2622) dropped into `src/AmmAppMockups/shots/` with the names listed in the owner's `*-screenshot.md` (e.g. `as-hero.png`, `bl-live.png`); `import.meta.glob` picks them up by name and `Phone` draws the iPhone frame in CSS. A missing shot falls back to the old framed mockup, or to an empty frame labeled with the expected filename. Scroll reveal is the CSS `.fx-reveal` class.
+`FeaturesPage.tsx` is Apple-style: a `PAGES` map per app with hero, `chapters` (1–2 phones each, alternating), `tiles` (secondary features, optional screenshot), privacy block and CTA. Screenshots are raw simulator shots (1206×2622) dropped into `src/AmmAppMockups/shots/` with the names listed in the owner's `*-screenshot.md` (e.g. `as-hero.png`, `bl-live.png`); `import.meta.glob` picks them up by name. Optional per-visitor variants: `<name>-dark.png`, `<name>-android.png`, `<name>-android-dark.png` (chosen by `detectOS()` + `prefers-color-scheme`, falling back to `<name>.png`; Android visitors get a squarer frame, `.fx-android`) and `Phone` draws the iPhone frame in CSS. A missing shot falls back to the old framed mockup, or to an empty frame labeled with the expected filename. Scroll reveal is the CSS `.fx-reveal` class.
 
 ## Bilingual copy
 

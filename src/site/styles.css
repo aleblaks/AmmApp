@@ -954,3 +954,7 @@ li { margin: 6px 0; }
 @keyframes openA { to { transform: translate(-112%, -50%) rotateY(0) rotateZ(-8deg); } }
 @keyframes openB { to { transform: translate(8%, -40%) rotateY(0) rotateZ(8deg); } }
 
+
+/* Cornice Android: angoli più squadrati, bordo sottile (il foro della fotocamera è nello screenshot). */
+.fx-android { border-radius: 11% / 5.2%; padding: 2.4%; }
+.fx-android img { border-radius: 9% / 4.2%; }

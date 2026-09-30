@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS, storeUrlFor } from './apps'
 import { useT, type Bi } from './lang'
@@ -21,8 +21,27 @@ import BlParcheggio from '../AmmAppMockups/balancelife/parcheggio.png'
 import BlStile from '../AmmAppMockups/balancelife/stile.png'
 
 // Screenshot nudi (1206×2622) caricati per nome: basta copiare il file in shots/.
+// Varianti per chi visita: <nome>.png (iOS chiaro), <nome>-dark.png, <nome>-android.png,
+// <nome>-android-dark.png. Se la variante manca si ripiega sulla base.
 const SHOTS = import.meta.glob('../AmmAppMockups/shots/*.png', { eager: true, import: 'default' }) as Record<string, string>
-export const shot = (name: string) => SHOTS[`../AmmAppMockups/shots/${name}.png`]
+const file = (n: string) => SHOTS[`../AmmAppMockups/shots/${n}.png`]
+const ANDROID = detectOS() === 'android'
+export const shot = (name: string, dark = false) =>
+  (ANDROID && dark && file(`${name}-android-dark`)) || (ANDROID && file(`${name}-android`)) ||
+  (dark && file(`${name}-dark`)) || file(name)
+
+// Tema del dispositivo, anche se cambia mentre la pagina è aperta.
+function useDark() {
+  const mq = typeof matchMedia !== 'undefined' ? matchMedia('(prefers-color-scheme: dark)') : null
+  const [dark, setDark] = useState(mq?.matches ?? false)
+  useEffect(() => {
+    if (!mq) return
+    const on = (e: MediaQueryListEvent) => setDark(e.matches)
+    mq.addEventListener('change', on)
+    return () => mq.removeEventListener('change', on)
+  }, [])
+  return dark
+}
 
 function AppleIcon() {
   return (
@@ -38,8 +57,8 @@ function AndroidIcon() {
 
 // Uno screenshot nudo va nella cornice dell'iPhone; il vecchio mockup (già incorniciato) no.
 export function Phone({ name, fallback, alt }: { name: string; fallback?: string; alt: string }) {
-  const src = shot(name)
-  const frame = name.includes('watch') ? 'fx-phone fx-watch' : 'fx-phone'
+  const src = shot(name, useDark())
+  const frame = name.includes('watch') ? 'fx-phone fx-watch' : ANDROID ? 'fx-phone fx-android' : 'fx-phone'
   if (src) return <div className={frame}><img src={src} alt={alt} loading="lazy" /></div>
   if (fallback) return <img src={fallback} alt={alt} className="fx-legacy" loading="lazy" />
   return <div className={`${frame} fx-phone-empty`}><span>{name}.png</span></div>
