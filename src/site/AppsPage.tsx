@@ -1,4 +1,6 @@
+import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
+import { Phone } from './FeaturesPage'
 import { useT, type Bi } from './lang'
 import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS } from './apps'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
@@ -23,6 +25,8 @@ interface AppShowcase {
   name: string
   icon: string
   status: Status
+  accent: string
+  shot: string
   tagline: Bi
   features: Bi[]
 }
@@ -33,9 +37,11 @@ const SHOWCASE: AppShowcase[] = [
     name: 'AirportShift',
     icon: AirportShiftIcon,
     status: 'live',
+    accent: '#0a84ff',
+    shot: 'as-hero',
     tagline: {
-      it: 'Gestisci e condividi i tuoi turni di lavoro in aeroporto. Tutto in locale, niente server.',
-      en: 'Manage and share your airport work shifts. Fully on-device, no servers.',
+      it: 'I tuoi turni Aviation Service, dal PDF al calendario. Tutto in locale, niente server.',
+      en: 'Your Aviation Service shifts, from PDF to calendar. Fully on-device, no servers.',
     },
     features: [
       { it: 'Importa i turni dal PDF', en: 'Import shifts from PDF' },
@@ -49,6 +55,8 @@ const SHOWCASE: AppShowcase[] = [
     name: 'Balance Life',
     icon: BalanceLifeIcon,
     status: 'live',
+    accent: '#30d158',
+    shot: 'bl-hero',
     tagline: {
       it: "Traccia ciò che fai, pianifica ciò che conta e raggiungi i tuoi obiettivi, un'attività alla volta.",
       en: 'Track what you do, plan what matters, and reach your goals, one activity at a time.',
@@ -79,7 +87,7 @@ export function Apps() {
 
       <section className="apps-grid" aria-label="Apps">
         {SHOWCASE.map((app) => (
-          <article key={app.slug} className={`app-card ${app.status === 'soon' ? 'soon' : ''}`}>
+          <article key={app.slug} className={`app-card ${app.status === 'soon' ? 'soon' : ''}`} style={{ '--fx-accent': app.accent } as CSSProperties}>
             {app.status === 'live' && apps[app.slug] && (
               <Link to={`/${app.slug}/features`} className="card-cover-link" aria-label={app.name} tabIndex={-1} />
             )}
@@ -162,6 +170,9 @@ export function Apps() {
                   {t({ it: 'Pagine privacy e assistenza in arrivo.', en: 'Privacy and support pages coming soon.' })}
                 </span>
               )}
+            </div>
+            <div className="app-card-shot" aria-hidden>
+              <Phone name={app.shot} alt="" />
             </div>
           </article>
         ))}

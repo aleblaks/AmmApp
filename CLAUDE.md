@@ -11,14 +11,16 @@ npx tsc --noEmit       # type check; vite build does NOT type-check
 node ghpages-sim.mjs   # serves dist/ at localhost:4178/AmmApp/ with real GitHub Pages 404 semantics
 ```
 
-No test suite, no lint step in CI. The Vite dev server serves `index.html` for any path, so it is not a faithful GitHub Pages test; use `ghpages-sim.mjs` after a build when touching routing or `public/404.html`.
+No test suite, no lint step in CI. The Vite dev server serves `index.html` for any path, so it is not a faithful GitHub Pages test; use `ghpages-sim.mjs` after a build when touching routing or the generated pages.
 
 ## Deploy and hosting
 
 `.github/workflows/deploy.yml` builds and publishes `dist/` on every push to `main`. Live at `https://aleblaks.github.io/AmmApp/`. GitHub Pages serves `index.html` with `Cache-Control: max-age=600`, so a fresh deploy can look stale for up to ~10 minutes.
 
-- **HashRouter is required.** Pages only returns 200 for the base path; every route lives after `#`. `public/404.html` converts path-form URLs to hash-form as a fallback.
-- **`base: './'` in build only** (`vite.config.ts`). Never reference assets by absolute path (`/foo.png`): it breaks under `/AmmApp/`. Import images from `src/` as modules instead; `public/` is only for the favicon and `404.html`.
+- **Real paths, not `#` (since 2026-10-04), so Google can index each page.** `BrowserRouter` with `basename` = Vite's `BASE_URL`. The `pagine-per-google` plugin in `vite.config.ts` writes, after the build, one `index.html` per entry of `src/site/seo.ts` (own title, description, canonical, Open Graph, `SoftwareApplication` JSON-LD), plus `404.html` (SPA fallback, `noindex`), `sitemap.xml` and `robots.txt`. A new indexable page = a route in `App.tsx` + an entry in `SEO`.
+- **Old `#` links still work:** `main.tsx` rewrites `#/path?query` to `/path#query` before React mounts.
+- **Base:** `SITE_BASE` (default `/AmmApp/`) and `SITE_URL` (default `https://aleblaks.github.io/AmmApp/`) env vars in `vite.config.ts`; for a custom domain set `SITE_BASE=/` and `SITE_URL=https://…/`. Import images from `src/` as modules; `public/` is only for favicons.
+- `robots.txt` only counts at a domain root: on `aleblaks.github.io/AmmApp/` Google ignores it, so `/open` and `/store` also get a `noindex` meta at runtime (`Meta` in `App.tsx`).
 - The repo is connected to **Lovable** (see `AGENTS.md`): never force-push or rewrite pushed history; keep `main` working.
 
 ## Architecture
@@ -55,7 +57,7 @@ Every visible string is a `Bi = { it, en }` rendered with `useT()` from `lang.ts
 
 ## QR router: privacy constraint
 
-QR codes in the apps must use the hash form, `https://aleblaks.github.io/AmmApp/#/airportshift/open?d=<payload>`, never the path form: a real `?d=` query would reach GitHub's server logs, leaking shift data. On mobile, `OpenPage` fires the custom-scheme deep link and falls back to the store after 1800 ms if the page is still visible; on desktop it asks the user to open the link on their phone.
+QR codes in the apps must keep the payload after `#`: `https://aleblaks.github.io/AmmApp/#/airportshift/open?d=<payload>` (what the apps generate today; `main.tsx` turns it into `/airportshift/open#d=<payload>`, which `OpenPage` reads from the hash). Never a real `?d=` query: it would reach GitHub's server logs, leaking shift data. On mobile, `OpenPage` fires the custom-scheme deep link and falls back to the store after 1800 ms if the page is still visible; on desktop it asks the user to open the link on their phone.
 
 ## Guides for the owner
 
@@ -64,4 +66,5 @@ QR codes in the apps must use the hash form, `https://aleblaks.github.io/AmmApp/
 ## Pending
 
 - Real-device test: QR scan → app opens / app absent → correct store.
-- Custom domain `www.ammapp.it` (not registered): add `public/CNAME`, make `404.html` host-aware, configure DNS.
+- Custom domain `www.ammapp.it` (not registered): add `public/CNAME`, build with `SITE_BASE=/ SITE_URL=https://www.ammapp.it/`, configure DNS.
+- Google Search Console: verify the site and submit `sitemap.xml` (owner's account).

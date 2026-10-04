@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { useT } from '../lang'
-import { LangSwitch } from './LangSwitch'
+import { ThemeSwitch } from './ThemeSwitch'
 import AmmAppIcon from "../../AmmAppIcon/AmmAppIcone.png"
 
 export function Layout({ children }: { children: ReactNode }) {
@@ -25,7 +25,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <a href="mailto:ammapp.help@gmail.com" className="nav-link nav-link-secondary">
               {t({ it: 'Contatti', en: 'Contact' })}
             </a>
-            <LangSwitch />
+            <ThemeSwitch />
           </nav>
         </div>
       </header>

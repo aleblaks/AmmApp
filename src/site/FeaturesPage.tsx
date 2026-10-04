@@ -1,4 +1,5 @@
-import { useEffect, useState, type CSSProperties } from 'react'
+import type { CSSProperties } from 'react'
+import { useTheme } from './theme'
 import { Link, useParams } from 'react-router-dom'
 import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS, storeUrlFor } from './apps'
 import { useT, type Bi } from './lang'
@@ -7,7 +8,6 @@ import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
 import MockupCalendario from '../AmmAppMockups/screen-calendario.png'
 import MockupRiepilogo from '../AmmAppMockups/screen-riepilogo.png'
 import MockupColori from '../AmmAppMockups/screen-colori.png'
-import MockupImpostazioni from '../AmmAppMockups/screen-impostazioni.png'
 import MockupCodici from '../AmmAppMockups/screen-codici.png'
 import MockupCondividi from '../AmmAppMockups/screen-condividi.png'
 import BlHome from '../AmmAppMockups/balancelife/home.png'
@@ -23,25 +23,14 @@ import BlStile from '../AmmAppMockups/balancelife/stile.png'
 // Screenshot nudi (1206×2622) caricati per nome: basta copiare il file in shots/.
 // Varianti per chi visita: <nome>.png (iOS chiaro), <nome>-dark.png, <nome>-android.png,
 // <nome>-android-dark.png. Se la variante manca si ripiega sulla base.
-const SHOTS = import.meta.glob('../AmmAppMockups/shots/*.png', { eager: true, import: 'default' }) as Record<string, string>
-const file = (n: string) => SHOTS[`../AmmAppMockups/shots/${n}.png`]
+const SHOTS = import.meta.glob('../AmmAppMockups/shots/*.{png,webp}', { eager: true, import: 'default' }) as Record<string, string>
+const file = (n: string) => SHOTS[`../AmmAppMockups/shots/${n}.png`] ?? SHOTS[`../AmmAppMockups/shots/${n}.webp`]
 const ANDROID = detectOS() === 'android'
 export const shot = (name: string, dark = false) =>
   (ANDROID && dark && file(`${name}-android-dark`)) || (ANDROID && file(`${name}-android`)) ||
   (dark && file(`${name}-dark`)) || file(name)
 
-// Tema del dispositivo, anche se cambia mentre la pagina è aperta.
-function useDark() {
-  const mq = typeof matchMedia !== 'undefined' ? matchMedia('(prefers-color-scheme: dark)') : null
-  const [dark, setDark] = useState(mq?.matches ?? false)
-  useEffect(() => {
-    if (!mq) return
-    const on = (e: MediaQueryListEvent) => setDark(e.matches)
-    mq.addEventListener('change', on)
-    return () => mq.removeEventListener('change', on)
-  }, [])
-  return dark
-}
+const useDark = () => useTheme() === 'dark'
 
 function AppleIcon() {
   return (
@@ -58,7 +47,8 @@ function AndroidIcon() {
 // Uno screenshot nudo va nella cornice dell'iPhone; il vecchio mockup (già incorniciato) no.
 export function Phone({ name, fallback, alt }: { name: string; fallback?: string; alt: string }) {
   const src = shot(name, useDark())
-  const frame = name.includes('watch') ? 'fx-phone fx-watch' : ANDROID ? 'fx-phone fx-android' : 'fx-phone'
+  // iOS e Watch: cornici ufficiali Apple (Product Bezels); Android: cornice disegnata in CSS.
+  const frame = name.includes('watch') ? 'fx-phone fx-watch fx-bezel' : ANDROID ? 'fx-phone fx-android' : 'fx-phone fx-bezel'
   if (src) return <div className={frame}><img src={src} alt={alt} loading="lazy" /></div>
   if (fallback) return <img src={fallback} alt={alt} className="fx-legacy" loading="lazy" />
   return <div className={`${frame} fx-phone-empty`}><span>{name}.png</span></div>
@@ -85,21 +75,23 @@ interface AppPage {
   tilesTitle: Bi
   tiles: Tile[]
   privacy: { title: Bi; desc: Bi }
+  // Chiusura propria (es. il gioco sulla sigla AS) e riga di chiarimento sotto i pulsanti.
+  end?: { title: Bi; sub?: Bi; note?: Bi }
 }
 
 const PAGES: Record<string, AppPage> = {
   airportshift: {
     icon: AirportShiftIcon,
     badge: { it: 'Novità · Versione 2.0', en: 'New · Version 2.0' },
-    hero: { name: 'as-hero', fallback: MockupCalendario },
+    hero: { name: 'as-hero-framed', fallback: MockupCalendario },
     headline: { it: 'Il tuo turno.\nA colpo d’occhio.', en: 'Your shift.\nAt a glance.' },
     tagline: {
-      it: 'Carica il PDF dei turni e AirportShift fa il resto: codici tradotti in orari, un calendario che si legge in un secondo, ore e straordinari già contati.',
-      en: 'Load the shift PDF and AirportShift does the rest: codes turned into times, a calendar you read in a second, hours and overtime already counted.',
+      it: 'Carica il PDF dei turni di Aviation Service e AirportShift fa il resto: codici tradotti in orari, un calendario che si legge in un secondo, ore e straordinari già contati.',
+      en: 'Load your Aviation Service shift PDF and AirportShift does the rest: codes turned into times, a calendar you read in a second, hours and overtime already counted.',
     },
     chapters: [
       {
-        shots: [{ name: 'as-import', fallback: MockupImpostazioni }],
+        shots: [{ name: 'as-hero', fallback: MockupCalendario }],
         eyebrow: { it: 'Importa', en: 'Import' },
         title: { it: 'Un PDF.\nUn mese intero.', en: 'One PDF.\nA whole month.' },
         desc: {
@@ -109,7 +101,7 @@ const PAGES: Record<string, AppPage> = {
         accent: '#0a84ff',
       },
       {
-        shots: [{ name: 'as-hero', fallback: MockupCalendario }, { name: 'as-giorno' }],
+        shots: [{ name: 'as-giorno' }],
         eyebrow: { it: 'Calendario', en: 'Calendar' },
         title: { it: 'Tocca un giorno.\nL’orario è lì.', en: 'Tap a day.\nThere’s the time.' },
         desc: {
@@ -191,24 +183,23 @@ const PAGES: Record<string, AppPage> = {
     tilesTitle: { it: 'E tutti i dettagli che contano.', en: 'And every detail that matters.' },
     tiles: [
       { icon: 'event_busy', shot: { name: 'as-impegnato' }, title: { it: 'Giorni impegnati', en: 'Busy days' }, desc: { it: 'Segna i turni che non puoi cedere. Chi scansiona il tuo QR lo vede, senza sapere il perché.', en: 'Mark shifts you can’t swap. Whoever scans your QR sees it, without knowing why.' } },
-      { icon: 'upload_file', title: { it: 'Trascina il PDF', en: 'Drag the PDF' }, desc: { it: 'Da Mail, File o qualsiasi app: lo lasci cadere e i turni sono dentro.', en: 'From Mail, Files or any app: drop it in and your shifts are there.' } },
-      { icon: 'notifications_active', title: { it: 'Promemoria del turno', en: 'Shift reminders' }, desc: { it: 'Un avviso prima di ogni turno, con l\u2019anticipo che preferisci.', en: 'A heads-up before every shift, as early as you like.' } },
-      { icon: 'calendar_month', title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Sincronizza i turni con il calendario del telefono, anche in automatico dopo ogni import.', en: 'Sync shifts to your phone’s calendar, even automatically after every import.' } },
+      { icon: 'calendar_month', shot: { name: 'as-calendario' }, title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Sincronizza i turni con il calendario del telefono, anche in automatico dopo ogni import.', en: 'Sync shifts to your phone’s calendar, even automatically after every import.' } },
       { icon: 'pin', shot: { name: 'as-codici', fallback: MockupCodici }, title: { it: 'Schema codici', en: 'Code decoder' }, desc: { it: 'Scrivi 509 e scopri orario e durata. FNL, RIP, ADD e FR riconosciuti da soli.', en: 'Type 509 and see time and duration. FNL, RIP, ADD and FR recognized automatically.' } },
-      { icon: 'palette', title: { it: 'I tuoi colori', en: 'Your colors' }, desc: { it: 'Scegli il colore di ogni tipo di giorno, e una palette a parte per i turni dei colleghi.', en: 'Pick the color of every day type, plus a separate palette for colleagues.' } },
       { icon: 'grid_view', shot: { name: 'as-mesi' }, title: { it: 'Tutti i mesi', en: 'All months' }, desc: { it: 'Salta a qualsiasi mese e guarda il resoconto dell’anno.', en: 'Jump to any month and see the yearly recap.' } },
-      { icon: 'spa', title: { it: 'Balance Life', en: 'Balance Life' }, desc: { it: 'Manda i turni all’app sorella e ritrovali nella tua giornata.', en: 'Send shifts to the sister app and find them in your day.' } },
-      { icon: 'dark_mode', title: { it: 'Chiaro o scuro', en: 'Light or dark' }, desc: { it: 'Segue il telefono, o scegli tu.', en: 'Follows your phone, or you choose.' } },
-      { icon: 'accessibility_new', title: { it: 'Accessibile', en: 'Accessible' }, desc: { it: 'VoiceOver, testo grande e Riduci movimento, rispettati ovunque.', en: 'VoiceOver, larger text and Reduce Motion, respected everywhere.' } },
     ],
     privacy: {
       title: { it: 'I tuoi turni restano\nsul tuo telefono.', en: 'Your shifts stay\non your phone.' },
       desc: { it: 'Nessun account, nessun server, nessuna connessione. Anche la condivisione passa solo da un QR, da telefono a telefono.', en: 'No account, no server, no connection. Even sharing goes through a QR only, phone to phone.' },
     },
+    end: {
+      title: { it: 'AS, per chi lavora con AS.', en: 'AS, for people who work with AS.' },
+      sub: { it: 'AirportShift legge i turni di Aviation Service. La sigla è la stessa: è un caso, ma ci piace.', en: 'AirportShift reads Aviation Service shifts. Same initials: a coincidence, but we like it.' },
+      note: { it: 'AirportShift è un’app indipendente: non è affiliata ad Aviation Service né approvata dall’agenzia.', en: 'AirportShift is an independent app: it is not affiliated with or endorsed by Aviation Service.' },
+    },
   },
   balancelife: {
     icon: BalanceLifeIcon,
-    hero: { name: 'bl-hero', fallback: BlHome },
+    hero: { name: 'bl-hero-framed', fallback: BlHome },
     headline: { it: 'La tua giornata.\nIn equilibrio.', en: 'Your day.\nIn balance.' },
     tagline: {
       it: 'Lettura, palestra, lavoro, serie, studio: registra ciò che fai, pianifica ciò che conta e guarda il tempo prendere forma.',
@@ -290,13 +281,10 @@ const PAGES: Record<string, AppPage> = {
     tiles: [
       { icon: 'local_parking', shot: { name: 'bl-parcheggio', fallback: BlParcheggio }, title: { it: 'Parcheggio', en: 'Parking' }, desc: { it: 'Salva dove hai lasciato l’auto e ritrovala sulla mappa.', en: 'Save where you left the car and find it on the map.' } },
       { icon: 'search', shot: { name: 'bl-cerca' }, title: { it: 'Cerca', en: 'Search' }, desc: { it: 'Prima ancora di scrivere, il libro e la serie da riprendere.', en: 'Before you type, the book and show to pick up.' } },
-      { icon: 'flight', shot: { name: 'bl-turni' }, title: { it: 'Turni da AirportShift', en: 'Shifts from AirportShift' }, desc: { it: 'I turni futuri diventano pianificati, quelli passati svolti.', en: 'Future shifts become planned, past ones done.' } },
       { icon: 'table_view', shot: { name: 'bl-export' }, title: { it: 'Export leggibile', en: 'Readable export' }, desc: { it: 'Tutto in tabelle che si aprono in Numbers o Excel, e si reimporta senza doppioni.', en: 'Everything in tables that open in Numbers or Excel, re-importable without duplicates.' } },
       { icon: 'live_tv', shot: { name: 'bl-serie' }, title: { it: 'Serie TV', en: 'TV shows' }, desc: { it: 'Stagioni, episodi visti e quello da cui riprendere.', en: 'Seasons, watched episodes and where to pick up.' } },
-      { icon: 'content_copy', title: { it: 'Copia e incolla', en: 'Copy and paste' }, desc: { it: 'Duplica un’attività o un’intera giornata.', en: 'Duplicate an activity or a whole day.' } },
-      { icon: 'edit_note', title: { it: 'Nota al volo', en: 'Quick note' }, desc: { it: 'Un pensiero, fissato nella giornata in un tocco.', en: 'A thought, pinned to your day in one tap.' } },
-      { icon: 'dark_mode', title: { it: 'Chiaro o scuro', en: 'Light or dark' }, desc: { it: 'Icone o emoji, il tema che preferisci.', en: 'Icons or emoji, the theme you like.' } },
-      { icon: 'accessibility_new', title: { it: 'Accessibile', en: 'Accessible' }, desc: { it: 'VoiceOver, testo grande e Riduci movimento.', en: 'VoiceOver, larger text and Reduce Motion.' } },
+      { icon: 'contrast', shot: { name: 'bl-bn' }, title: { it: 'B&W', en: 'B&W' }, desc: { it: 'Tutta l\u2019app in bianco e nero: nero su bianco in tema chiaro, bianco su nero in scuro. Il significato resta nel testo e nelle icone.', en: 'The whole app in black and white: black on white in light mode, white on black in dark. Meaning stays in text and icons.' } },
+      { icon: 'content_copy', shot: { name: 'bl-copia' }, title: { it: 'Copia e incolla', en: 'Copy and paste' }, desc: { it: 'Duplica un’attività o un’intera giornata.', en: 'Duplicate an activity or a whole day.' } },
     ],
     privacy: {
       title: { it: '100% offline.\n100% tuo.', en: '100% offline.\n100% yours.' },
@@ -313,6 +301,7 @@ export function FeaturesPage() {
   const page = app ? PAGES[app] : undefined
   const t = useT()
   const os = detectOS()
+  const dark = useDark()
 
   if (!entry || !page) {
     return (
@@ -345,9 +334,10 @@ export function FeaturesPage() {
           <p className="fx-lead">{t(page.tagline)}</p>
           <div className="fx-cta">{cta}</div>
         </div>
-        <div className="fx-hero-shot">
+        <div className="fx-hero-shot fx-hero-framed">
           <div className="fx-hero-glow" aria-hidden />
-          <Phone name={page.hero.name} fallback={page.hero.fallback} alt={entry.appName} />
+          {/* Immagine già nella cornice ufficiale Apple: niente cornice CSS */}
+          <img src={shot(page.hero.name, dark) ?? page.hero.fallback} alt={entry.appName} />
         </div>
       </section>
 
@@ -385,6 +375,23 @@ export function FeaturesPage() {
         </div>
       </section>
 
+      {app === 'balancelife' && (
+        <section className="ins-teaser fx-reveal">
+          <Link to="/insieme" className="ins-teaser-card">
+            <div className="ins-icons" aria-hidden>
+              <img src={AirportShiftIcon} alt="" className="fx-icon" />
+              <span className="material-symbols-outlined">add</span>
+              <img src={BalanceLifeIcon} alt="" className="fx-icon" />
+            </div>
+            <div>
+              <h2 className="fx-title">{t({ it: 'Lavori con Aviation Service?', en: 'Working with Aviation Service?' })}</h2>
+              <p className="fx-desc">{t({ it: 'Con AirportShift i tuoi turni entrano in Balance Life, e la giornata è completa.', en: 'With AirportShift your shifts come into Balance Life, and your day is complete.' })}</p>
+              <span className="ld-door-more">{t({ it: 'Scopri come', en: 'See how' })}<span className="material-symbols-outlined" aria-hidden>arrow_forward</span></span>
+            </div>
+          </Link>
+        </section>
+      )}
+
       <section className="fx-privacy fx-reveal">
         <span className="material-symbols-outlined fx-lock" aria-hidden>lock</span>
         <h2 className="fx-title">{lines(t(page.privacy.title))}</h2>
@@ -393,7 +400,8 @@ export function FeaturesPage() {
 
       <section className="fx-end">
         <img src={page.icon} alt="" className="fx-icon" />
-        <h2 className="fx-title">{t({ it: 'Pronto a provarla?', en: 'Ready to try it?' })}</h2>
+        <h2 className="fx-title">{t(page.end?.title ?? { it: 'Pronto a provarla?', en: 'Ready to try it?' })}</h2>
+        {page.end?.sub && <p className="fx-desc">{t(page.end.sub)}</p>}
         <div className="fx-cta">{cta}</div>
         <div className="features-store-icons">
           <a href={iosStoreUrl(entry.store.iosAppId)} target="_blank" rel="noopener noreferrer" className="store-icon-btn" aria-label="App Store">
@@ -409,6 +417,7 @@ export function FeaturesPage() {
             </a>
           )}
         </div>
+        {page.end?.note && <p className="muted small" style={{ maxWidth: '46ch' }}>{t(page.end.note)}</p>}
         <p className="muted small" style={{ marginTop: 14 }}>
           <Link to={`/${app}/privacy`}>Privacy</Link>
           {' · '}

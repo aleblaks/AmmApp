@@ -25,7 +25,7 @@ const DOORS: Door[] = [
     name: 'AirportShift',
     icon: AirportShiftIcon,
     accent: '#0a84ff',
-    title: { it: 'I turni in aeroporto, letti in un secondo.', en: 'Airport shifts, read in a second.' },
+    title: { it: 'I turni di Aviation Service, letti in un secondo.', en: 'Aviation Service shifts, read in a second.' },
     desc: {
       it: 'Carichi il PDF dei turni: codici tradotti in orari, ore e straordinari contati, condivisione col collega via QR.',
       en: 'Load the shift PDF: codes turned into times, hours and overtime counted, sharing with a colleague via QR.',

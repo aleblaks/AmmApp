@@ -17,6 +17,10 @@ const TYPES = {
   '.css': 'text/css',
   '.svg': 'image/svg+xml',
   '.json': 'application/json',
+  '.png': 'image/png',
+  '.webp': 'image/webp',
+  '.xml': 'application/xml',
+  '.txt': 'text/plain',
 }
 
 async function send(res, status, filePath) {

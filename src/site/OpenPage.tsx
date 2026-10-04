@@ -29,9 +29,11 @@ export function OpenPage() {
   const t = useT()
 
   const os = useMemo(() => detectOS(), [])
+  // Il dato del QR sta dopo il # (…/open#d=…), così non passa dal server; ?d= resta per sicurezza.
+  const d = new URLSearchParams(location.hash.slice(1)).get('d') ?? params.get('d')
   const deepLink = useMemo(
-    () => (entry ? buildDeepLink(entry, params.get('d')) : ''),
-    [entry, params],
+    () => (entry ? buildDeepLink(entry, d) : ''),
+    [entry, d],
   )
   const storeUrl = entry ? storeUrlFor(os, entry) : null
 
