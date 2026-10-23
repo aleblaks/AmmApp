@@ -1,5 +1,6 @@
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
+import { imagetools } from 'vite-imagetools'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { SEO } from './src/site/seo'
 
@@ -32,6 +33,7 @@ function paginePerGoogle(): Plugin {
           `<meta property="og:title" content="${esc(seo.title)}" />`,
           `<meta property="og:description" content="${esc(seo.description)}" />`,
           `<meta property="og:url" content="${url}" />`,
+          `<meta property="og:image" content="${SITE_URL}${seo.app ? 'icon-' + seo.app.name.toLowerCase().replace(/ /g, '') : 'icon-ammapp'}.png" />`,
           ld ? `<script type="application/ld+json">${JSON.stringify(ld)}</script>` : '',
         ].join('\n    ')
         const page = html
@@ -55,7 +57,17 @@ function paginePerGoogle(): Plugin {
   }
 }
 
+// Le immagini restano negli originali (PNG da 1206×2622, icone da 1024): alla build escono
+// già ridotte e in WebP. Larghezze pensate per lo schermo più denso: un telefono sul sito
+// è largo al massimo ~340 px, un'icona 88 px. Le cornici Apple restano com'erano.
+function immaginiLeggere(url: URL) {
+  if (url.searchParams.size || url.pathname.includes('/cornici/')) return new URLSearchParams()
+  if (url.pathname.includes('/AmmAppIcon/')) return new URLSearchParams({ w: '256', format: 'webp' })
+  if (url.pathname.includes('/AmmAppMockups/')) return new URLSearchParams({ w: '800', format: 'webp', quality: '80', withoutEnlargement: '' })
+  return new URLSearchParams()
+}
+
 export default defineConfig(({ command }) => ({
-  plugins: [react(), paginePerGoogle()],
+  plugins: [react(), imagetools({ defaultDirectives: immaginiLeggere }), paginePerGoogle()],
   base: command === 'build' ? BASE : '/',
 }))

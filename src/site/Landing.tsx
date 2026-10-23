@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import { useT, type Bi } from './lang'
-import { Phone } from './FeaturesPage'
+import { Phone } from './Phone'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
 import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
 import MockupCalendario from '../AmmAppMockups/screen-calendario.png'

@@ -1,15 +1,16 @@
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { useEffect, useState, type ReactNode } from 'react'
+import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react'
 import { LangProvider } from './lang'
 import { Layout } from './components/Layout'
 import { Landing } from './Landing'
-import { Apps } from './AppsPage'
-import { OpenPage } from './OpenPage'
-import { StorePage } from './StorePage'
-import { FeaturesPage } from './FeaturesPage'
-import { InsiemePage } from './InsiemePage'
-import { PrivacyPage } from './PrivacyPage'
-import { SupportPage } from './SupportPage'
+// La home parte subito; le altre pagine (e i testi legali di content.ts) si scaricano solo quando servono.
+const Apps = lazy(() => import('./AppsPage').then(m => ({ default: m.Apps })))
+const OpenPage = lazy(() => import('./OpenPage').then(m => ({ default: m.OpenPage })))
+const StorePage = lazy(() => import('./StorePage').then(m => ({ default: m.StorePage })))
+const FeaturesPage = lazy(() => import('./FeaturesPage').then(m => ({ default: m.FeaturesPage })))
+const InsiemePage = lazy(() => import('./InsiemePage').then(m => ({ default: m.InsiemePage })))
+const PrivacyPage = lazy(() => import('./PrivacyPage').then(m => ({ default: m.PrivacyPage })))
+const SupportPage = lazy(() => import('./SupportPage').then(m => ({ default: m.SupportPage })))
 import { SEO, NOINDEX } from './seo'
 import './styles.css'
 
@@ -53,6 +54,7 @@ export default function App() {
           <ScrollToTop />
           <Meta />
           <Layout>
+            <Suspense fallback={<main className="page" aria-busy="true" />}>
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/apps" element={<Apps />} />
@@ -64,6 +66,7 @@ export default function App() {
               <Route path="/:app/support" element={<SupportPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            </Suspense>
           </Layout>
         </BrowserRouter>
       </ClientOnly>
