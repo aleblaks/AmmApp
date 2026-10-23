@@ -60,7 +60,7 @@ interface AppPage {
 const PAGES: Record<string, AppPage> = {
   airportshift: {
     icon: AirportShiftIcon,
-    badge: { it: 'Novità · Versione 2.0', en: 'New · Version 2.0' },
+    badge: { it: 'Novità · Calendario a tessere', en: 'New · Tile calendar' },
     hero: { name: 'as-hero-framed', fallback: MockupCalendario },
     headline: { it: 'Il tuo turno.\nA colpo d’occhio.', en: 'Your shift.\nAt a glance.' },
     tagline: {
@@ -83,9 +83,13 @@ const PAGES: Record<string, AppPage> = {
         eyebrow: { it: 'Calendario', en: 'Calendar' },
         title: { it: 'Tocca un giorno.\nL’orario è lì.', en: 'Tap a day.\nThere’s the time.' },
         desc: {
-          it: 'Ogni tipo di giorno ha il suo colore: turno, riposo, ferie, addestramento. Allunghi e straordinari si segnano in un attimo, e la fine del turno si sposta da sola.',
-          en: 'Every day type has its own color: shift, rest, vacation, training. Extensions and overtime take a second, and the end of the shift moves by itself.',
+          it: 'Ogni giorno è una tessera del colore del suo tipo: turno, riposo, ferie, addestramento. Sopra, una pila di card che scorri su e giù: il turno del giorno, i prossimi cinque, la settimana e il mese.',
+          en: 'Every day is a tile in the color of its type: shift, rest, vacation, training. On top, a stack of cards you swipe up and down: the day’s shift, the next five, the week and the month.',
         },
+        points: [
+          { it: 'Quando il turno è vicino, la card ti dice quanto manca: «tra 3h 20m».', en: 'When your shift is close, the card tells you how long: “in 3h 20m”.' },
+          { it: 'Allunghi e straordinari si segnano in un attimo, e la fine del turno si sposta da sola.', en: 'Extensions and overtime take a second, and the end of the shift moves by itself.' },
+        ],
         accent: '#ff9f0a',
       },
       {
@@ -93,9 +97,12 @@ const PAGES: Record<string, AppPage> = {
         eyebrow: { it: 'Riepilogo', en: 'Summary' },
         title: { it: 'Le tue ore.\nContate per te.', en: 'Your hours.\nCounted for you.' },
         desc: {
-          it: 'Quanto hai lavorato rispetto al totale del mese, gli straordinari, le serate. E un calendario delle fasce orarie che mostra non solo quante mattine e notti, ma quando.',
-          en: 'How much you’ve worked against the month’s total, overtime, evenings. And a time-band calendar that shows not just how many mornings and nights, but when.',
+          it: 'Un mosaico di tessere con numeri grandi: tocca una tessera e si allarga sui dettagli, dalle mattine alle notti. Scorri e trovi il calendario delle fasce orarie, che mostra non solo quante, ma quando.',
+          en: 'A mosaic of tiles with big numbers: tap one and it opens up with the details, from mornings to nights. Swipe for the time-band calendar, which shows not just how many, but when.',
         },
+        points: [
+          { it: 'Le ore dell’anno mese per mese, con giorni, straordinari e ferie.', en: 'The year’s hours month by month, with days, overtime and vacation.' },
+        ],
         accent: '#30d158',
       },
       {
@@ -134,16 +141,16 @@ const PAGES: Record<string, AppPage> = {
       },
       {
         shots: [{ name: 'as-watch' }, { name: 'as-watch-quadrante' }, { name: 'as-watch-stack' }],
-        eyebrow: { it: 'Apple Watch', en: 'Apple Watch' },
+        eyebrow: { it: 'Apple Watch e Wear OS', en: 'Apple Watch and Wear OS' },
         title: { it: 'Il tuo turno.\nAl polso.', en: 'Your shift.\nOn your wrist.' },
         desc: {
-          it: 'Un\u2019app Watch vera, non una copia in piccolo. Apri e vedi oggi; scorri e hai il mese, le ore, le fasce orarie. E il quadrante ti dice quando si parte.',
-          en: 'A real Watch app, not a shrunken copy. Open it and see today; scroll for the month, hours and time bands. And the watch face tells you when it\u2019s time to go.',
+          it: 'Un\u2019app vera per l\u2019orologio, non una copia in piccolo. Apri e vedi oggi; scorri e hai il mese, le ore a tessere con lo skyline di un aeroporto, le fasce orarie. E il quadrante ti dice quando si parte.',
+          en: 'A real watch app, not a shrunken copy. Open it and see today; scroll for the month, your hours as tiles with an airport skyline, the time bands. And the watch face tells you when it\u2019s time to go.',
         },
         points: [
           { it: 'Cinque schermate: oggi, mese, ore, riepilogo, fasce orarie.', en: 'Five screens: today, month, hours, summary, time bands.' },
           { it: 'Quattro complicazioni e tre card nello Smart Stack.', en: 'Four complications and three Smart Stack cards.' },
-          { it: 'Presto anche su Wear OS, per Google e Samsung.', en: 'Coming soon to Wear OS, for Google and Samsung.' },
+          { it: 'Anche su Wear OS: Galaxy Watch, Pixel Watch e gli altri, con complicazioni e schede.', en: 'On Wear OS too: Galaxy Watch, Pixel Watch and more, with complications and tiles.' },
         ],
         accent: '#ff375f',
       },
@@ -152,8 +159,8 @@ const PAGES: Record<string, AppPage> = {
         eyebrow: { it: 'Stile', en: 'Style' },
         title: { it: 'I tuoi colori.\nDi giorno e di notte.', en: 'Your colors.\nDay and night.' },
         desc: {
-          it: 'Scegli il colore di ogni tipo di giorno: tinge tutta l\u2019app, dai grafici alle schede. Tema chiaro o scuro, come il telefono o come preferisci tu.',
-          en: 'Pick the color of every day type: it tints the whole app, from charts to tabs. Light or dark, like your phone or however you like.',
+          it: 'Scegli il colore di ogni tipo di giorno: tinge tutta l\u2019app, dai grafici alle schede. Tema chiaro o scuro, come il telefono o come preferisci tu. E se vuoi, uno sfondo a sfumatura che va dal colore di oggi a quello di domani.',
+          en: 'Pick the color of every day type: it tints the whole app, from charts to tabs. Light or dark, like your phone or however you like. And if you want, a gradient background from today\u2019s color to tomorrow\u2019s.',
         },
         accent: '#ffd60a',
       },
@@ -164,6 +171,8 @@ const PAGES: Record<string, AppPage> = {
       { icon: 'calendar_month', shot: { name: 'as-calendario' }, title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Sincronizza i turni con il calendario del telefono, anche in automatico dopo ogni import.', en: 'Sync shifts to your phone’s calendar, even automatically after every import.' } },
       { icon: 'pin', shot: { name: 'as-codici', fallback: MockupCodici }, title: { it: 'Schema codici', en: 'Code decoder' }, desc: { it: 'Scrivi 509 e scopri orario e durata. FNL, RIP, ADD e FR riconosciuti da soli.', en: 'Type 509 and see time and duration. FNL, RIP, ADD and FR recognized automatically.' } },
       { icon: 'grid_view', shot: { name: 'as-mesi' }, title: { it: 'Tutti i mesi', en: 'All months' }, desc: { it: 'Salta a qualsiasi mese e guarda il resoconto dell’anno.', en: 'Jump to any month and see the yearly recap.' } },
+      { icon: 'upload_file', title: { it: 'Trascina il PDF', en: 'Drag in the PDF' }, desc: { it: 'Dai File, da Mail o da Safari: lascialo cadere sull’app e l’import parte da solo.', en: 'From Files, Mail or Safari: drop it on the app and the import starts by itself.' } },
+      { icon: 'translate', title: { it: 'Quattro lingue', en: 'Four languages' }, desc: { it: 'Italiano, inglese, spagnolo e francese, per i colleghi che vengono da lontano.', en: 'Italian, English, Spanish and French, for colleagues from far away.' } },
     ],
     privacy: {
       title: { it: 'I tuoi turni restano\nsul tuo telefono.', en: 'Your shifts stay\non your phone.' },
@@ -219,8 +228,8 @@ const PAGES: Record<string, AppPage> = {
         eyebrow: { it: 'Trends', en: 'Trends' },
         title: { it: 'Guarda dove va\nil tuo tempo.', en: 'See where\nyour time goes.' },
         desc: {
-          it: 'Ore, sessioni e giorni attivi per settimana, mese o anno, confrontati con il periodo prima. Una heatmap per le abitudini, i record per le giornate migliori.',
-          en: 'Hours, sessions and active days by week, month or year, compared with the period before. A heatmap for habits, records for your best days.',
+          it: 'Un mosaico di tessere che si allargano al tocco: ore, sessioni, serie di giorni di fila e record, per settimana, mese o anno. Una chip per ogni attività, e una heatmap per le abitudini.',
+          en: 'A mosaic of tiles that open up when tapped: hours, sessions, streaks and records, by week, month or year. One chip per activity, and a heatmap for your habits.',
         },
         accent: '#64d2ff',
       },
@@ -239,30 +248,37 @@ const PAGES: Record<string, AppPage> = {
         eyebrow: { it: 'Vita', en: 'Life' },
         title: { it: 'Bollo, veterinario,\ntagliando. Ricordati.', en: 'Car tax, vet,\nservice. Remembered.' },
         desc: {
-          it: 'Veicoli e animali nel tuo profilo, con lo storico degli interventi. Promemoria ricorrenti con l’anticipo che scegli tu, prima che qualcosa scada.',
-          en: 'Vehicles and pets in your profile, with their service history. Recurring reminders with the lead time you choose, before anything expires.',
+          it: 'Veicoli e animali nel tuo profilo, con lo storico degli interventi. Eventi come i Promemoria di iPhone: elenchi, liste della spesa, contrassegni e ricorrenze, con l’anticipo che scegli tu.',
+          en: 'Vehicles and pets in your profile, with their service history. Events like iPhone Reminders: lists, shopping lists, flags and repeats, with the lead time you choose.',
         },
         accent: '#ff375f',
       },
       {
         shots: [{ name: 'bl-scuro', fallback: BlStile }],
         eyebrow: { it: 'Stile', en: 'Style' },
-        title: { it: 'Chiaro o scuro.\nSempre a suo agio.', en: 'Light or dark.\nAlways at home.' },
+        title: { it: 'Tre stili.\nDi giorno e di notte.', en: 'Three styles.\nDay and night.' },
         desc: {
-          it: 'L\u2019app segue il tuo telefono e i materiali di iOS: vetro, profondità, colori pensati per entrambi i temi.',
-          en: 'The app follows your phone and iOS materials: glass, depth, colors designed for both themes.',
+          it: 'Colori, B&W o Rétro, in tema chiaro o scuro: l\u2019app segue il tuo telefono e i materiali di iOS, vetro e profondità compresi.',
+          en: 'Colors, B&W or Rétro, in light or dark mode: the app follows your phone and iOS materials, glass and depth included.',
         },
+        points: [
+          { it: 'Rétro: carta color crema di giorno, caffè di notte, e ogni icona ridisegnata.', en: 'Rétro: cream paper by day, coffee by night, and every icon redrawn.' },
+        ],
         accent: '#8e8e93',
       },
     ],
     tilesTitle: { it: 'Piccole cose. Fatte bene.', en: 'Small things. Done right.' },
     tiles: [
       { icon: 'local_parking', shot: { name: 'bl-parcheggio', fallback: BlParcheggio }, title: { it: 'Parcheggio', en: 'Parking' }, desc: { it: 'Salva dove hai lasciato l’auto e ritrovala sulla mappa.', en: 'Save where you left the car and find it on the map.' } },
-      { icon: 'search', shot: { name: 'bl-cerca' }, title: { it: 'Cerca', en: 'Search' }, desc: { it: 'Prima ancora di scrivere, il libro e la serie da riprendere.', en: 'Before you type, the book and show to pick up.' } },
+      { icon: 'search', shot: { name: 'bl-cerca' }, title: { it: 'Cerca', en: 'Search' }, desc: { it: 'Una tab tutta sua: attività, libri, eventi, impostazioni. E prima ancora di scrivere, quello da riprendere.', en: 'A tab of its own: activities, books, events, settings. And before you type, what to pick up.' } },
+      { icon: 'watch', shot: { name: 'bl-watch' }, title: { it: 'Al polso', en: 'On your wrist' }, desc: { it: 'Avvia, metti in pausa e chiudi una sessione dall’Apple Watch, e guarda la giornata sul quadrante.', en: 'Start, pause and stop a session from Apple Watch, and see your day on the watch face.' } },
+      { icon: 'widgets', title: { it: 'La tua giornata', en: 'Your day' }, desc: { it: 'Un widget in tre misure: la giornata su un quadrante di 24 ore, la timeline, l’agenda coi promemoria da spuntare.', en: 'One widget, three sizes: your day on a 24-hour dial, the timeline, the agenda with reminders to tick off.' } },
+      { icon: 'event', title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Gli eventi del calendario del telefono diventano previsioni della giornata, e le sessioni ci tornano dentro.', en: 'Your phone’s calendar events become plans for the day, and sessions go back into it.' } },
       { icon: 'table_view', shot: { name: 'bl-export' }, title: { it: 'Export leggibile', en: 'Readable export' }, desc: { it: 'Tutto in tabelle che si aprono in Numbers o Excel, e si reimporta senza doppioni.', en: 'Everything in tables that open in Numbers or Excel, re-importable without duplicates.' } },
       { icon: 'live_tv', shot: { name: 'bl-serie' }, title: { it: 'Serie TV', en: 'TV shows' }, desc: { it: 'Stagioni, episodi visti e quello da cui riprendere.', en: 'Seasons, watched episodes and where to pick up.' } },
       { icon: 'contrast', shot: { name: 'bl-bn' }, title: { it: 'B&W', en: 'B&W' }, desc: { it: 'Tutta l\u2019app in bianco e nero: nero su bianco in tema chiaro, bianco su nero in scuro. Il significato resta nel testo e nelle icone.', en: 'The whole app in black and white: black on white in light mode, white on black in dark. Meaning stays in text and icons.' } },
-      { icon: 'content_copy', shot: { name: 'bl-copia' }, title: { it: 'Copia e incolla', en: 'Copy and paste' }, desc: { it: 'Duplica un’attività o un’intera giornata.', en: 'Duplicate an activity or a whole day.' } },
+      { icon: 'content_copy', shot: { name: 'bl-copia' }, title: { it: 'Copia e incolla', en: 'Copy and paste' }, desc: { it: 'Duplica un’attività o un’intera giornata, anche come testo da mandare in chat.', en: 'Duplicate an activity or a whole day, even as text to send in a chat.' } },
+      { icon: 'science', title: { it: 'Prova con i dati d’esempio', en: 'Try it with sample data' }, desc: { it: 'Al primo avvio l’app si riempie di un mese verosimile: esplori tutto, poi riparti dai tuoi dati.', en: 'On first launch the app fills up with a believable month: explore everything, then start over with your own data.' } },
     ],
     privacy: {
       title: { it: '100% offline.\n100% tuo.', en: '100% offline.\n100% yours.' },
