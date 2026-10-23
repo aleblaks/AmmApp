@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react'
 import { useT, type Bi } from './lang'
 import { apps, iosStoreUrl } from './apps'
-import { Phone } from './FeaturesPage'
+import { Phone } from './Phone'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
 import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
 

@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
-import { Phone } from './FeaturesPage'
+import { Phone } from './Phone'
 import { useT, type Bi } from './lang'
 import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS } from './apps'
 import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
