@@ -155,7 +155,7 @@ const PAGES: Record<string, AppPage> = {
         accent: '#ff375f',
       },
       {
-        shots: [{ name: 'as-colori', fallback: MockupColori }, { name: 'as-scuro' }],
+        shots: [{ name: 'as-colori', fallback: MockupColori }, { name: 'as-sfondo' }],
         eyebrow: { it: 'Stile', en: 'Style' },
         title: { it: 'I tuoi colori.\nDi giorno e di notte.', en: 'Your colors.\nDay and night.' },
         desc: {
@@ -170,6 +170,7 @@ const PAGES: Record<string, AppPage> = {
       { icon: 'event_busy', shot: { name: 'as-impegnato' }, title: { it: 'Giorni impegnati', en: 'Busy days' }, desc: { it: 'Segna i turni che non puoi cedere. Chi scansiona il tuo QR lo vede, senza sapere il perché.', en: 'Mark shifts you can’t swap. Whoever scans your QR sees it, without knowing why.' } },
       { icon: 'calendar_month', shot: { name: 'as-calendario' }, title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Sincronizza i turni con il calendario del telefono, anche in automatico dopo ogni import.', en: 'Sync shifts to your phone’s calendar, even automatically after every import.' } },
       { icon: 'pin', shot: { name: 'as-codici', fallback: MockupCodici }, title: { it: 'Schema codici', en: 'Code decoder' }, desc: { it: 'Scrivi 509 e scopri orario e durata. FNL, RIP, ADD e FR riconosciuti da soli.', en: 'Type 509 and see time and duration. FNL, RIP, ADD and FR recognized automatically.' } },
+      { icon: 'bar_chart', shot: { name: 'as-anno' }, title: { it: 'L’anno intero', en: 'The whole year' }, desc: { it: 'Le ore lavorate mese per mese: tocca la card per giorni, straordinari e ferie, e passa da un anno all’altro.', en: 'Hours worked month by month: tap the card for days, overtime and vacation, and switch between years.' } },
       { icon: 'grid_view', shot: { name: 'as-mesi' }, title: { it: 'Tutti i mesi', en: 'All months' }, desc: { it: 'Salta a qualsiasi mese e guarda il resoconto dell’anno.', en: 'Jump to any month and see the yearly recap.' } },
       { icon: 'upload_file', title: { it: 'Trascina il PDF', en: 'Drag in the PDF' }, desc: { it: 'Dai File, da Mail o da Safari: lascialo cadere sull’app e l’import parte da solo.', en: 'From Files, Mail or Safari: drop it on the app and the import starts by itself.' } },
       { icon: 'translate', title: { it: 'Quattro lingue', en: 'Four languages' }, desc: { it: 'Italiano, inglese, spagnolo e francese, per i colleghi che vengono da lontano.', en: 'Italian, English, Spanish and French, for colleagues from far away.' } },
@@ -254,7 +255,7 @@ const PAGES: Record<string, AppPage> = {
         accent: '#ff375f',
       },
       {
-        shots: [{ name: 'bl-scuro', fallback: BlStile }],
+        shots: [{ name: 'bl-retro', fallback: BlStile }, { name: 'bl-bn' }],
         eyebrow: { it: 'Stile', en: 'Style' },
         title: { it: 'Tre stili.\nDi giorno e di notte.', en: 'Three styles.\nDay and night.' },
         desc: {
@@ -276,7 +277,6 @@ const PAGES: Record<string, AppPage> = {
       { icon: 'event', title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Gli eventi del calendario del telefono diventano previsioni della giornata, e le sessioni ci tornano dentro.', en: 'Your phone’s calendar events become plans for the day, and sessions go back into it.' } },
       { icon: 'table_view', shot: { name: 'bl-export' }, title: { it: 'Export leggibile', en: 'Readable export' }, desc: { it: 'Tutto in tabelle che si aprono in Numbers o Excel, e si reimporta senza doppioni.', en: 'Everything in tables that open in Numbers or Excel, re-importable without duplicates.' } },
       { icon: 'live_tv', shot: { name: 'bl-serie' }, title: { it: 'Serie TV', en: 'TV shows' }, desc: { it: 'Stagioni, episodi visti e quello da cui riprendere.', en: 'Seasons, watched episodes and where to pick up.' } },
-      { icon: 'contrast', shot: { name: 'bl-bn' }, title: { it: 'B&W', en: 'B&W' }, desc: { it: 'Tutta l\u2019app in bianco e nero: nero su bianco in tema chiaro, bianco su nero in scuro. Il significato resta nel testo e nelle icone.', en: 'The whole app in black and white: black on white in light mode, white on black in dark. Meaning stays in text and icons.' } },
       { icon: 'content_copy', shot: { name: 'bl-copia' }, title: { it: 'Copia e incolla', en: 'Copy and paste' }, desc: { it: 'Duplica un’attività o un’intera giornata, anche come testo da mandare in chat.', en: 'Duplicate an activity or a whole day, even as text to send in a chat.' } },
       { icon: 'science', title: { it: 'Prova con i dati d’esempio', en: 'Try it with sample data' }, desc: { it: 'Al primo avvio l’app si riempie di un mese verosimile: esplori tutto, poi riparti dai tuoi dati.', en: 'On first launch the app fills up with a believable month: explore everything, then start over with your own data.' } },
     ],
