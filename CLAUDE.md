@@ -19,7 +19,9 @@ No test suite, no lint step in CI. The Vite dev server serves `index.html` for a
 
 - **Real paths, not `#` (since 2026-10-04), so Google can index each page.** `BrowserRouter` with `basename` = Vite's `BASE_URL`. The `pagine-per-google` plugin in `vite.config.ts` writes, after the build, one `index.html` per entry of `src/site/seo.ts` (own title, description, canonical, Open Graph, `SoftwareApplication` JSON-LD), plus `404.html` (SPA fallback, `noindex`), `sitemap.xml` and `robots.txt`. A new indexable page = a route in `App.tsx` + an entry in `SEO`.
 - **Old `#` links still work:** `main.tsx` rewrites `#/path?query` to `/path#query` before React mounts.
-- **Base:** `SITE_BASE` (default `/AmmApp/`) and `SITE_URL` (default `https://aleblaks.github.io/AmmApp/`) env vars in `vite.config.ts`; for a custom domain set `SITE_BASE=/` and `SITE_URL=https://…/`. Import images from `src/` as modules; `public/` is only for favicons.
+- **Base:** `SITE_BASE` (default `/AmmApp/`) and `SITE_URL` (default `https://aleblaks.github.io/AmmApp/`) env vars in `vite.config.ts`; for a custom domain set `SITE_BASE=/` and `SITE_URL=https://…/`. Import images from `src/` as modules; `public/` is only for favicons and the `og:image` icons.
+- **Images are shrunk at build time** by `vite-imagetools` (`immaginiLeggere` in `vite.config.ts`): everything under `AmmAppMockups/` becomes an 800 px WebP, `AmmAppIcon/` a 256 px WebP; `cornici/` is left alone. Keep dropping full-size originals into `src/`; never pre-shrink them by hand.
+- **Pages are lazy-loaded** (`React.lazy` in `App.tsx`) except `Landing`. Shared screenshot helpers (`Phone`, `shot`, `useDark`) live in `Phone.tsx`, so importing them does not pull in `FeaturesPage`.
 - `robots.txt` only counts at a domain root: on `aleblaks.github.io/AmmApp/` Google ignores it, so `/open` and `/store` also get a `noindex` meta at runtime (`Meta` in `App.tsx`).
 - The repo is connected to **Lovable** (see `AGENTS.md`): never force-push or rewrite pushed history; keep `main` working.
 
@@ -45,7 +47,7 @@ Page data requirements differ:
 
 `content.ts` holds the privacy/support copy that App Store listings link to. Treat it as legal text: change it only when asked.
 
-`FeaturesPage.tsx` is Apple-style: a `PAGES` map per app with hero, `chapters` (1–2 phones each, alternating), `tiles` (secondary features, optional screenshot), privacy block and CTA. Screenshots are raw simulator shots (1206×2622) dropped into `src/AmmAppMockups/shots/` with the names listed in the owner's `*-screenshot.md` (e.g. `as-hero.png`, `bl-live.png`); `import.meta.glob` picks them up by name. Optional per-visitor variants: `<name>-dark.png`, `<name>-android.png`, `<name>-android-dark.png` (chosen by `detectOS()` + `prefers-color-scheme`, falling back to `<name>.png`; Android visitors get a squarer frame, `.fx-android`) and `Phone` draws the iPhone frame in CSS. A missing shot falls back to the old framed mockup, or to an empty frame labeled with the expected filename. Scroll reveal is the CSS `.fx-reveal` class.
+`FeaturesPage.tsx` is Apple-style: a `PAGES` map per app with hero, `chapters` (1–2 phones each, alternating), `tiles` (secondary features, optional screenshot), privacy block and CTA. Screenshots are raw simulator shots (1206×2622) dropped into `src/AmmAppMockups/shots/` with the names listed in the owner's `*-screenshot.md` (e.g. `as-hero.png`, `bl-live.png`); `import.meta.glob` picks them up by name. Optional per-visitor variants: `<name>-dark.png`, `<name>-android.png`, `<name>-android-dark.png` (chosen by `detectOS()` + `prefers-color-scheme`, falling back to `<name>.png`; Android visitors get a squarer frame, `.fx-android`) and `Phone` (in `Phone.tsx`) draws the frame. A missing shot falls back to the old framed mockup, or to an empty frame labeled with the expected filename. Scroll reveal is the CSS `.fx-reveal` class.
 
 ## Bilingual copy
 
