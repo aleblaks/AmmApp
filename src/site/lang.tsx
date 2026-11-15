@@ -37,3 +37,6 @@ export function useT() {
   const { lang } = useLang()
   return (b: Bi) => b[lang]
 }
+
+// Un titolo scritto con "\n" diventa una riga per span (.ln), così ogni riga si anima per conto suo.
+export const lines = (s: string) => s.split('\n').map((l, i) => <span key={i} className="ln">{l}</span>)

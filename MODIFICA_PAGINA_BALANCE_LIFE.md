@@ -64,7 +64,7 @@ Finché un elemento di `BALANCELIFE_FEATURES` non ha la proprietà `image`, al s
 
 ## 4. Icona dell'app nell'hero
 
-L'icona in cima alla pagina viene già da `appIcons.balancelife` (in `FeaturesPage.tsx`), che punta a `src/AmmAppIcon/BalanceLife.png`. Se vuoi cambiarla, sostituisci quel file PNG — non serve toccare il codice.
+L'icona in cima alla pagina viene da `ICONS.balancelife` (in `AppIcon.tsx`): `src/AmmAppIcon/BalanceLife.png` col tema scuro del sito, `BalanceLife-light.png` col tema chiaro. Se vuoi cambiarla, sostituisci quei file PNG: non serve toccare il codice.
 
 ---
 

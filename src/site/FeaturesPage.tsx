@@ -1,10 +1,10 @@
-import type { CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import { Phone, shot, useDark } from './Phone'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { TLink as Link } from './TLink'
 import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS, storeUrlFor } from './apps'
-import { useT, type Bi } from './lang'
-import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
-import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
+import { lines, useT, type Bi } from './lang'
+import { AppIcon } from './AppIcon'
 import MockupCalendario from '../AmmAppMockups/screen-calendario.png'
 import MockupRiepilogo from '../AmmAppMockups/screen-riepilogo.png'
 import MockupColori from '../AmmAppMockups/screen-colori.png'
@@ -32,8 +32,15 @@ function AndroidIcon() {
   return <span className="material-symbols-outlined" style={{ fontSize: 30, lineHeight: 1 }} aria-hidden>android</span>
 }
 
+// Come entrano i telefoni di un capitolo (classi .mo-* in styles.css). Ogni capitolo ne ha una diversa dai vicini:
+// zoom = parte grande e si assesta · behind = il secondo esce da dietro il primo · cross = arrivano incrociati
+// · stagger = salgono uno dopo l'altro · apart = partono sovrapposti e si separano · pop = compaiono in sequenza.
+type Motion = 'zoom' | 'behind' | 'cross' | 'stagger' | 'apart' | 'pop'
+
 interface Chapter {
-  shots: { name: string; fallback?: string }[]
+  motion: Motion
+  // then: vedi Phone (secondo screenshot nella stessa cornice, o 'night' per l'altro tema).
+  shots: { name: string; fallback?: string; then?: string }[]
   eyebrow: Bi
   title: Bi
   desc: Bi
@@ -44,8 +51,12 @@ interface Chapter {
 interface Tile { icon: string; title: Bi; desc: Bi; shot?: { name: string; fallback?: string } }
 
 interface AppPage {
-  icon: string
   badge?: Bi
+  // Il momento d'apertura del titolo: 'flap' gira lettera per lettera come un tabellone delle partenze,
+  // 'tilt' oscilla e si mette in bolla come una bilancia.
+  heroFx: 'flap' | 'tilt'
+  // Invito alla pagina /insieme.
+  together: { title: Bi; desc: Bi }
   hero: { name: string; fallback?: string }
   headline: Bi
   tagline: Bi
@@ -59,8 +70,12 @@ interface AppPage {
 
 const PAGES: Record<string, AppPage> = {
   airportshift: {
-    icon: AirportShiftIcon,
-    badge: { it: 'Novità · Calendario a tessere', en: 'New · Tile calendar' },
+    badge: { it: 'Novità: Home e Riepilogo a tessere', en: 'New: tiled Home and Summary' },
+    heroFx: 'flap',
+    together: {
+      title: { it: 'Usi anche Balance Life?', en: 'Using Balance Life too?' },
+      desc: { it: 'Attiva la condivisione e i tuoi turni entrano nella giornata di Balance Life, senza uscire dal telefono.', en: 'Turn on sharing and your shifts show up in your Balance Life day, without leaving your phone.' },
+    },
     hero: { name: 'as-hero-framed', fallback: MockupCalendario },
     headline: { it: 'Il tuo turno.\nA colpo d’occhio.', en: 'Your shift.\nAt a glance.' },
     tagline: {
@@ -69,6 +84,7 @@ const PAGES: Record<string, AppPage> = {
     },
     chapters: [
       {
+        motion: 'zoom',
         shots: [{ name: 'as-hero', fallback: MockupCalendario }],
         eyebrow: { it: 'Importa', en: 'Import' },
         title: { it: 'Un PDF.\nUn mese intero.', en: 'One PDF.\nA whole month.' },
@@ -79,7 +95,8 @@ const PAGES: Record<string, AppPage> = {
         accent: '#0a84ff',
       },
       {
-        shots: [{ name: 'as-giorno' }],
+        motion: 'behind',
+        shots: [{ name: 'as-hero', then: 'as-giorno' }],
         eyebrow: { it: 'Calendario', en: 'Calendar' },
         title: { it: 'Tocca un giorno.\nL’orario è lì.', en: 'Tap a day.\nThere’s the time.' },
         desc: {
@@ -93,6 +110,7 @@ const PAGES: Record<string, AppPage> = {
         accent: '#ff9f0a',
       },
       {
+        motion: 'cross',
         shots: [{ name: 'as-riepilogo', fallback: MockupRiepilogo }, { name: 'as-fasce' }],
         eyebrow: { it: 'Riepilogo', en: 'Summary' },
         title: { it: 'Le tue ore.\nContate per te.', en: 'Your hours.\nCounted for you.' },
@@ -106,6 +124,7 @@ const PAGES: Record<string, AppPage> = {
         accent: '#30d158',
       },
       {
+        motion: 'behind',
         shots: [{ name: 'as-qr', fallback: MockupCondividi }, { name: 'as-collega' }],
         eyebrow: { it: 'Colleghi', en: 'Colleagues' },
         title: { it: 'Un QR.\nNiente server.', en: 'One QR.\nNo servers.' },
@@ -116,6 +135,7 @@ const PAGES: Record<string, AppPage> = {
         accent: '#bf5af2',
       },
       {
+        motion: 'stagger',
         shots: [{ name: 'as-live' }, { name: 'as-notifica' }],
         eyebrow: { it: 'Live Activity', en: 'Live Activity' },
         title: { it: 'Il turno in corso.\nSulla schermata di blocco.', en: 'Your shift in progress.\nOn the Lock Screen.' },
@@ -130,6 +150,7 @@ const PAGES: Record<string, AppPage> = {
         accent: '#ff9f0a',
       },
       {
+        motion: 'apart',
         shots: [{ name: 'as-widget' }, { name: 'as-widget-chiaro' }],
         eyebrow: { it: 'Widget', en: 'Widgets' },
         title: { it: 'Il turno di domani.\nSenza aprire l\u2019app.', en: 'Tomorrow\u2019s shift.\nWithout opening the app.' },
@@ -140,6 +161,7 @@ const PAGES: Record<string, AppPage> = {
         accent: '#64d2ff',
       },
       {
+        motion: 'pop',
         shots: [{ name: 'as-watch' }, { name: 'as-watch-quadrante' }, { name: 'as-watch-stack' }],
         eyebrow: { it: 'Apple Watch e Wear OS', en: 'Apple Watch and Wear OS' },
         title: { it: 'Il tuo turno.\nAl polso.', en: 'Your shift.\nOn your wrist.' },
@@ -155,7 +177,8 @@ const PAGES: Record<string, AppPage> = {
         accent: '#ff375f',
       },
       {
-        shots: [{ name: 'as-colori', fallback: MockupColori }, { name: 'as-sfondo' }],
+        motion: 'behind',
+        shots: [{ name: 'as-colori', fallback: MockupColori, then: 'night' }, { name: 'as-sfondo', then: 'night' }],
         eyebrow: { it: 'Stile', en: 'Style' },
         title: { it: 'I tuoi colori.\nDi giorno e di notte.', en: 'Your colors.\nDay and night.' },
         desc: {
@@ -168,7 +191,7 @@ const PAGES: Record<string, AppPage> = {
     tilesTitle: { it: 'E tutti i dettagli che contano.', en: 'And every detail that matters.' },
     tiles: [
       { icon: 'event_busy', shot: { name: 'as-impegnato' }, title: { it: 'Giorni impegnati', en: 'Busy days' }, desc: { it: 'Segna i turni che non puoi cedere. Chi scansiona il tuo QR lo vede, senza sapere il perché.', en: 'Mark shifts you can’t swap. Whoever scans your QR sees it, without knowing why.' } },
-      { icon: 'calendar_month', shot: { name: 'as-calendario' }, title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Sincronizza i turni con il calendario del telefono, anche in automatico dopo ogni import.', en: 'Sync shifts to your phone’s calendar, even automatically after every import.' } },
+      { icon: 'calendar_month', shot: { name: 'as-calendario-nuovo' }, title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Sincronizza i turni con il calendario del telefono, anche in automatico dopo ogni import. E li togli quando vuoi, tutti o un mese solo.', en: 'Sync shifts to your phone’s calendar, even automatically after every import. And remove them whenever you like, all of them or a single month.' } },
       { icon: 'pin', shot: { name: 'as-codici', fallback: MockupCodici }, title: { it: 'Schema codici', en: 'Code decoder' }, desc: { it: 'Scrivi 509 e scopri orario e durata. FNL, RIP, ADD e FR riconosciuti da soli.', en: 'Type 509 and see time and duration. FNL, RIP, ADD and FR recognized automatically.' } },
       { icon: 'bar_chart', shot: { name: 'as-anno' }, title: { it: 'L’anno intero', en: 'The whole year' }, desc: { it: 'Le ore lavorate mese per mese: tocca la card per giorni, straordinari e ferie, e passa da un anno all’altro.', en: 'Hours worked month by month: tap the card for days, overtime and vacation, and switch between years.' } },
       { icon: 'grid_view', shot: { name: 'as-mesi' }, title: { it: 'Tutti i mesi', en: 'All months' }, desc: { it: 'Salta a qualsiasi mese e guarda il resoconto dell’anno.', en: 'Jump to any month and see the yearly recap.' } },
@@ -186,7 +209,11 @@ const PAGES: Record<string, AppPage> = {
     },
   },
   balancelife: {
-    icon: BalanceLifeIcon,
+    heroFx: 'tilt',
+    together: {
+      title: { it: 'Lavori con Aviation Service?', en: 'Working with Aviation Service?' },
+      desc: { it: 'Con AirportShift i tuoi turni entrano in Balance Life, e la giornata è completa.', en: 'With AirportShift your shifts come into Balance Life, and your day is complete.' },
+    },
     hero: { name: 'bl-hero-framed', fallback: BlHome },
     headline: { it: 'La tua giornata.\nIn equilibrio.', en: 'Your day.\nIn balance.' },
     tagline: {
@@ -195,6 +222,7 @@ const PAGES: Record<string, AppPage> = {
     },
     chapters: [
       {
+        motion: 'behind',
         shots: [{ name: 'bl-hero', fallback: BlHome }, { name: 'bl-aggiungi' }],
         eyebrow: { it: 'Oggi', en: 'Today' },
         title: { it: 'Tutto quello che fai.\nIn una timeline.', en: 'Everything you do.\nOn one timeline.' },
@@ -205,6 +233,7 @@ const PAGES: Record<string, AppPage> = {
         accent: '#30d158',
       },
       {
+        motion: 'stagger',
         shots: [{ name: 'bl-live', fallback: BlTimer }, { name: 'bl-lockscreen' }],
         eyebrow: { it: 'Dal vivo', en: 'Live' },
         title: { it: 'Premi avvia.\nPensa al resto.', en: 'Press start.\nFocus on the rest.' },
@@ -212,9 +241,14 @@ const PAGES: Record<string, AppPage> = {
           it: 'Il cronometro corre mentre segni serie, pesi e ripetizioni. Resta sulla schermata di blocco, e le pause si contano da sole.',
           en: 'The timer runs while you log sets, weights and reps. It stays on the Lock Screen, and pauses are counted for you.',
         },
+        points: [
+          { it: 'In palestra il recupero parte da solo: conto alla rovescia e un suono quando tocca a te.', en: 'At the gym, rest starts by itself: a countdown and a sound when it’s your turn.' },
+          { it: 'Guardi una serie? Gli episodi si segnano da soli mentre il tempo passa.', en: 'Watching a show? Episodes tick themselves off as time goes by.' },
+        ],
         accent: '#ff453a',
       },
       {
+        motion: 'cross',
         shots: [{ name: 'bl-libreria' }, { name: 'bl-lettura' }],
         eyebrow: { it: 'Lettura', en: 'Reading' },
         title: { it: 'La tua libreria.\nPagina dopo pagina.', en: 'Your library.\nPage by page.' },
@@ -225,6 +259,7 @@ const PAGES: Record<string, AppPage> = {
         accent: '#ff9f0a',
       },
       {
+        motion: 'apart',
         shots: [{ name: 'bl-trends', fallback: BlTrends }, { name: 'bl-heatmap' }],
         eyebrow: { it: 'Trends', en: 'Trends' },
         title: { it: 'Guarda dove va\nil tuo tempo.', en: 'See where\nyour time goes.' },
@@ -235,6 +270,7 @@ const PAGES: Record<string, AppPage> = {
         accent: '#64d2ff',
       },
       {
+        motion: 'zoom',
         shots: [{ name: 'bl-obiettivi', fallback: BlOrari }, { name: 'bl-calendario', fallback: BlCalendario }],
         eyebrow: { it: 'Obiettivi', en: 'Goals' },
         title: { it: 'Pianifica la settimana.\nL’agenda fa il resto.', en: 'Plan the week.\nThe agenda does the rest.' },
@@ -242,9 +278,13 @@ const PAGES: Record<string, AppPage> = {
           it: 'Imposta obiettivi e orari preferiti per ogni attività: l’agenda organizza ogni giorno di conseguenza. Il calendario tiene insieme ciò che hai fatto e ciò che ti aspetta.',
           en: 'Set goals and preferred times for each activity: the agenda plans each day around them. The calendar holds what you’ve done and what’s ahead.',
         },
+        points: [
+          { it: 'Se vuoi, l’attività programmata parte da sola all’ora giusta e si ferma alla fine.', en: 'If you like, a planned activity starts by itself at the right time and stops at the end.' },
+        ],
         accent: '#5e5ce6',
       },
       {
+        motion: 'pop',
         shots: [{ name: 'bl-profilo', fallback: BlProfilo }, { name: 'bl-promemoria', fallback: BlPromemoria }],
         eyebrow: { it: 'Vita', en: 'Life' },
         title: { it: 'Bollo, veterinario,\ntagliando. Ricordati.', en: 'Car tax, vet,\nservice. Remembered.' },
@@ -255,7 +295,8 @@ const PAGES: Record<string, AppPage> = {
         accent: '#ff375f',
       },
       {
-        shots: [{ name: 'bl-retro', fallback: BlStile }, { name: 'bl-bn' }],
+        motion: 'behind',
+        shots: [{ name: 'bl-retro', fallback: BlStile, then: 'night' }, { name: 'bl-bn', then: 'night' }],
         eyebrow: { it: 'Stile', en: 'Style' },
         title: { it: 'Tre stili.\nDi giorno e di notte.', en: 'Three styles.\nDay and night.' },
         desc: {
@@ -273,10 +314,10 @@ const PAGES: Record<string, AppPage> = {
       { icon: 'local_parking', shot: { name: 'bl-parcheggio', fallback: BlParcheggio }, title: { it: 'Parcheggio', en: 'Parking' }, desc: { it: 'Salva dove hai lasciato l’auto e ritrovala sulla mappa.', en: 'Save where you left the car and find it on the map.' } },
       { icon: 'search', shot: { name: 'bl-cerca' }, title: { it: 'Cerca', en: 'Search' }, desc: { it: 'Una tab tutta sua: attività, libri, eventi, impostazioni. E prima ancora di scrivere, quello da riprendere.', en: 'A tab of its own: activities, books, events, settings. And before you type, what to pick up.' } },
       { icon: 'watch', shot: { name: 'bl-watch' }, title: { it: 'Al polso', en: 'On your wrist' }, desc: { it: 'Avvia, metti in pausa e chiudi una sessione dall’Apple Watch, e guarda la giornata sul quadrante.', en: 'Start, pause and stop a session from Apple Watch, and see your day on the watch face.' } },
-      { icon: 'widgets', title: { it: 'La tua giornata', en: 'Your day' }, desc: { it: 'Un widget in tre misure: la giornata su un quadrante di 24 ore, la timeline, l’agenda coi promemoria da spuntare.', en: 'One widget, three sizes: your day on a 24-hour dial, the timeline, the agenda with reminders to tick off.' } },
+      { icon: 'widgets', title: { it: 'La tua giornata', en: 'Your day' }, desc: { it: 'Un widget in tre misure: la giornata su un quadrante di 24 ore con i promemoria di oggi, la timeline, l’agenda da spuntare.', en: 'One widget, three sizes: your day on a 24-hour dial with today’s reminders, the timeline, the agenda to tick off.' } },
       { icon: 'event', title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Gli eventi del calendario del telefono diventano previsioni della giornata, e le sessioni ci tornano dentro.', en: 'Your phone’s calendar events become plans for the day, and sessions go back into it.' } },
-      { icon: 'table_view', shot: { name: 'bl-export' }, title: { it: 'Export leggibile', en: 'Readable export' }, desc: { it: 'Tutto in tabelle che si aprono in Numbers o Excel, e si reimporta senza doppioni.', en: 'Everything in tables that open in Numbers or Excel, re-importable without duplicates.' } },
-      { icon: 'live_tv', shot: { name: 'bl-serie' }, title: { it: 'Serie TV', en: 'TV shows' }, desc: { it: 'Stagioni, episodi visti e quello da cui riprendere.', en: 'Seasons, watched episodes and where to pick up.' } },
+      { icon: 'table_view', shot: { name: 'bl-export-nuovo' }, title: { it: 'Export leggibile', en: 'Readable export' }, desc: { it: 'Tutto in un solo file che si apre in Numbers o Excel, e si reimporta senza doppioni.', en: 'Everything in a single file that opens in Numbers or Excel, re-importable without duplicates.' } },
+      { icon: 'live_tv', shot: { name: 'bl-serie' }, title: { it: 'Serie TV', en: 'TV shows' }, desc: { it: 'Stagioni, episodi visti e quello da cui riprendere, con un tasto per ripartire subito.', en: 'Seasons, watched episodes and where to pick up, with a button to jump right back in.' } },
       { icon: 'content_copy', shot: { name: 'bl-copia' }, title: { it: 'Copia e incolla', en: 'Copy and paste' }, desc: { it: 'Duplica un’attività o un’intera giornata, anche come testo da mandare in chat.', en: 'Duplicate an activity or a whole day, even as text to send in a chat.' } },
       { icon: 'science', title: { it: 'Prova con i dati d’esempio', en: 'Try it with sample data' }, desc: { it: 'Al primo avvio l’app si riempie di un mese verosimile: esplori tutto, poi riparti dai tuoi dati.', en: 'On first launch the app fills up with a believable month: explore everything, then start over with your own data.' } },
     ],
@@ -287,7 +328,65 @@ const PAGES: Record<string, AppPage> = {
   },
 }
 
-const lines = (s: string) => s.split('\n').map((l, i) => <span key={i}>{l}<br /></span>)
+// Barra dell'app. La voce del capitolo che attraversa il centro dello schermo si accende, e la riga
+// scorre da sola per tenerla in vista. I tocchi scorrono la pagina senza toccare l'indirizzo: così
+// il tasto Indietro del browser torna alla pagina precedente, non al capitolo di prima.
+function LocalNav({ name, app, labels, children }: { name: string; app: string; labels: string[]; children: ReactNode }) {
+  const [on, setOn] = useState(0)
+  const row = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => { for (const e of entries) if (e.isIntersecting) setOn(Number(e.target.id.slice(4))) },
+      { rootMargin: '-45% 0px -50% 0px' },
+    )
+    document.querySelectorAll('[id^="cap-"]').forEach(el => io.observe(el))
+    return () => io.disconnect()
+  }, [])
+  useEffect(() => {
+    const r = row.current
+    const a = r?.children[on] as HTMLElement | undefined
+    if (!r || !a) return
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches
+    r.scrollTo({ left: a.offsetLeft - (r.clientWidth - a.offsetWidth) / 2, behavior: calm ? 'auto' : 'smooth' })
+  }, [on])
+  return (
+    <nav className="fx-local" aria-label={name}>
+      <div className="fx-local-inner">
+        <button type="button" className="fx-local-id" onClick={() => window.scrollTo({ top: 0 })}>
+          <AppIcon app={app} />
+          <span>{name}</span>
+        </button>
+        <div className="fx-local-links" ref={row}>
+          {labels.map((label, i) => (
+            <a key={i} href={`#cap-${i}`} className={i === on ? 'on' : undefined} aria-current={i === on ? 'true' : undefined}
+              onClick={(e) => { e.preventDefault(); document.getElementById(`cap-${i}`)?.scrollIntoView() }}>
+              {label}
+            </a>
+          ))}
+        </div>
+        {children}
+      </div>
+    </nav>
+  )
+}
+
+// Titolo d'apertura. Con 'flap' ogni lettera è uno span (--i dà il ritardo); chi usa uno screen reader
+// sente il titolo intero dall'aria-label.
+function Headline({ text, fx }: { text: string; fx: AppPage['heroFx'] }) {
+  if (fx === 'tilt') return <h1 className="fx-headline fx-tilt">{lines(text)}</h1>
+  let i = 0
+  return (
+    <h1 className="fx-headline fx-flap" aria-label={text.replace('\n', ' ')}>
+      {text.split('\n').map((line, l) => (
+        <span key={l} className="ln" aria-hidden>
+          {line.split(' ').map((word, w) => (
+            <span key={w}><span className="w">{[...word].map((ch, c) => <span key={c} className="ch" style={{ '--i': i++ } as CSSProperties}>{ch}</span>)}</span>{' '}</span>
+          ))}
+        </span>
+      ))}
+    </h1>
+  )
+}
 
 export function FeaturesPage() {
   const { app } = useParams()
@@ -320,34 +419,38 @@ export function FeaturesPage() {
       <section className="fx-hero" style={{ '--fx-accent': page.chapters[0].accent } as CSSProperties}>
         <div className="fx-hero-copy">
           <div className="fx-hero-id">
-            <img src={page.icon} alt="" className="fx-icon" />
+            <AppIcon app={app!} className="fx-icon" style={{ viewTransitionName: `icon-${app}` }} />
             <p className="fx-appname">{entry.appName}</p>
           </div>
           {page.badge && <p className="fx-badge">{t(page.badge)}</p>}
-          <h1 className="fx-headline">{lines(t(page.headline))}</h1>
+          <Headline text={t(page.headline)} fx={page.heroFx} />
           <p className="fx-lead">{t(page.tagline)}</p>
           <div className="fx-cta">{cta}</div>
         </div>
-        <div className="fx-hero-shot fx-hero-framed">
-          <div className="fx-hero-glow" aria-hidden />
+        <div className="fx-hero-shot">
           {/* Immagine già nella cornice ufficiale Apple: niente cornice CSS */}
-          <img src={shot(page.hero.name, dark) ?? page.hero.fallback} alt={entry.appName} />
+          <img src={shot(page.hero.name, dark) ?? page.hero.fallback} alt={entry.appName} style={{ viewTransitionName: `phone-${app}` }} />
         </div>
       </section>
 
+      <LocalNav key={app} name={entry.appName} app={app!} labels={page.chapters.map(c => t(c.eyebrow))}>
+        {storeUrl
+          ? <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">{t({ it: 'Scarica', en: 'Get' })}</a>
+          : <span className="btn btn-disabled" aria-disabled="true">{t(androidComingSoonText)}</span>}
+      </LocalNav>
+
       {page.chapters.map((c, i) => (
-        <section key={i} className={`fx-chapter ${i % 3 === 2 ? 'fx-wide' : i % 3 ? 'fx-alt' : ''}`} style={{ '--fx-accent': c.accent } as CSSProperties}>
+        <section key={i} id={`cap-${i}`} className={`fx-chapter ${i % 3 === 2 ? 'fx-wide' : i % 3 ? 'fx-alt' : ''}`} style={{ '--fx-accent': c.accent } as CSSProperties}>
           <div className="fx-chapter-inner">
             <div className="fx-copy fx-reveal">
-              <p className="fx-eyebrow">{t(c.eyebrow)}</p>
               <h2 className="fx-title">{lines(t(c.title))}</h2>
               <p className="fx-desc">{t(c.desc)}</p>
               {c.points && (
                 <ul className="fx-points">{c.points.map((pt, j) => <li key={j}>{t(pt)}</li>)}</ul>
               )}
             </div>
-            <div className={`fx-shots fx-reveal ${['', '', 'fx-pair', 'fx-trio'][c.shots.length]}`}>
-              {c.shots.map(s => <Phone key={s.name} name={s.name} fallback={s.fallback} alt={t(c.eyebrow)} />)}
+            <div className={`fx-shots mo-${c.motion} ${['', '', 'fx-pair', 'fx-trio'][c.shots.length]}`}>
+              {c.shots.map(s => <Phone key={s.name} name={s.name} fallback={s.fallback} then={s.then} alt={t(c.eyebrow)} />)}
             </div>
           </div>
         </section>
@@ -357,7 +460,7 @@ export function FeaturesPage() {
         <h2 className="fx-title fx-center fx-reveal">{t(page.tilesTitle)}</h2>
         <div className="fx-tiles">
           {page.tiles.map((tile, i) => (
-            <div key={i} className={`fx-tile fx-reveal ${tile.shot && (shot(tile.shot.name) || tile.shot.fallback) ? 'fx-tile-big' : ''}`}>
+            <div key={i} className={`fx-tile ${tile.shot && (shot(tile.shot.name) || tile.shot.fallback) ? 'fx-tile-big' : ''}`}>
               {tile.shot && (shot(tile.shot.name) || tile.shot.fallback) && (
                 <div className="fx-tile-shot"><Phone name={tile.shot.name} fallback={tile.shot.fallback} alt={t(tile.title)} /></div>
               )}
@@ -369,22 +472,20 @@ export function FeaturesPage() {
         </div>
       </section>
 
-      {app === 'balancelife' && (
-        <section className="ins-teaser fx-reveal">
+      <section className="ins-teaser" style={{ '--fx-accent': app === 'balancelife' ? '#0a84ff' : '#30d158' } as CSSProperties}>
           <Link to="/insieme" className="ins-teaser-card">
             <div className="ins-icons" aria-hidden>
-              <img src={AirportShiftIcon} alt="" className="fx-icon" />
+              <AppIcon app="airportshift" className="fx-icon" />
               <span className="material-symbols-outlined">add</span>
-              <img src={BalanceLifeIcon} alt="" className="fx-icon" />
+              <AppIcon app="balancelife" className="fx-icon" />
             </div>
             <div>
-              <h2 className="fx-title">{t({ it: 'Lavori con Aviation Service?', en: 'Working with Aviation Service?' })}</h2>
-              <p className="fx-desc">{t({ it: 'Con AirportShift i tuoi turni entrano in Balance Life, e la giornata è completa.', en: 'With AirportShift your shifts come into Balance Life, and your day is complete.' })}</p>
-              <span className="ld-door-more">{t({ it: 'Scopri come', en: 'See how' })}<span className="material-symbols-outlined" aria-hidden>arrow_forward</span></span>
+              <h2 className="fx-title">{t(page.together.title)}</h2>
+              <p className="fx-desc">{t(page.together.desc)}</p>
+              <span className="fx-more">{t({ it: 'Scopri come', en: 'See how' })}<span className="material-symbols-outlined" aria-hidden>arrow_forward</span></span>
             </div>
           </Link>
-        </section>
-      )}
+      </section>
 
       <section className="fx-privacy fx-reveal">
         <span className="material-symbols-outlined fx-lock" aria-hidden>lock</span>
@@ -393,7 +494,7 @@ export function FeaturesPage() {
       </section>
 
       <section className="fx-end">
-        <img src={page.icon} alt="" className="fx-icon" />
+        <AppIcon app={app!} className="fx-icon" />
         <h2 className="fx-title">{t(page.end?.title ?? { it: 'Pronto a provarla?', en: 'Ready to try it?' })}</h2>
         {page.end?.sub && <p className="fx-desc">{t(page.end.sub)}</p>}
         <div className="fx-cta">{cta}</div>

@@ -132,18 +132,17 @@ const SHOWCASE: AppShowcase[] = [
 - `status: 'live'` abilita i bottoni (se 'soon' rimane disabilitato)
 - Adatta `tagline` e `features` alle specifiche di Balance Life
 
-### Step 3: Aggiungi l'icona di Balance Life
+### Step 3: Aggiungi le icone dell'app
 
-**File:** `src/site/AppsPage.tsx` (top delle imports)
+Le icone stanno in un posto solo: `src/site/AppIcon.tsx`. Ogni app ne ha due, una per il tema
+scuro del sito e una per quello chiaro:
 
-L'icona è già importata (riga 5):
-```typescript
-import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
-```
+- `src/AmmAppIcon/BalanceLife.png` (scura)
+- `src/AmmAppIcon/BalanceLife-light.png` (chiara)
 
-Assicurati che il file PNG esista:
-- Percorso: `src/AmmAppIcon/BalanceLife.png`
-- Se non c'è, aggiungi il file PNG lì
+Per un'app nuova: copia i due PNG in `src/AmmAppIcon/`, importali in cima a `AppIcon.tsx` e
+aggiungi una riga all'oggetto `ICONS` con la stessa key usata in `apps.ts`. Tutte le pagine
+(card, Scopri di più, QR, Insieme) le prendono da lì.
 
 ### Step 4: Aggiungi Privacy e Support
 
@@ -163,32 +162,6 @@ supportData: Record<string, string> = {
 }
 ```
 
-### Step 5: Aggiungi icone ai router
-
-**File:** `src/site/OpenPage.tsx` (riga 6-9)
-
-```typescript
-const appIcons: Record<string, string> = {
-  airportshift: AirportShiftIcon,
-  balancelife: BalanceLifeIcon,  // Aggiungi questa linea
-}
-```
-
-**File:** `src/site/FeaturesPage.tsx` (riga 4)
-
-Aggiungi l'import:
-```typescript
-import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
-```
-
-E aggiungi all'oggetto `appIcons`:
-```typescript
-const appIcons: Record<string, string> = {
-  airportshift: AirportShiftIcon,
-  balancelife: BalanceLifeIcon,  // Aggiungi questa linea
-}
-```
-
 ---
 
 ## Checklist finale
@@ -197,9 +170,9 @@ const appIcons: Record<string, string> = {
 - [ ] Parte 2: Entry `balancelife` aggiunta in `apps.ts` con i veri ID store
 - [ ] Parte 2: Card Balance Life aggiunta in `SHOWCASE` di `AppsPage.tsx`
 - [ ] Parte 2: Privacy e support text aggiunti in `content.ts`
-- [ ] Parte 2: Icone aggiunte in `OpenPage.tsx` e `FeaturesPage.tsx`
+- [ ] Parte 2: Icone aggiunte in `ICONS` di `AppIcon.tsx`
 - [ ] Parte 2: Contenuti della pagina "Scopri di più" compilati — vedi [MODIFICA_PAGINA_BALANCE_LIFE.md](./MODIFICA_PAGINA_BALANCE_LIFE.md)
-- [ ] File PNG `BalanceLife.png` in `src/AmmAppIcon/`
+- [ ] File PNG `BalanceLife.png` e `BalanceLife-light.png` in `src/AmmAppIcon/`
 - [ ] Build e test: `npm run build` non ha errori
 - [ ] Commit e push su `main`
 

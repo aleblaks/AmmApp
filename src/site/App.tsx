@@ -12,11 +12,15 @@ const InsiemePage = lazy(() => import('./InsiemePage').then(m => ({ default: m.I
 const PrivacyPage = lazy(() => import('./PrivacyPage').then(m => ({ default: m.PrivacyPage })))
 const SupportPage = lazy(() => import('./SupportPage').then(m => ({ default: m.SupportPage })))
 import { SEO, NOINDEX } from './seo'
+import { routeCommitted } from './TLink'
 import './styles.css'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
-  useEffect(() => { window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior }) }, [pathname])
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior })
+    routeCommitted()
+  }, [pathname])
   return null
 }
 
@@ -47,6 +51,11 @@ function ClientOnly({ children }: { children: ReactNode }) {
 
 
 export default function App() {
+  // Le pagine più visitate si scaricano a riposo, così la transizione di pagina le trova pronte.
+  useEffect(() => {
+    const id = setTimeout(() => { void import('./FeaturesPage'); void import('./AppsPage') }, 1500)
+    return () => clearTimeout(id)
+  }, [])
   return (
     <LangProvider>
       <ClientOnly>

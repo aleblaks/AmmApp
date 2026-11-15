@@ -1,9 +1,8 @@
 import type { CSSProperties } from 'react'
-import { useT, type Bi } from './lang'
+import { lines, useT, type Bi } from './lang'
 import { apps, iosStoreUrl } from './apps'
 import { Phone } from './Phone'
-import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
-import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
+import { AppIcon } from './AppIcon'
 
 // Pagina "Balance Life + AirportShift": perché conviene usarle insieme.
 // Solo in questa direzione: AirportShift è per chi lavora con Aviation Service, non per tutti gli utenti di Balance Life.
@@ -48,19 +47,17 @@ const PASSI: { app: 'airportshift' | 'balancelife'; text: Bi }[] = [
   { app: 'balancelife', text: { it: 'Quando arriva un foglio nuovo, ripeti l’import: si aggiorna solo ciò che è cambiato.', en: 'When a new roster comes out, import again: only what changed is updated.' } },
 ]
 
-const ICON = { airportshift: AirportShiftIcon, balancelife: BalanceLifeIcon }
-
 export function InsiemePage() {
   const t = useT()
   return (
     <main className="fx">
       <section className="ins-hero" style={{ '--fx-accent': '#30d158' } as CSSProperties}>
         <div className="ins-icons" aria-hidden>
-          <img src={AirportShiftIcon} alt="" className="fx-icon" />
+          <AppIcon app="airportshift" className="fx-icon" />
           <span className="material-symbols-outlined">add</span>
-          <img src={BalanceLifeIcon} alt="" className="fx-icon" />
+          <AppIcon app="balancelife" className="fx-icon" />
         </div>
-        <h1 className="fx-headline">{t({ it: 'Il lavoro è parte\ndella giornata.', en: 'Work is part\nof your day.' }).split('\n').map((l, i) => <span key={i}>{l}<br /></span>)}</h1>
+        <h1 className="fx-headline">{lines(t({ it: 'Il lavoro è parte\ndella giornata.', en: 'Work is part\nof your day.' }))}</h1>
         <p className="fx-lead">
           {t({
             it: 'Se lavori con Aviation Service e usi AirportShift, Balance Life può ricevere i tuoi turni. Lavoro, allenamenti, letture e riposo, finalmente sulla stessa pagina.',
@@ -69,8 +66,8 @@ export function InsiemePage() {
         </p>
       </section>
 
-      <section className="ins-show fx-reveal">
-        <div className="fx-pair">
+      <section className="ins-show">
+        <div className="fx-shots fx-pair">
           <Phone name="as-hero" alt="AirportShift" />
           <Phone name="bl-turni" alt="Balance Life" />
         </div>
@@ -78,7 +75,7 @@ export function InsiemePage() {
 
       <section className="ins-perche">
         {PERCHE.map((p, i) => (
-          <div key={i} className="ins-card fx-reveal">
+          <div key={i} className="ins-card">
             <span className="material-symbols-outlined fx-tile-icon" aria-hidden>{p.icon}</span>
             <h3>{t(p.title)}</h3>
             <p>{t(p.desc)}</p>
@@ -88,7 +85,7 @@ export function InsiemePage() {
 
       <section className="fx-privacy fx-reveal">
         <span className="material-symbols-outlined fx-lock" aria-hidden>lock</span>
-        <h2 className="fx-title">{t({ it: 'I tuoi turni\nnon escono dal telefono.', en: 'Your shifts\nnever leave your phone.' }).split('\n').map((l, i) => <span key={i}>{l}<br /></span>)}</h2>
+        <h2 className="fx-title">{lines(t({ it: 'I tuoi turni\nnon escono dal telefono.', en: 'Your shifts\nnever leave your phone.' }))}</h2>
         <p className="fx-desc">
           {t({
             it: 'Le due app se li passano dentro il tuo iPhone. Niente account, niente cloud, niente internet: nessuno, nemmeno noi, sa dove e quando lavori.',
@@ -107,8 +104,8 @@ export function InsiemePage() {
         <h2 className="fx-title fx-center fx-reveal">{t({ it: 'Si attiva in un minuto.', en: 'Set up in a minute.' })}</h2>
         <ol>
           {PASSI.map((s, i) => (
-            <li key={i} className="fx-reveal">
-              <img src={ICON[s.app]} alt="" />
+            <li key={i}>
+              <AppIcon app={s.app} />
               <p>{t(s.text)}</p>
             </li>
           ))}
@@ -120,7 +117,7 @@ export function InsiemePage() {
         <div className="fx-cta">
           {(['airportshift', 'balancelife'] as const).map(k => (
             <a key={k} href={iosStoreUrl(apps[k].store.iosAppId)} target="_blank" rel="noopener noreferrer" className="btn btn-lg ins-get">
-              <img src={ICON[k]} alt="" />
+              <AppIcon app={k} />
               {apps[k].appName}
             </a>
           ))}

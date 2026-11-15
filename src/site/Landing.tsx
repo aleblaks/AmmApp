@@ -1,9 +1,8 @@
 import type { CSSProperties } from 'react'
-import { Link } from 'react-router-dom'
+import { TLink } from './TLink'
 import { useT, type Bi } from './lang'
 import { Phone } from './Phone'
-import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
-import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
+import { AppIcon } from './AppIcon'
 import MockupCalendario from '../AmmAppMockups/screen-calendario.png'
 import BlHome from '../AmmAppMockups/balancelife/home.png'
 import BlTrends from '../AmmAppMockups/balancelife/trends.png'
@@ -12,7 +11,6 @@ import MockupRiepilogo from '../AmmAppMockups/screen-riepilogo.png'
 interface Door {
   slug: string
   name: string
-  icon: string
   accent: string
   title: Bi
   desc: Bi
@@ -23,7 +21,6 @@ const DOORS: Door[] = [
   {
     slug: 'airportshift',
     name: 'AirportShift',
-    icon: AirportShiftIcon,
     accent: '#0a84ff',
     title: { it: 'I turni di Aviation Service, letti in un secondo.', en: 'Aviation Service shifts, read in a second.' },
     desc: {
@@ -35,7 +32,6 @@ const DOORS: Door[] = [
   {
     slug: 'balancelife',
     name: 'Balance Life',
-    icon: BalanceLifeIcon,
     accent: '#30d158',
     title: { it: 'La tua giornata, finalmente in equilibrio.', en: 'Your day, finally in balance.' },
     desc: {
@@ -44,6 +40,12 @@ const DOORS: Door[] = [
     },
     shots: [{ name: 'bl-hero', fallback: BlHome }, { name: 'bl-trends', fallback: BlTrends }],
   },
+]
+
+const ZERO: Bi[] = [
+  { it: 'Zero account.', en: 'Zero accounts.' },
+  { it: 'Zero server.', en: 'Zero servers.' },
+  { it: 'Zero tracciamento.', en: 'Zero tracking.' },
 ]
 
 export function Landing() {
@@ -63,11 +65,10 @@ export function Landing() {
             })}
           </p>
           <div className="ld-cta">
-            <Link to="/apps" className="btn btn-primary btn-lg">{t({ it: 'Scopri le app', en: 'See the apps' })}</Link>
+            <TLink to="/apps" className="btn btn-primary btn-lg">{t({ it: 'Scopri le app', en: 'See the apps' })}</TLink>
           </div>
         </div>
         <div className="ld-stage" aria-hidden>
-          <div className="ld-glow" />
           <div className="ld-phone ld-phone-a"><Phone name="as-hero" fallback={MockupCalendario} alt="" /></div>
           <div className="ld-phone ld-phone-b"><Phone name="bl-hero" fallback={BlHome} alt="" /></div>
         </div>
@@ -75,27 +76,27 @@ export function Landing() {
 
       {DOORS.map((d, i) => (
         <section key={d.slug} className={`ld-door ${i % 2 ? 'ld-door-alt' : ''}`} style={{ '--fx-accent': d.accent } as CSSProperties}>
-          <Link to={`/${d.slug}/features`} className="ld-door-card fx-reveal">
+          <TLink to={`/${d.slug}/features`} className="ld-door-card">
             <div className="ld-door-copy">
-              <img src={d.icon} alt="" className="ld-door-icon" />
+              <AppIcon app={d.slug} className="ld-door-icon" style={{ viewTransitionName: `icon-${d.slug}` }} />
               <p className="ld-door-name">{d.name}</p>
               <h2 className="fx-title">{t(d.title)}</h2>
               <p className="fx-desc">{t(d.desc)}</p>
-              <span className="ld-door-more">
+              <span className="fx-more">
                 {t({ it: 'Scopri di più', en: 'Learn more' })}
                 <span className="material-symbols-outlined" aria-hidden>arrow_forward</span>
               </span>
             </div>
             <div className="ld-door-shots">
-              {d.shots.map(s => <Phone key={s.name} name={s.name} fallback={s.fallback} alt={d.name} />)}
+              {d.shots.map((s, j) => <Phone key={s.name} name={s.name} fallback={s.fallback} alt={d.name} vt={j ? undefined : `phone-${d.slug}`} />)}
             </div>
-          </Link>
+          </TLink>
         </section>
       ))}
 
       <section className="ld-manifesto fx-reveal">
         <p className="ld-big">
-          {t({ it: 'Zero account. Zero server. Zero tracciamento.', en: 'Zero accounts. Zero servers. Zero tracking.' })}
+          {ZERO.map((z, i) => <span key={i}>{t(z)}</span>)}
         </p>
         <p className="fx-desc">
           {t({

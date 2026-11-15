@@ -13,11 +13,11 @@ export interface Seo {
 export const SEO: Record<string, Seo> = {
   '': {
     title: 'AmmApp | App semplici, private, fatte con cura',
-    description: 'AmmApp è un piccolo laboratorio indipendente che costruisce app per iPhone leggere, senza account né server. I tuoi dati restano sul telefono.',
+    description: 'AmmApp è un piccolo laboratorio indipendente che costruisce app per iPhone e Android leggere, senza account né server. I tuoi dati restano sul telefono.',
   },
   apps: {
     title: 'Le nostre app | AmmApp',
-    description: 'AirportShift e Balance Life: app per iPhone senza account né server, che funzionano offline.',
+    description: 'AirportShift e Balance Life: app per iPhone e Android senza account né server, che funzionano offline.',
   },
   'airportshift/features': {
     title: 'AirportShift | I turni di Aviation Service, a colpo d’occhio',

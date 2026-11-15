@@ -1,10 +1,9 @@
 import type { CSSProperties } from 'react'
-import { Link } from 'react-router-dom'
+import { TLink as Link } from './TLink'
 import { Phone } from './Phone'
 import { useT, type Bi } from './lang'
 import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS } from './apps'
-import AirportShiftIcon from '../AmmAppIcon/AirportShift.png'
-import BalanceLifeIcon from '../AmmAppIcon/BalanceLife.png'
+import { AppIcon } from './AppIcon'
 
 function AppleIcon() {
   return (
@@ -23,7 +22,6 @@ type Status = 'live' | 'soon'
 interface AppShowcase {
   slug: string
   name: string
-  icon: string
   status: Status
   accent: string
   shot: string
@@ -35,7 +33,6 @@ const SHOWCASE: AppShowcase[] = [
   {
     slug: 'airportshift',
     name: 'AirportShift',
-    icon: AirportShiftIcon,
     status: 'live',
     accent: '#0a84ff',
     shot: 'as-hero',
@@ -45,15 +42,15 @@ const SHOWCASE: AppShowcase[] = [
     },
     features: [
       { it: 'Importa i turni dal PDF', en: 'Import shifts from PDF' },
+      { it: 'Ore, straordinari e fasce orarie già contati', en: 'Hours, overtime and time bands already counted' },
       { it: 'Condividi con un collega via QR', en: 'Share with a colleague via QR' },
-      { it: 'Aggiungi al calendario del telefono', en: 'Add to your phone calendar' },
+      { it: 'Widget, Live Activity, Apple Watch e Wear OS', en: 'Widgets, Live Activity, Apple Watch and Wear OS' },
       { it: 'Nessun account, nessun tracciamento', en: 'No account, no tracking' },
     ],
   },
   {
     slug: 'balancelife',
     name: 'Balance Life',
-    icon: BalanceLifeIcon,
     status: 'live',
     accent: '#30d158',
     shot: 'bl-hero',
@@ -62,9 +59,10 @@ const SHOWCASE: AppShowcase[] = [
       en: 'Track what you do, plan what matters, and reach your goals, one activity at a time.',
     },
     features: [
-      { it: 'Timer live per ogni attività', en: 'Live timer for every activity' },
+      { it: 'Cronometro dal vivo per ogni attività', en: 'Live timer for every activity' },
+      { it: 'Libri, serie TV e allenamenti con i loro dettagli', en: 'Books, TV shows and workouts with their details' },
       { it: 'Obiettivi e orari settimanali', en: 'Weekly goals and schedules' },
-      { it: 'Trends e statistiche', en: 'Trends and statistics' },
+      { it: 'Trends per settimana, mese e anno', en: 'Trends by week, month and year' },
       { it: '100% offline, nessun account', en: '100% offline, no account' },
     ],
   },
@@ -79,8 +77,8 @@ export function Apps() {
         <h1>{t({ it: 'Le nostre app', en: 'Our apps' })}</h1>
         <p className="apps-page-sub">
           {t({
-            it: 'Tutte le app AmmApp, in un unico posto.',
-            en: 'All AmmApp apps, in one place.',
+            it: 'Due app, per iPhone e Android. Nessun account, nessun server.',
+            en: 'Two apps, for iPhone and Android. No account, no server.',
           })}
         </p>
       </section>
@@ -108,7 +106,7 @@ export function Apps() {
               </div>
             )}
             <div className="app-card-head">
-              <img src={app.icon} alt={app.name} className="app-icon-img" />
+              <AppIcon app={app.slug} alt={app.name} className="app-icon-img" style={{ viewTransitionName: `icon-${app.slug}` }} />
               <div style={{ flex: 1 }}>
                 <h3>{app.name}</h3>
                 <span className={`badge ${app.status === 'live' ? 'badge-live' : 'badge-soon'}`}>
@@ -172,7 +170,7 @@ export function Apps() {
               )}
             </div>
             <div className="app-card-shot" aria-hidden>
-              <Phone name={app.shot} alt="" />
+              <Phone name={app.shot} alt="" vt={`phone-${app.slug}`} />
             </div>
           </article>
         ))}
