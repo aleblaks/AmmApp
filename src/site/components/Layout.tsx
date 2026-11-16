@@ -1,6 +1,12 @@
 import { useState, type ReactNode } from 'react'
 import { useLang, useT } from '../lang'
 import { TLink } from '../TLink'
+import { SEO } from '../seo'
+
+// Le informative sulla privacy pubblicate: una per ogni voce «<app>/privacy» di seo.ts (titolo «Privacy | Nome»).
+const PRIVACY = Object.entries(SEO)
+  .filter(([path]) => path.endsWith('/privacy'))
+  .map(([path, seo]) => ({ to: `/${path}`, name: seo.title.split(' | ')[1] }))
 import { ThemeSwitch } from './ThemeSwitch'
 import AmmAppIcon from "../../AmmAppIcon/AmmAppIcone.png"
 
@@ -62,9 +68,14 @@ export function Layout({ children }: { children: ReactNode }) {
             <p>{t({ it: 'App per iPhone e Android che funzionano senza account e senza server.', en: 'Apps for iPhone and Android that work with no account and no server.' })}</p>
           </div>
           <nav className="ft-links" aria-label={t({ it: 'Pagine', en: 'Pages' })}>
+            <span className="ft-head">{t({ it: 'Le app', en: 'The apps' })}</span>
             <TLink to="/airportshift/features">AirportShift</TLink>
             <TLink to="/balancelife/features">Balance Life</TLink>
             <TLink to="/insieme">{t({ it: 'Usarle insieme', en: 'Using them together' })}</TLink>
+          </nav>
+          <nav className="ft-links" aria-label="Privacy">
+            <span className="ft-head">Privacy</span>
+            {PRIVACY.map(l => <TLink key={l.to} to={l.to}>{l.name}</TLink>)}
           </nav>
           <div className="ft-side">
             <Contact />

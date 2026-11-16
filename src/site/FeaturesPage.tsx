@@ -48,7 +48,8 @@ interface Chapter {
   accent: string
 }
 
-interface Tile { icon: string; title: Bi; desc: Bi; shot?: { name: string; fallback?: string } }
+// also: altri screenshot accanto al primo (le schermate dell'orologio stanno in coppia).
+interface Tile { icon: string; title: Bi; desc: Bi; shot?: { name: string; fallback?: string; also?: string[] } }
 
 interface AppPage {
   badge?: Bi
@@ -313,7 +314,7 @@ const PAGES: Record<string, AppPage> = {
     tiles: [
       { icon: 'local_parking', shot: { name: 'bl-parcheggio', fallback: BlParcheggio }, title: { it: 'Parcheggio', en: 'Parking' }, desc: { it: 'Salva dove hai lasciato l’auto e ritrovala sulla mappa.', en: 'Save where you left the car and find it on the map.' } },
       { icon: 'search', shot: { name: 'bl-cerca' }, title: { it: 'Cerca', en: 'Search' }, desc: { it: 'Una tab tutta sua: attività, libri, eventi, impostazioni. E prima ancora di scrivere, quello da riprendere.', en: 'A tab of its own: activities, books, events, settings. And before you type, what to pick up.' } },
-      { icon: 'watch', shot: { name: 'bl-watch' }, title: { it: 'Al polso', en: 'On your wrist' }, desc: { it: 'Avvia, metti in pausa e chiudi una sessione dall’Apple Watch, e guarda la giornata sul quadrante.', en: 'Start, pause and stop a session from Apple Watch, and see your day on the watch face.' } },
+      { icon: 'watch', shot: { name: 'bl-watch', also: ['bl-watch-oggi'] }, title: { it: 'Al polso', en: 'On your wrist' }, desc: { it: 'Avvia, metti in pausa e chiudi una sessione dall’Apple Watch, e guarda la giornata sul quadrante.', en: 'Start, pause and stop a session from Apple Watch, and see your day on the watch face.' } },
       { icon: 'widgets', title: { it: 'La tua giornata', en: 'Your day' }, desc: { it: 'Un widget in tre misure: la giornata su un quadrante di 24 ore con i promemoria di oggi, la timeline, l’agenda da spuntare.', en: 'One widget, three sizes: your day on a 24-hour dial with today’s reminders, the timeline, the agenda to tick off.' } },
       { icon: 'event', title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Gli eventi del calendario del telefono diventano previsioni della giornata, e le sessioni ci tornano dentro.', en: 'Your phone’s calendar events become plans for the day, and sessions go back into it.' } },
       { icon: 'table_view', shot: { name: 'bl-export-nuovo' }, title: { it: 'Export leggibile', en: 'Readable export' }, desc: { it: 'Tutto in un solo file che si apre in Numbers o Excel, e si reimporta senza doppioni.', en: 'Everything in a single file that opens in Numbers or Excel, re-importable without duplicates.' } },
@@ -462,7 +463,10 @@ export function FeaturesPage() {
           {page.tiles.map((tile, i) => (
             <div key={i} className={`fx-tile ${tile.shot && (shot(tile.shot.name) || tile.shot.fallback) ? 'fx-tile-big' : ''}`}>
               {tile.shot && (shot(tile.shot.name) || tile.shot.fallback) && (
-                <div className="fx-tile-shot"><Phone name={tile.shot.name} fallback={tile.shot.fallback} alt={t(tile.title)} /></div>
+                <div className="fx-tile-shot">
+                  <Phone name={tile.shot.name} fallback={tile.shot.fallback} alt={t(tile.title)} />
+                  {tile.shot.also?.map(n => <Phone key={n} name={n} alt="" />)}
+                </div>
               )}
               <span className="material-symbols-outlined fx-tile-icon" aria-hidden>{tile.icon}</span>
               <h3>{t(tile.title)}</h3>

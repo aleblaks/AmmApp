@@ -153,18 +153,20 @@ a:focus-visible, button:focus-visible {
 }
 .site-footer-inner {
   max-width: 1120px; margin: 0 auto;
-  display: grid; grid-template-columns: 1.4fr 1fr auto; gap: 32px; align-items: start;
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr auto; gap: 32px; align-items: start;
 }
 .ft-brand p { margin: 12px 0 0; max-width: 34ch; }
 .ft-links { display: grid; gap: 4px; justify-items: start; }
 .ft-links a { color: var(--muted); padding: 5px 0; }
+.ft-head { color: var(--fg-strong); font-weight: 700; padding-bottom: 6px; }
 .site-footer a:hover { color: var(--fg-strong); }
 .ft-side { display: grid; gap: 16px; justify-items: start; }
 .ft-contact { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; scroll-margin-bottom: 40px; }
 .ft-contact a { color: var(--fg-strong); font-weight: 600; }
 .ft-contact .btn { padding: 7px 14px; font-size: 0.84rem; }
 .ft-legal { max-width: 1120px; margin: 32px auto 0; color: var(--muted-2); font-size: 0.84rem; }
-@media (max-width: 700px) { .site-footer-inner { grid-template-columns: 1fr; gap: 24px; } }
+@media (max-width: 860px) { .site-footer-inner { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .site-footer-inner { grid-template-columns: 1fr; gap: 24px; } }
 
 /* ---------- Tipografia ---------- */
 
@@ -397,7 +399,7 @@ a:hover .fx-more .material-symbols-outlined { translate: 6px 0; }
 @media (max-width: 760px) {
   .fx-local { position: fixed; top: auto; left: 0; right: 0; bottom: calc(10px + env(safe-area-inset-bottom)); }
   .fx-local-id span { display: none; }
-  .fx { padding-bottom: 72px; }
+  .shell:has(.fx-local) .site-footer { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
   [id^="cap-"] { scroll-margin-top: 16px; }
 }
 
@@ -457,6 +459,8 @@ a:hover .fx-more .material-symbols-outlined { translate: 6px 0; }
 }
 .fx-tile-shot { width: 46%; order: 3; margin: 24px auto -30%; transition: translate 0.7s var(--ease); }
 .fx-tile:hover .fx-tile-shot { translate: 0 -12px; }
+/* Orologi: in coppia e interi, non tagliati dal fondo della card. */
+.fx-tile-shot:has(.fx-watch) { width: 84%; display: grid; grid-template-columns: 1fr 1fr; gap: 4%; margin: 20px auto -4%; }
 .fx-tile-big h3 { font-size: 1.6rem; }
 
 .fx-privacy {
