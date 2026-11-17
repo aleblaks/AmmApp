@@ -364,13 +364,12 @@ a:hover .fx-more .material-symbols-outlined { translate: 6px 0; }
 .fx-headline .w { display: inline-block; white-space: nowrap; }
 .fx-headline .ch { display: inline-block; }
 .fx-lead { margin: 26px 0 34px; max-width: 38ch; font-size: clamp(1.1rem, 2vw, 1.3rem); color: var(--muted); line-height: 1.45; }
-.fx-hero-shot { justify-self: center; }
-.fx-hero-shot img {
-  position: relative; display: block; height: min(640px, 75vh); max-width: 86vw; width: auto; object-fit: contain;
-  filter: drop-shadow(0 30px 40px rgb(0 0 0 / .22));
-}
+/* Larga quanto serve perché il telefono (1350×2760) stia in 640 px o nel 75% dello schermo in altezza. */
+.fx-hero-shot { justify-self: center; width: min(313px, 36.7vh, 66vw); }
+/* L'orologio si appoggia in basso a destra del telefono. */
+.fx-hero-shot > .fx-watch { position: absolute; right: -30%; bottom: 2%; width: 50%; z-index: 1; }
 .fx-hero-shot::before { inset: 8% -22%; filter: blur(64px); }
-.fx-hero-shot img, .ld-door-shots .fx-phone, .app-card-shot .fx-phone { view-transition-class: phone; }
+.fx-hero-shot > .fx-phone:first-child, .ld-door-shots .fx-phone, .app-card-shot .fx-phone { view-transition-class: phone; }
 
 /* Barra dell'app: dopo l'apertura resta in vista con i capitoli e il pulsante per scaricare.
    Su schermo largo sta in alto; su telefono in basso, dove sta la tab bar delle app. */
@@ -753,7 +752,7 @@ a:hover .fx-more .material-symbols-outlined { translate: 6px 0; }
     /* Scorrendo via dall'apertura: i telefoni della home si aprono, quello dell'app si allontana. */
     .ld-phone-a { animation: openA linear both; animation-timeline: scroll(root); animation-range: 0 80vh; }
     .ld-phone-b { animation: openB linear both; animation-timeline: scroll(root); animation-range: 0 80vh; }
-    .fx-hero-shot img { animation: away linear both; animation-timeline: scroll(root); animation-range: 0 90vh; }
+    .fx-hero-shot > .fx-phone { animation: away linear both; animation-timeline: scroll(root); animation-range: 0 90vh; }
 
     @media (max-width: 760px) {
       .fx-local { animation: local-in linear both; animation-timeline: scroll(root); animation-range: 45vh 75vh; }

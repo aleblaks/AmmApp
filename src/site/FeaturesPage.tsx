@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
-import { Phone, shot, useDark } from './Phone'
+import { Phone, shot } from './Phone'
 import { useParams } from 'react-router-dom'
 import { TLink as Link } from './TLink'
 import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS, storeUrlFor } from './apps'
@@ -58,7 +58,9 @@ interface AppPage {
   heroFx: 'flap' | 'tilt'
   // Invito alla pagina /insieme.
   together: { title: Bi; desc: Bi }
-  hero: { name: string; fallback?: string }
+  // Telefono d'apertura: uno screenshot nella cornice (lo stesso file dei capitoli, così non invecchia a parte);
+  // watch = un orologio appoggiato accanto.
+  hero: { name: string; fallback?: string; watch?: string }
   headline: Bi
   tagline: Bi
   chapters: Chapter[]
@@ -77,7 +79,7 @@ const PAGES: Record<string, AppPage> = {
       title: { it: 'Usi anche Balance Life?', en: 'Using Balance Life too?' },
       desc: { it: 'Attiva la condivisione e i tuoi turni entrano nella giornata di Balance Life, senza uscire dal telefono.', en: 'Turn on sharing and your shifts show up in your Balance Life day, without leaving your phone.' },
     },
-    hero: { name: 'as-hero-framed', fallback: MockupCalendario },
+    hero: { name: 'as-hero', fallback: MockupCalendario, watch: 'as-watch' },
     headline: { it: 'Il tuo turno.\nA colpo d’occhio.', en: 'Your shift.\nAt a glance.' },
     tagline: {
       it: 'Carica il PDF dei turni di Aviation Service e AirportShift fa il resto: codici tradotti in orari, un calendario che si legge in un secondo, ore e straordinari già contati.',
@@ -163,7 +165,7 @@ const PAGES: Record<string, AppPage> = {
       },
       {
         motion: 'pop',
-        shots: [{ name: 'as-watch' }, { name: 'as-watch-quadrante' }, { name: 'as-watch-stack' }],
+        shots: [{ name: 'as-watch-ore' }, { name: 'as-watch-riepilogo' }, { name: 'as-watch-quadrante' }],
         eyebrow: { it: 'Apple Watch e Wear OS', en: 'Apple Watch and Wear OS' },
         title: { it: 'Il tuo turno.\nAl polso.', en: 'Your shift.\nOn your wrist.' },
         desc: {
@@ -215,7 +217,7 @@ const PAGES: Record<string, AppPage> = {
       title: { it: 'Lavori con Aviation Service?', en: 'Working with Aviation Service?' },
       desc: { it: 'Con AirportShift i tuoi turni entrano in Balance Life, e la giornata è completa.', en: 'With AirportShift your shifts come into Balance Life, and your day is complete.' },
     },
-    hero: { name: 'bl-hero-framed', fallback: BlHome },
+    hero: { name: 'bl-hero', fallback: BlHome },
     headline: { it: 'La tua giornata.\nIn equilibrio.', en: 'Your day.\nIn balance.' },
     tagline: {
       it: 'Lettura, palestra, lavoro, serie, studio: registra ciò che fai, pianifica ciò che conta e guarda il tempo prendere forma.',
@@ -250,7 +252,7 @@ const PAGES: Record<string, AppPage> = {
       },
       {
         motion: 'cross',
-        shots: [{ name: 'bl-libreria' }, { name: 'bl-lettura' }],
+        shots: [{ name: 'bl-libreria-nuovo' }, { name: 'bl-lettura' }],
         eyebrow: { it: 'Lettura', en: 'Reading' },
         title: { it: 'La tua libreria.\nPagina dopo pagina.', en: 'Your library.\nPage by page.' },
         desc: {
@@ -395,7 +397,6 @@ export function FeaturesPage() {
   const page = app ? PAGES[app] : undefined
   const t = useT()
   const os = detectOS()
-  const dark = useDark()
 
   if (!entry || !page) {
     return (
@@ -429,8 +430,8 @@ export function FeaturesPage() {
           <div className="fx-cta">{cta}</div>
         </div>
         <div className="fx-hero-shot">
-          {/* Immagine già nella cornice ufficiale Apple: niente cornice CSS */}
-          <img src={shot(page.hero.name, dark) ?? page.hero.fallback} alt={entry.appName} style={{ viewTransitionName: `phone-${app}` }} />
+          <Phone name={page.hero.name} fallback={page.hero.fallback} alt={entry.appName} vt={`phone-${app}`} />
+          {page.hero.watch && <Phone name={page.hero.watch} alt="" />}
         </div>
       </section>
 
