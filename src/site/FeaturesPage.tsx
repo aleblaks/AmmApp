@@ -5,6 +5,7 @@ import { TLink as Link } from './TLink'
 import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS, storeUrlFor } from './apps'
 import { lines, useT, type Bi } from './lang'
 import { AppIcon } from './AppIcon'
+import { ActivitiesSection, type Activities } from './Attivita'
 import MockupCalendario from '../AmmAppMockups/screen-calendario.png'
 import MockupRiepilogo from '../AmmAppMockups/screen-riepilogo.png'
 import MockupColori from '../AmmAppMockups/screen-colori.png'
@@ -64,6 +65,8 @@ interface AppPage {
   headline: Bi
   tagline: Bi
   chapters: Chapter[]
+  // Sezione «Nove attività» (Step 2 di ogni attività), fra i capitoli: vedi Attivita.tsx.
+  activities?: Activities
   tilesTitle: Bi
   tiles: Tile[]
   privacy: { title: Bi; desc: Bi }
@@ -198,6 +201,7 @@ const PAGES: Record<string, AppPage> = {
       { icon: 'pin', shot: { name: 'as-codici', fallback: MockupCodici }, title: { it: 'Schema codici', en: 'Code decoder' }, desc: { it: 'Scrivi 509 e scopri orario e durata. FNL, RIP, ADD e FR riconosciuti da soli.', en: 'Type 509 and see time and duration. FNL, RIP, ADD and FR recognized automatically.' } },
       { icon: 'bar_chart', shot: { name: 'as-anno' }, title: { it: 'L’anno intero', en: 'The whole year' }, desc: { it: 'Le ore lavorate mese per mese: tocca la card per giorni, straordinari e ferie, e passa da un anno all’altro.', en: 'Hours worked month by month: tap the card for days, overtime and vacation, and switch between years.' } },
       { icon: 'grid_view', shot: { name: 'as-mesi' }, title: { it: 'Tutti i mesi', en: 'All months' }, desc: { it: 'Salta a qualsiasi mese e guarda il resoconto dell’anno.', en: 'Jump to any month and see the yearly recap.' } },
+      { icon: 'devices_fold', title: { it: 'iPhone Duo', en: 'iPhone Duo' }, desc: { it: 'Aperto, il calendario sta accanto alle card del giorno e della settimana, e il Riepilogo mostra le due pagine affiancate.', en: 'Unfolded, the calendar sits next to the day and week cards, and the Summary shows both pages side by side.' } },
       { icon: 'upload_file', title: { it: 'Trascina il PDF', en: 'Drag in the PDF' }, desc: { it: 'Dai File, da Mail o da Safari: lascialo cadere sull’app e l’import parte da solo.', en: 'From Files, Mail or Safari: drop it on the app and the import starts by itself.' } },
       { icon: 'translate', title: { it: 'Quattro lingue', en: 'Four languages' }, desc: { it: 'Italiano, inglese, spagnolo e francese, per i colleghi che vengono da lontano.', en: 'Italian, English, Spanish and French, for colleagues from far away.' } },
     ],
@@ -245,20 +249,24 @@ const PAGES: Record<string, AppPage> = {
           en: 'The timer runs while you log sets, weights and reps. It stays on the Lock Screen, and pauses are counted for you.',
         },
         points: [
-          { it: 'In palestra il recupero parte da solo: conto alla rovescia e un suono quando tocca a te.', en: 'At the gym, rest starts by itself: a countdown and a sound when it’s your turn.' },
-          { it: 'Guardi una serie? Gli episodi si segnano da soli mentre il tempo passa.', en: 'Watching a show? Episodes tick themselves off as time goes by.' },
+          { it: 'Uno swipe sulla card mette in pausa o termina; in ogni tab la sessione in corso resta sopra la barra.', en: 'One swipe on the card pauses or stops it; on every tab, the running session stays above the bar.' },
+          { it: 'Avviata in ritardo? Dal menu ⋯ sposti l’ora d’inizio mentre il cronometro corre.', en: 'Started late? Move the start time from the ⋯ menu while the timer runs.' },
+          { it: 'Dalla schermata di blocco, con ✓ segni l’episodio o la puntata appena finiti.', en: 'From the Lock Screen, ✓ marks the episode you just finished.' },
         ],
         accent: '#ff453a',
       },
       {
         motion: 'cross',
         shots: [{ name: 'bl-libreria-nuovo' }, { name: 'bl-lettura' }],
-        eyebrow: { it: 'Lettura', en: 'Reading' },
+        eyebrow: { it: 'Libreria', en: 'Library' },
         title: { it: 'La tua libreria.\nPagina dopo pagina.', en: 'Your library.\nPage by page.' },
         desc: {
-          it: 'Dorsi colorati per genere e collana, ritmo di lettura, quanto manca alla fine e le tue citazioni preferite. E per le serie, l’episodio esatto da cui riprendere.',
-          en: 'Spines colored by genre and series, reading pace, how far to the end and your favorite quotes. And for TV shows, the exact episode to pick up from.',
+          it: 'Dorsi colorati per genere e collana, e per ogni libro la sua scheda: ore, ritmo, giorni di fila e una heatmap giorno per giorno. Tocca «Letto» e la tessera si gira sulla data in cui lo finisci.',
+          en: 'Spines colored by genre and collection, and a page for every book: hours, pace, days in a row and a day-by-day heatmap. Tap “Read” and the tile flips to the date you’ll finish it.',
         },
+        points: [
+          { it: 'Sospendi o interrompi una lettura: resta in libreria, al suo posto.', en: 'Pause or drop a book: it stays on the shelf, in its place.' },
+        ],
         accent: '#ff9f0a',
       },
       {
@@ -267,9 +275,13 @@ const PAGES: Record<string, AppPage> = {
         eyebrow: { it: 'Trends', en: 'Trends' },
         title: { it: 'Guarda dove va\nil tuo tempo.', en: 'See where\nyour time goes.' },
         desc: {
-          it: 'Un mosaico di tessere che si allargano al tocco: ore, sessioni, serie di giorni di fila e record, per settimana, mese o anno. Una chip per ogni attività, e una heatmap per le abitudini.',
-          en: 'A mosaic of tiles that open up when tapped: hours, sessions, streaks and records, by week, month or year. One chip per activity, and a heatmap for your habits.',
+          it: 'Un mosaico di tessere che si allargano al tocco: ore, sessioni, serie di giorni attivi e record, per settimana, mese o anno. Una chip per ogni attività, con il suo resoconto.',
+          en: 'A mosaic of tiles that open up when tapped: hours, sessions, streaks and records, by week, month or year. One chip per activity, each with its own report.',
         },
+        points: [
+          { it: 'Giorni e orari: una griglia di sette giorni per 24 ore dice quando fai ogni cosa.', en: 'Days and hours: a seven-day, 24-hour grid shows when you do each thing.' },
+          { it: 'Libri e serie finiti o interrotti, autori e generi più letti.', en: 'Books and shows finished or dropped, your most-read authors and genres.' },
+        ],
         accent: '#64d2ff',
       },
       {
@@ -283,6 +295,7 @@ const PAGES: Record<string, AppPage> = {
         },
         points: [
           { it: 'Se vuoi, l’attività programmata parte da sola all’ora giusta e si ferma alla fine.', en: 'If you like, a planned activity starts by itself at the right time and stops at the end.' },
+          { it: 'Nel calendario turni, eventi e sessioni future si vedono sempre, a righe oblique.', en: 'In the calendar, shifts, events and future sessions always show, in diagonal stripes.' },
         ],
         accent: '#5e5ce6',
       },
@@ -312,6 +325,140 @@ const PAGES: Record<string, AppPage> = {
         accent: '#8e8e93',
       },
     ],
+    activities: {
+      after: 0,
+      label: { it: 'Attività', en: 'Activities' },
+      prefix: 'bl',
+      title: { it: 'Nove attività.\nOgnuna a modo suo.', en: 'Nine activities.\nEach in its own way.' },
+      intro: {
+        it: 'Tocca il +, scegli l’attività e lo Step 2 cambia faccia: chiede solo quello che conta per lei. Il resto lo calcola l’app.',
+        en: 'Tap +, pick the activity and Step 2 changes to fit: it asks only what matters for that activity. The app works out the rest.',
+      },
+      items: [
+        {
+          key: 'reading', icon: 'menu_book', color: '#4a9bdd',
+          name: { it: 'Lettura', en: 'Reading' },
+          title: { it: 'Leggi, e sai già quando finisci.', en: 'Read, and know when you’ll finish.' },
+          desc: {
+            it: 'Pagine totali, da–a o solo quella dove sei arrivato: l’app fa i conti, misura il ritmo al netto delle pause e ti dice la data in cui chiudi il libro.',
+            en: 'Total pages, from–to or just where you stopped: the app does the math, measures your pace net of breaks and tells you the date you’ll close the book.',
+          },
+          points: [
+            { it: '«Lo finisci il»: con i cursori provi altri minuti al giorno o un altro ritmo, senza salvare niente.', en: '“You’ll finish on”: try other minutes a day or another pace with the sliders, without saving a thing.' },
+            { it: 'Riparti da capitolo e pagina dell’ultima sessione, con i libri iniziati in cima.', en: 'Pick up from the last session’s chapter and page, with books in progress on top.' },
+            { it: 'Prefazioni, introduzioni e postfazioni si spuntano e contano nel progresso.', en: 'Prefaces, introductions and afterwords get ticked off and count toward progress.' },
+            { it: 'Sulla card, il ritmo in pagine all’ora e la citazione che volevi ricordare.', en: 'On the card, your pace in pages per hour and the quote you wanted to keep.' },
+          ],
+        },
+        {
+          key: 'tv', icon: 'tv', color: '#efc66d',
+          name: { it: 'Serie TV', en: 'TV shows' },
+          title: { it: 'Sai sempre a che episodio sei.', en: 'Always know which episode you’re on.' },
+          desc: {
+            it: 'Tocca gli episodi e la durata si fa da sé, partendo da quello dopo l’ultimo visto. Anche a metà episodio, anche dopo tre settimane di pausa.',
+            en: 'Tap the episodes and the duration fills itself in, starting from the one after the last you watched. Even halfway through, even after three weeks off.',
+          },
+          points: [
+            { it: 'Ti sei addormentato a metà? Tieni premuto l’episodio e scegli «Mezzo»: la prossima volta riparti da lì.', en: 'Fell asleep halfway? Long-press the episode and pick “Half”: next time you resume from there.' },
+            { it: '«Visto» dalla schermata di blocco: con ✓ passi al successivo senza aprire l’app.', en: '“Watched” from the Lock Screen: ✓ moves to the next one without opening the app.' },
+            { it: 'Nella scheda della serie, quando sarai in pari al tuo ritmo. E la sospendi o la lasci senza perdere lo storico.', en: 'On the show’s page, when you’ll be caught up at your pace. Pause or drop it without losing your history.' },
+          ],
+        },
+        {
+          key: 'gym', icon: 'fitness_center', color: '#e34141',
+          name: { it: 'Palestra', en: 'Gym' },
+          title: { it: 'La scheda si ricorda i tuoi carichi.', en: 'Your log remembers the weights.' },
+          desc: {
+            it: 'Ripeti l’ultima seduta in un tocco o parti da una routine: sopra ogni esercizio c’è cosa hai fatto l’ultima volta. Tocca S1, S2… e la serie è fatta.',
+            en: 'Repeat your last workout in one tap or start from a routine: above every exercise is what you did last time. Tap S1, S2… and the set is done.',
+          },
+          points: [
+            { it: 'Il recupero parte da solo e si legge da lontano, con «Salta» e un suono quando tocca a te.', en: 'Rest starts by itself and reads from across the room, with “Skip” and a sound when it’s your turn.' },
+            { it: 'Plank e gli altri esercizi a tempo: preparazione, timer, squillo e recupero, tutto da sé.', en: 'Planks and other timed exercises: get ready, timer, chime and rest, all on their own.' },
+            { it: 'Gruppi muscolari dedotti dagli esercizi; a fine allenamento il volume e i record battuti.', en: 'Muscle groups worked out from the exercises; at the end, your volume and the records you broke.' },
+          ],
+        },
+        {
+          key: 'study', icon: 'school', color: '#5abc95',
+          name: { it: 'Studio', en: 'Study' },
+          title: { it: 'Ogni sera sai quante pagine ti aspettano.', en: 'Every evening you know how many pages are waiting.' },
+          desc: {
+            it: 'Dai le pagine e la data della verifica: i piani di studio dividono il lavoro sulle sere che restano, e in Home trovi il tuo pezzo.',
+            en: 'Give it the pages and the exam date: study plans split the work across the evenings left, and Home shows your share.',
+          },
+          points: [
+            { it: 'Giorni di ripasso: restano in agenda ma non fanno avanzare le pagine.', en: 'Review days: they stay on the agenda but don’t move the pages forward.' },
+            { it: 'Due materie la stessa sera? Prima la scadenza più vicina.', en: 'Two subjects the same evening? The nearest deadline comes first.' },
+            { it: 'Il pomodoro è già dentro il cronometro, e verifiche ed esami finiscono in Eventi.', en: 'The Pomodoro is built into the timer, and tests and exams land in Events.' },
+          ],
+        },
+        {
+          key: 'work', icon: 'work', color: '#a784f0',
+          name: { it: 'Lavoro', en: 'Work' },
+          title: { it: 'Otto ore in ufficio,\nsette di lavoro.', en: 'Eight hours at the office,\nseven of work.' },
+          desc: {
+            it: 'Scegli il tipo di lavoro e l’orario c’è già. La pausa pranzo parte e finisce da sola: la card dice le ore vere.',
+            en: 'Pick the type of work and the hours are already there. The lunch break starts and ends by itself: the card shows your real hours.',
+          },
+          points: [
+            { it: 'Turni pianificati in Home, con il luogo e «Apri in Mappe».', en: 'Planned shifts on Home, with the place and “Open in Maps”.' },
+            { it: 'Pranzi prima o dopo? Dal menu ⋯ avvii la pausa a mano.', en: 'Lunch earlier or later? Start the break by hand from the ⋯ menu.' },
+            { it: 'In Trends, giorni e orari in una griglia: si vede subito quando lavori.', en: 'In Trends, days and hours on a grid: you see at once when you work.' },
+          ],
+        },
+        {
+          key: 'podcast', icon: 'mic', color: '#7b5cac',
+          name: { it: 'Podcast', en: 'Podcasts' },
+          title: { it: 'Riparti dalla puntata dopo.', en: 'Pick up from the next episode.' },
+          desc: {
+            it: 'Dici quante puntate hai ascoltato e il numero di partenza lo sa già. Dici in che giorno escono, e il conto delle uscite cresce da solo ogni settimana.',
+            en: 'Say how many episodes you listened to and it already knows where to start. Say which day they come out, and the count grows by itself every week.',
+          },
+          points: [
+            { it: 'Dalla schermata di blocco, ✓ segna la puntata finita.', en: 'From the Lock Screen, ✓ marks the finished episode.' },
+            { it: 'Con la durata media della puntata, l’ora di fine si calcola da sé.', en: 'With the average episode length, the end time works itself out.' },
+          ],
+        },
+        {
+          key: 'movie', icon: 'movie', color: '#efa447',
+          name: { it: 'Film', en: 'Movies' },
+          title: { it: 'La lista dei film da vedere.', en: 'Your watchlist, built in.' },
+          desc: {
+            it: 'Visti, da vedere, conclusi: quando cerchi cosa guardare stasera, la risposta è già lì. Scegli il titolo e l’ora di fine si sposta da sola.',
+            en: 'Watched, to watch, done: when you’re wondering what to see tonight, the answer is already there. Pick the title and the end time moves by itself.',
+          },
+          points: [
+            { it: 'Saghe con il loro numero, o il regista se la saga non c’è.', en: 'Sagas with their number, or the director when there’s no saga.' },
+            { it: 'Sotto il titolo, quando l’hai visto l’ultima volta.', en: 'Under the title, when you last watched it.' },
+          ],
+        },
+        {
+          key: 'gaming', icon: 'sports_esports', color: '#4cc5b5',
+          name: { it: 'Gaming', en: 'Gaming' },
+          title: { it: 'Ogni gioco, la sua piattaforma.', en: 'Every game, its own platform.' },
+          desc: {
+            it: 'Il titolo si riprende dall’elenco dei giochi e la piattaforma finisce sulla card. Nel resoconto, le ore per gioco dicono quanto ti è piaciuto meglio di un voto.',
+            en: 'Pick the title from your games list and the platform goes on the card. In the report, hours per game say how much you liked it better than a rating.',
+          },
+          points: [
+            { it: 'Dal menu ⋯ sospendi o interrompi un gioco, o lo escludi dalle statistiche.', en: 'From the ⋯ menu, pause or drop a game, or leave it out of your stats.' },
+          ],
+        },
+        {
+          key: 'sport', icon: 'sports_soccer', color: '#93b83a',
+          name: { it: 'Sport', en: 'Sports' },
+          title: { it: 'Ogni sport misura cose sue.', en: 'Every sport counts its own things.' },
+          desc: {
+            it: 'Chilometri per la corsa, vasche per stile nel nuoto, goal, rigori e angoli per il calcio, punti, canestri, partite: scegli lo sport e compaiono i suoi campi.',
+            en: 'Kilometers for running, laps per stroke for swimming, goals, penalties and corners for football, points, baskets, matches: pick the sport and its fields appear.',
+          },
+          points: [
+            { it: 'I numeri si salvano con la sessione e compaiono sulla card.', en: 'The numbers are saved with the session and show up on the card.' },
+            { it: 'Anche una corsa al sabato tiene viva la serie di giorni attivi, da Piantina a Leggenda.', en: 'Even a Saturday run keeps your streak alive, from Sprout to Legend.' },
+          ],
+        },
+      ],
+    },
     tilesTitle: { it: 'Piccole cose. Fatte bene.', en: 'Small things. Done right.' },
     tiles: [
       { icon: 'local_parking', shot: { name: 'bl-parcheggio', fallback: BlParcheggio }, title: { it: 'Parcheggio', en: 'Parking' }, desc: { it: 'Salva dove hai lasciato l’auto e ritrovala sulla mappa.', en: 'Save where you left the car and find it on the map.' } },
@@ -320,9 +467,10 @@ const PAGES: Record<string, AppPage> = {
       { icon: 'widgets', title: { it: 'La tua giornata', en: 'Your day' }, desc: { it: 'Un widget in tre misure: la giornata su un quadrante di 24 ore con i promemoria di oggi, la timeline, l’agenda da spuntare.', en: 'One widget, three sizes: your day on a 24-hour dial with today’s reminders, the timeline, the agenda to tick off.' } },
       { icon: 'event', title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Gli eventi del calendario del telefono diventano previsioni della giornata, e le sessioni ci tornano dentro.', en: 'Your phone’s calendar events become plans for the day, and sessions go back into it.' } },
       { icon: 'table_view', shot: { name: 'bl-export-nuovo' }, title: { it: 'Export leggibile', en: 'Readable export' }, desc: { it: 'Tutto in un solo file che si apre in Numbers o Excel, e si reimporta senza doppioni.', en: 'Everything in a single file that opens in Numbers or Excel, re-importable without duplicates.' } },
-      { icon: 'live_tv', shot: { name: 'bl-serie' }, title: { it: 'Serie TV', en: 'TV shows' }, desc: { it: 'Stagioni, episodi visti e quello da cui riprendere, con un tasto per ripartire subito.', en: 'Seasons, watched episodes and where to pick up, with a button to jump right back in.' } },
       { icon: 'content_copy', shot: { name: 'bl-copia' }, title: { it: 'Copia e incolla', en: 'Copy and paste' }, desc: { it: 'Duplica un’attività o un’intera giornata, anche come testo da mandare in chat.', en: 'Duplicate an activity or a whole day, even as text to send in a chat.' } },
       { icon: 'science', title: { it: 'Prova con i dati d’esempio', en: 'Try it with sample data' }, desc: { it: 'Al primo avvio l’app si riempie di un mese verosimile: esplori tutto, poi riparti dai tuoi dati.', en: 'On first launch the app fills up with a believable month: explore everything, then start over with your own data.' } },
+      { icon: 'touch_app', title: { it: 'Come si usa', en: 'How it works' }, desc: { it: 'Una guida a schede con prove vere: tocca «Provalo» e l’app ti indica cosa toccare. La riapri da Impostazioni o da Cerca.', en: 'A card-by-card guide with real try-outs: tap “Try it” and the app points to what to tap. Reopen it from Settings or Search.' } },
+      { icon: 'devices_fold', title: { it: 'iPhone Duo', en: 'iPhone Duo' }, desc: { it: 'Aperto, l’app si dispone su due colonne: Home, Trends, Cerca, Eventi e Impostazioni, con il + che si adatta alla piega.', en: 'Unfolded, the app spreads over two columns: Home, Trends, Search, Events and Settings, with the + adapting to the fold.' } },
     ],
     privacy: {
       title: { it: '100% offline.\n100% tuo.', en: '100% offline.\n100% yours.' },
@@ -407,6 +555,10 @@ export function FeaturesPage() {
     )
   }
 
+  // Capitoli e, se c'è, la sezione delle attività al suo posto: la barra dell'app le elenca tutte.
+  const blocks: (Chapter | 'act')[] = [...page.chapters]
+  if (page.activities) blocks.splice(page.activities.after + 1, 0, 'act')
+
   const storeUrl = storeUrlFor(os === 'other' ? 'ios' : os, entry)
   const cta = storeUrl ? (
     <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-lg">
@@ -435,14 +587,16 @@ export function FeaturesPage() {
         </div>
       </section>
 
-      <LocalNav key={app} name={entry.appName} app={app!} labels={page.chapters.map(c => t(c.eyebrow))}>
+      <LocalNav key={app} name={entry.appName} app={app!} labels={blocks.map(b => t(b === 'act' ? page.activities!.label : b.eyebrow))}>
         {storeUrl
           ? <a href={storeUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">{t({ it: 'Scarica', en: 'Get' })}</a>
           : <span className="btn btn-disabled" aria-disabled="true">{t(androidComingSoonText)}</span>}
       </LocalNav>
 
-      {page.chapters.map((c, i) => (
-        <section key={i} id={`cap-${i}`} className={`fx-chapter ${i % 3 === 2 ? 'fx-wide' : i % 3 ? 'fx-alt' : ''}`} style={{ '--fx-accent': c.accent } as CSSProperties}>
+      {blocks.map((c, j) => c === 'act' ? <ActivitiesSection key="act" data={page.activities!} id={`cap-${j}`} /> : (() => {
+        const i = page.chapters.indexOf(c)
+        return (
+        <section key={i} id={`cap-${j}`} className={`fx-chapter ${i % 3 === 2 ? 'fx-wide' : i % 3 ? 'fx-alt' : ''}`} style={{ '--fx-accent': c.accent } as CSSProperties}>
           <div className="fx-chapter-inner">
             <div className="fx-copy fx-reveal">
               <h2 className="fx-title">{lines(t(c.title))}</h2>
@@ -456,7 +610,8 @@ export function FeaturesPage() {
             </div>
           </div>
         </section>
-      ))}
+        )
+      })())}
 
       <section className="fx-tiles-wrap">
         <h2 className="fx-title fx-center fx-reveal">{t(page.tilesTitle)}</h2>

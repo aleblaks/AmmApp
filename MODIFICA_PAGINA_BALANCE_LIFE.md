@@ -74,10 +74,27 @@ Questi non si toccano qui: leggono automaticamente da `src/site/apps.ts` (entry 
 
 ---
 
+## 6. La sezione «Nove attività» (lo Step 2 di ogni attività)
+
+Dal 2026-11-25, subito dopo il capitolo «Oggi», c'è una sezione con una chip per ogni attività: toccandola compaiono titolo, descrizione, punti e i componenti veri dello Step 2 di quell'attività.
+
+- **Testi:** in `FeaturesPage.tsx`, voce `balancelife`, campo `activities`. Ogni attività (`items`) ha `key`, `icon` (nome Material Symbols), `color` (il colore dell'attività nell'app), `name`, `title`, `desc` e `points`, tutti in italiano e inglese. Con `after` scegli dopo quale capitolo compare (0 = dopo il primo). La voce nella barra dell'app è `label`.
+- **Icone:** se usi un'icona nuova, aggiungi il suo nome a `icon_names` in `index.html` (in ordine alfabetico), altrimenti non si vede.
+- **Immagini:** stanno in `src/AmmAppMockups/step2/` e si chiamano `bl-<key>-1.png`, `bl-<key>-2.png`… (compaiono in quell'ordine; con 3 immagini la prima è la più grande). Sono ritagli, con lo sfondo trasparente, delle slide dei post social di Balance Life (`marketing/social/` nel repository dell'app). Se cambi i post, rigenerale con:
+
+  ```bash
+  node risorse/step2/ritagli.cjs ../balance-life/marketing/social/sorgenti/post src/AmmAppMockups/step2
+  ```
+
+  Quali slide usare per ogni attività si sceglie in cima a `risorse/step2/ritagli.cjs` (`JOBS`). Puoi anche mettere a mano un PNG qualsiasi con quel nome: la pagina lo prende da sola.
+
+---
+
 ## Checklist
 
 - [ ] Tagline in `CONTENT.balancelife.tagline` sostituita
 - [ ] Titolo, descrizione e colore di ogni sezione in `BALANCELIFE_FEATURES` sostituiti
 - [ ] Screenshot reali importati e collegati (proprietà `image`) per ogni sezione, oppure lasciati come placeholder se non ancora pronti
+- [ ] Sezione «Nove attività»: testi in `activities` e immagini in `src/AmmAppMockups/step2/`
 - [ ] `npm run build` senza errori
 - [ ] Commit e push su `main`

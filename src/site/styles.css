@@ -439,6 +439,54 @@ a:hover .fx-more .material-symbols-outlined { translate: 6px 0; }
 .fx-wide .fx-trio > :first-child { grid-row: auto; }
 .fx-wide .fx-shots:not(.fx-pair):not(.fx-trio) { width: min(360px, 80vw); }
 
+/* ---------- Scopri di più: le attività (Step 2), Attivita.tsx ---------- */
+/* --act è il colore dell'attività scelta: tinge chip, alone, etichetta e pallini. */
+
+.act {
+  position: relative; padding: clamp(80px, 12vw, 150px) 20px;
+  background: radial-gradient(55% 45% at 72% 62%, color-mix(in srgb, var(--act) 16%, transparent), transparent 75%);
+  transition: background-color 0.4s ease;
+}
+.act-head { max-width: 760px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; align-items: center; }
+.act-head .fx-desc { max-width: 52ch; }
+.act-chips { max-width: 700px; margin: 40px auto 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.act-chips button {
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px 10px 14px; border: 0; border-radius: 999px;
+  font: inherit; font-weight: 600; color: var(--fg); background: var(--surface); cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--line); transition: background-color 0.3s ease, box-shadow 0.3s ease, translate 0.4s var(--ease);
+}
+.act-chips button .material-symbols-outlined { font-size: 20px; color: var(--c); }
+.act-chips button:hover { translate: 0 -2px; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 60%, var(--line)); }
+.act-chips button.on { color: var(--fg-strong); background: color-mix(in srgb, var(--c) 22%, var(--surface)); box-shadow: inset 0 0 0 1.5px var(--c); }
+.act-chips button:focus-visible { outline: 2px solid var(--c); outline-offset: 3px; }
+
+.act-panel {
+  max-width: 1080px; margin: clamp(40px, 6vw, 72px) auto 0; display: grid; gap: clamp(32px, 5vw, 72px);
+  grid-template-columns: 0.85fr 1.15fr; align-items: center;
+}
+.act-name { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px; font-weight: 700; color: var(--act); }
+.act-name .material-symbols-outlined { font-size: 22px; }
+.act-copy h3 { margin: 0; font-family: var(--display); font-size: clamp(1.8rem, 3.2vw, 2.6rem); line-height: 1.06; letter-spacing: -0.03em; color: var(--fg-strong); white-space: pre-line; }
+.act-shots { display: grid; gap: 18px; align-items: start; }
+.act-shots img { width: 100%; height: auto; display: block; filter: drop-shadow(0 30px 40px color-mix(in srgb, var(--act) 22%, transparent)); }
+.act-n2 { grid-template-columns: 1fr 1fr; }
+.act-n2 img:last-child { margin-top: 16%; }
+.act-n3 { grid-template-columns: 1.1fr 1fr; }
+.act-n3 img:first-child { grid-row: span 2; align-self: center; }
+
+@media (max-width: 760px) {
+  .act-chips { max-width: none; flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; margin: 32px -20px 0; padding: 4px 20px; scrollbar-width: none; }
+  .act-chips::-webkit-scrollbar { display: none; }
+  .act-chips button { flex: none; }
+  .act-panel { grid-template-columns: 1fr; }
+  .act-shots { order: -1; }
+  .act-shots, .act-n2, .act-n3 {
+    display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; margin: 0 -20px; padding: 0 20px 8px; scrollbar-width: none;
+  }
+  .act-shots::-webkit-scrollbar { display: none; }
+  .act-shots img { flex: none; width: 78vw; max-width: 360px; scroll-snap-align: center; margin: 0 !important; }
+}
+
 /* ---------- Scopri di più: mosaico dei dettagli ---------- */
 
 .fx-tiles-wrap { max-width: 1080px; margin: 0 auto; padding: clamp(80px, 12vw, 160px) 20px; }
@@ -655,6 +703,7 @@ a:hover .fx-more .material-symbols-outlined { translate: 6px 0; }
    Tra una pagina e l'altra: icona e telefono volano al loro nuovo posto (View Transitions).
    ================================================================ */
 
+@keyframes act-in { from { opacity: 0; translate: 0 36px; scale: 0.96; } }
 @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
 @keyframes sweep { from { background-size: 0% 100%; color: var(--fg-strong); } }
 @keyframes flap { 0% { transform: perspective(500px) rotateX(-92deg); opacity: 0; } 55% { opacity: 1; } }
@@ -758,6 +807,13 @@ a:hover .fx-more .material-symbols-outlined { translate: 6px 0; }
       .fx-local { animation: local-in linear both; animation-timeline: scroll(root); animation-range: 45vh 75vh; }
     }
   }
+
+  /* Attività: cambiando chip il testo sale e i componenti arrivano uno dopo l'altro. */
+  .act-copy > * { animation: rise 0.6s var(--ease) both; }
+  .act-copy > :nth-child(2) { animation-delay: 50ms; }
+  .act-copy > :nth-child(3) { animation-delay: 100ms; }
+  .act-copy > :nth-child(4) { animation-delay: 150ms; }
+  .act-shots img { animation: act-in 0.8s var(--ease) both; animation-delay: calc(var(--i) * 90ms + 60ms); }
 
   /* Cambio pagina */
   ::view-transition-old(root) { animation: vt-out 0.22s ease-in both; }
