@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
-import { Phone, shot } from './Phone'
+import { Phone, shot, useDark } from './Phone'
 import { useParams } from 'react-router-dom'
 import { TLink as Link } from './TLink'
 import { apps, iosStoreUrl, androidStoreUrl, androidComingSoonText, detectOS, storeUrlFor } from './apps'
@@ -50,7 +50,13 @@ interface Chapter {
 }
 
 // also: altri screenshot accanto al primo (le schermate dell'orologio stanno in coppia).
-interface Tile { icon: string; title: Bi; desc: Bi; shot?: { name: string; fallback?: string; also?: string[] } }
+// art: un'illustrazione che non è uno screenshot (widget, guida, iPhone Duo…), da AmmAppMockups/tessere/<art>.png
+// con l'eventuale <art>-dark.png; la card diventa larga, testo a sinistra e immagine a destra.
+interface Tile { icon: string; title: Bi; desc: Bi; shot?: { name: string; fallback?: string; also?: string[] }; art?: string }
+
+const ARTS = import.meta.glob('../AmmAppMockups/tessere/*.png', { eager: true, import: 'default' }) as Record<string, string>
+const art = (name: string, dark: boolean) =>
+  (dark && ARTS[`../AmmAppMockups/tessere/${name}-dark.png`]) || ARTS[`../AmmAppMockups/tessere/${name}.png`]
 
 interface AppPage {
   badge?: Bi
@@ -201,7 +207,7 @@ const PAGES: Record<string, AppPage> = {
       { icon: 'pin', shot: { name: 'as-codici', fallback: MockupCodici }, title: { it: 'Schema codici', en: 'Code decoder' }, desc: { it: 'Scrivi 509 e scopri orario e durata. FNL, RIP, ADD e FR riconosciuti da soli.', en: 'Type 509 and see time and duration. FNL, RIP, ADD and FR recognized automatically.' } },
       { icon: 'bar_chart', shot: { name: 'as-anno' }, title: { it: 'L’anno intero', en: 'The whole year' }, desc: { it: 'Le ore lavorate mese per mese: tocca la card per giorni, straordinari e ferie, e passa da un anno all’altro.', en: 'Hours worked month by month: tap the card for days, overtime and vacation, and switch between years.' } },
       { icon: 'grid_view', shot: { name: 'as-mesi' }, title: { it: 'Tutti i mesi', en: 'All months' }, desc: { it: 'Salta a qualsiasi mese e guarda il resoconto dell’anno.', en: 'Jump to any month and see the yearly recap.' } },
-      { icon: 'devices_fold', title: { it: 'iPhone Duo', en: 'iPhone Duo' }, desc: { it: 'Aperto, il calendario sta accanto alle card del giorno e della settimana, e il Riepilogo mostra le due pagine affiancate.', en: 'Unfolded, the calendar sits next to the day and week cards, and the Summary shows both pages side by side.' } },
+      { icon: 'devices_fold', art: 'as-duo', title: { it: 'iPhone Duo', en: 'iPhone Duo' }, desc: { it: 'Aperto, il calendario sta accanto alle card del giorno e della settimana, e il Riepilogo mostra le due pagine affiancate.', en: 'Unfolded, the calendar sits next to the day and week cards, and the Summary shows both pages side by side.' } },
       { icon: 'upload_file', title: { it: 'Trascina il PDF', en: 'Drag in the PDF' }, desc: { it: 'Dai File, da Mail o da Safari: lascialo cadere sull’app e l’import parte da solo.', en: 'From Files, Mail or Safari: drop it on the app and the import starts by itself.' } },
       { icon: 'translate', title: { it: 'Quattro lingue', en: 'Four languages' }, desc: { it: 'Italiano, inglese, spagnolo e francese, per i colleghi che vengono da lontano.', en: 'Italian, English, Spanish and French, for colleagues from far away.' } },
     ],
@@ -464,13 +470,13 @@ const PAGES: Record<string, AppPage> = {
       { icon: 'local_parking', shot: { name: 'bl-parcheggio', fallback: BlParcheggio }, title: { it: 'Parcheggio', en: 'Parking' }, desc: { it: 'Salva dove hai lasciato l’auto e ritrovala sulla mappa.', en: 'Save where you left the car and find it on the map.' } },
       { icon: 'search', shot: { name: 'bl-cerca' }, title: { it: 'Cerca', en: 'Search' }, desc: { it: 'Una tab tutta sua: attività, libri, eventi, impostazioni. E prima ancora di scrivere, quello da riprendere.', en: 'A tab of its own: activities, books, events, settings. And before you type, what to pick up.' } },
       { icon: 'watch', shot: { name: 'bl-watch', also: ['bl-watch-oggi'] }, title: { it: 'Al polso', en: 'On your wrist' }, desc: { it: 'Avvia, metti in pausa e chiudi una sessione dall’Apple Watch, e guarda la giornata sul quadrante.', en: 'Start, pause and stop a session from Apple Watch, and see your day on the watch face.' } },
-      { icon: 'widgets', title: { it: 'La tua giornata', en: 'Your day' }, desc: { it: 'Un widget in tre misure: la giornata su un quadrante di 24 ore con i promemoria di oggi, la timeline, l’agenda da spuntare.', en: 'One widget, three sizes: your day on a 24-hour dial with today’s reminders, the timeline, the agenda to tick off.' } },
-      { icon: 'event', title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Gli eventi del calendario del telefono diventano previsioni della giornata, e le sessioni ci tornano dentro.', en: 'Your phone’s calendar events become plans for the day, and sessions go back into it.' } },
+      { icon: 'widgets', art: 'bl-giornata', title: { it: 'La tua giornata', en: 'Your day' }, desc: { it: 'Un widget in tre misure: la giornata su un quadrante di 24 ore con i promemoria di oggi, la timeline, l’agenda da spuntare.', en: 'One widget, three sizes: your day on a 24-hour dial with today’s reminders, the timeline, the agenda to tick off.' } },
+      { icon: 'event', shot: { name: 'bl-calendari' }, title: { it: 'Calendario di sistema', en: 'System calendar' }, desc: { it: 'Gli eventi del calendario del telefono diventano previsioni della giornata, e le sessioni ci tornano dentro.', en: 'Your phone’s calendar events become plans for the day, and sessions go back into it.' } },
       { icon: 'table_view', shot: { name: 'bl-export-nuovo' }, title: { it: 'Export leggibile', en: 'Readable export' }, desc: { it: 'Tutto in un solo file che si apre in Numbers o Excel, e si reimporta senza doppioni.', en: 'Everything in a single file that opens in Numbers or Excel, re-importable without duplicates.' } },
       { icon: 'content_copy', shot: { name: 'bl-copia' }, title: { it: 'Copia e incolla', en: 'Copy and paste' }, desc: { it: 'Duplica un’attività o un’intera giornata, anche come testo da mandare in chat.', en: 'Duplicate an activity or a whole day, even as text to send in a chat.' } },
-      { icon: 'science', title: { it: 'Prova con i dati d’esempio', en: 'Try it with sample data' }, desc: { it: 'Al primo avvio l’app si riempie di un mese verosimile: esplori tutto, poi riparti dai tuoi dati.', en: 'On first launch the app fills up with a believable month: explore everything, then start over with your own data.' } },
-      { icon: 'touch_app', title: { it: 'Come si usa', en: 'How it works' }, desc: { it: 'Una guida a schede con prove vere: tocca «Provalo» e l’app ti indica cosa toccare. La riapri da Impostazioni o da Cerca.', en: 'A card-by-card guide with real try-outs: tap “Try it” and the app points to what to tap. Reopen it from Settings or Search.' } },
-      { icon: 'devices_fold', title: { it: 'iPhone Duo', en: 'iPhone Duo' }, desc: { it: 'Aperto, l’app si dispone su due colonne: Home, Trends, Cerca, Eventi e Impostazioni, con il + che si adatta alla piega.', en: 'Unfolded, the app spreads over two columns: Home, Trends, Search, Events and Settings, with the + adapting to the fold.' } },
+      { icon: 'science', art: 'bl-demo', title: { it: 'Prova con i dati d’esempio', en: 'Try it with sample data' }, desc: { it: 'Al primo avvio l’app si riempie di un mese verosimile: esplori tutto, poi riparti dai tuoi dati.', en: 'On first launch the app fills up with a believable month: explore everything, then start over with your own data.' } },
+      { icon: 'touch_app', art: 'bl-guida', title: { it: 'Come si usa', en: 'How it works' }, desc: { it: 'Una guida a schede con prove vere: tocca «Provalo» e l’app ti indica cosa toccare. La riapri da Impostazioni o da Cerca.', en: 'A card-by-card guide with real try-outs: tap “Try it” and the app points to what to tap. Reopen it from Settings or Search.' } },
+      { icon: 'devices_fold', art: 'bl-duo', title: { it: 'iPhone Duo', en: 'iPhone Duo' }, desc: { it: 'Aperto, l’app si dispone su due colonne: Home, Trends, Cerca, Eventi e Impostazioni, con il + che si adatta alla piega.', en: 'Unfolded, the app spreads over two columns: Home, Trends, Search, Events and Settings, with the + adapting to the fold.' } },
     ],
     privacy: {
       title: { it: '100% offline.\n100% tuo.', en: '100% offline.\n100% yours.' },
@@ -544,6 +550,7 @@ export function FeaturesPage() {
   const entry = app ? apps[app] : undefined
   const page = app ? PAGES[app] : undefined
   const t = useT()
+  const dark = useDark()
   const os = detectOS()
 
   if (!entry || !page) {
@@ -616,8 +623,11 @@ export function FeaturesPage() {
       <section className="fx-tiles-wrap">
         <h2 className="fx-title fx-center fx-reveal">{t(page.tilesTitle)}</h2>
         <div className="fx-tiles">
-          {page.tiles.map((tile, i) => (
-            <div key={i} className={`fx-tile ${tile.shot && (shot(tile.shot.name) || tile.shot.fallback) ? 'fx-tile-big' : ''}`}>
+          {page.tiles.map((tile, i) => {
+            const pic = tile.art && art(tile.art, dark)
+            return (
+            <div key={i} className={`fx-tile ${tile.shot && (shot(tile.shot.name) || tile.shot.fallback) ? 'fx-tile-big' : pic ? 'fx-tile-wide' : ''}`}>
+              {pic && <img className="fx-tile-art" src={pic} alt="" loading="lazy" />}
               {tile.shot && (shot(tile.shot.name) || tile.shot.fallback) && (
                 <div className="fx-tile-shot">
                   <Phone name={tile.shot.name} fallback={tile.shot.fallback} alt={t(tile.title)} />
@@ -625,10 +635,13 @@ export function FeaturesPage() {
                 </div>
               )}
               <span className="material-symbols-outlined fx-tile-icon" aria-hidden>{tile.icon}</span>
-              <h3>{t(tile.title)}</h3>
-              <p>{t(tile.desc)}</p>
+              <div className="fx-tile-text">
+                <h3>{t(tile.title)}</h3>
+                <p>{t(tile.desc)}</p>
+              </div>
             </div>
-          ))}
+            )
+          })}
         </div>
       </section>
 

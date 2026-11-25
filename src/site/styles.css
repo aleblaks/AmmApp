@@ -509,6 +509,23 @@ a:hover .fx-more .material-symbols-outlined { translate: 6px 0; }
 /* Orologi: in coppia e interi, non tagliati dal fondo della card. */
 .fx-tile-shot:has(.fx-watch) { width: 84%; display: grid; grid-template-columns: 1fr 1fr; gap: 4%; margin: 20px auto -4%; }
 .fx-tile-big h3 { font-size: 1.6rem; }
+/* Card larga con un'illustrazione (campo art): testo a sinistra, immagine a destra; su schermi stretti l'immagine va sotto. */
+.fx-tile-wide {
+  grid-column: span 2; display: grid; grid-template-columns: 1fr 1.15fr; grid-template-rows: auto 1fr; column-gap: 20px; align-items: start;
+  background: radial-gradient(70% 90% at 85% 50%, var(--accent-soft), transparent 70%), var(--surface);
+}
+.fx-tile-wide .fx-tile-icon { grid-column: 1; grid-row: 1; }
+.fx-tile-wide .fx-tile-text { grid-column: 1; grid-row: 2; align-self: end; }
+.fx-tile-art {
+  grid-column: 2; grid-row: 1 / span 2; align-self: center; justify-self: center; width: 100%; max-height: 300px; object-fit: contain;
+  margin: -12px -12px -12px 0; transition: translate 0.7s var(--ease), rotate 0.7s var(--ease);
+}
+.fx-tile:hover .fx-tile-art { translate: 0 -6px; rotate: -1deg; }
+@media (max-width: 560px) {
+  .fx-tile-wide { grid-column: auto; grid-template-columns: 1fr; grid-template-rows: auto; }
+  .fx-tile-wide .fx-tile-art { grid-column: 1; grid-row: 3; margin: 20px 0 0; max-height: 280px; }
+  .fx-tile-wide .fx-tile-text { grid-row: 2; }
+}
 
 .fx-privacy {
   max-width: 820px; margin: 0 auto; padding: clamp(80px, 12vw, 160px) 20px; text-align: center;
