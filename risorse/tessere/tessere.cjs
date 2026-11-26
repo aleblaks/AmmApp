@@ -89,11 +89,18 @@ const GUIDA = `<div id="art"><div style="width:360px;background:#F7F4EF;border-r
 // Lo screenshot nel tema chiesto, se c'è la variante scura.
 const shot = (n, scuro) => { const d = path.join(shots, `${n}-dark.png`); return scuro && fs.existsSync(d) ? d : path.join(shots, `${n}.png`); };
 
-const corpoDuo = (src, scuro) => `<div id="art"><div style="position:relative;padding:16px;border-radius:46px;background:${scuro ? "#2a2a2c" : "#1c1c1e"};box-shadow:0 40px 70px -30px rgba(0,0,0,.55),inset 0 0 0 2px #3a3a3c">
-  <div style="position:relative;border-radius:32px;overflow:hidden;line-height:0">
-    <img src="${src}" style="width:820px;display:block">
-    <i style="position:absolute;left:50%;top:0;bottom:0;width:18px;margin-left:-9px;background:linear-gradient(90deg,transparent,rgba(0,0,0,.10) 45%,rgba(255,255,255,.08) 55%,transparent)"></i>
-  </div></div></div>`;
+// Cornici ufficiali Apple (Apple Design Resources › Product Bezels › iPhone Duo, «Inner Open Landscape»),
+// copiate dal DMG in risorse/cornici/: 3093×2247, vetro trasparente da (120,120) a (2972,2126), cioè 2853×2007.
+// Night Sky per il tema scuro, Star White per il chiaro.
+const CORNICE_DUO = (scuro) => path.resolve(__dirname, "../cornici", `iPhone Duo - ${scuro ? "Night Sky" : "Star White"} - Inner Open Landscape.png`);
+const DUO = { w: 3093, h: 2247, x: 120, y: 120, sw: 2853, sh: 2007 }; // la schermata va fatta in proporzione sw:sh (1,42:1)
+const corpoDuo = (src, scuro) => {
+  const k = 0.5; // disegno a metà misura (con deviceScaleFactor 2 resta a piena risoluzione)
+  return `<div id="art"><div style="position:relative;width:${DUO.w * k}px;height:${DUO.h * k}px;filter:drop-shadow(0 30px 40px rgba(0,0,0,.35))">
+    <img src="${src}" style="position:absolute;left:${DUO.x * k - 2}px;top:${DUO.y * k - 2}px;width:${DUO.sw * k + 4}px;height:${DUO.sh * k + 4}px">
+    <img src="${uri(CORNICE_DUO(scuro))}" style="position:absolute;inset:0;width:100%;height:100%">
+  </div></div>`;
+};
 
 // Balance Life, Home sul Duo (app/(tabs)/home/index.tsx, `colonne`): intestazione e nastro della giornata
 // su tutta la larghezza; a sinistra ciò che è previsto, a destra ciò che è accaduto. Disegnata col kit.
@@ -103,7 +110,7 @@ async function homeDuo(page, scuro) {
     ${["kit.css", "brand.css", "real.css", "temi.css"].map((f) => `<link rel="stylesheet" href="${kit(f)}">`).join("")}
     ${["icons.js", "kit.js", "screens.js", "real.js"].map((f) => `<script src="${kit(f)}"></script>`).join("")}
     <style>html,body{margin:0;background:transparent}
-      #scr{position:relative;width:820px;height:650px;overflow:hidden;background:var(--bg);color:var(--text)}
+      #scr{position:relative;width:820px;height:577px;overflow:hidden;background:var(--bg);color:var(--text)}
       #scr .tabbar{left:50%;right:auto;width:470px;margin-left:-235px}
       #scr .fab{right:28px;bottom:27px}
       #scr .col{position:absolute;top:196px;bottom:0}</style></head>
@@ -137,22 +144,23 @@ async function riepilogoDuo(page, scuro) {
     const carica = (s) => new Promise((ok) => { const i = new Image(); i.onload = () => ok(i); i.src = s; });
     window.fatto = (async () => {
       const [A, B] = await Promise.all([carica(${JSON.stringify(a)}), carica(${JSON.stringify(b)})]);
-      const W = 2412, H = 2340, c = document.getElementById("c"); c.width = W; c.height = H;
+      const W = 2412, H = 1697, c = document.getElementById("c"); c.width = W; c.height = H; // proporzione del vetro del Duo
       const g = c.getContext("2d");
       // sfondo: il colore dell'app, preso da un punto vuoto dello screenshot
       const t = document.createElement("canvas"); t.width = t.height = 1; t.getContext("2d").drawImage(A, 600, 1, 1, 1, 0, 0, 1, 1);
       const [r, gg, bb] = t.getContext("2d").getImageData(0, 0, 1, 1).data; g.fillStyle = "rgb(" + r + "," + gg + "," + bb + ")"; g.fillRect(0, 0, W, H);
-      const pezzo = (img, sx, sy, sw, sh, dx, dy) => g.drawImage(img, sx, sy, sw, sh, dx, dy, sw, sh);
-      pezzo(A, 0, 0, 420, 170, 0, 0);                 // ora
-      pezzo(A, 786, 0, 420, 170, W - 420, 0);          // segnale, wi-fi, batteria
-      pezzo(A, 0, 220, 700, 130, 0, 220);              // «Riepilogo»
-      pezzo(A, 40, 355, 160, 130, 40, 355);            // freccia ‹
-      pezzo(A, 380, 380, 446, 90, (W - 446) / 2, 380); // «Ottobre 2026»
-      pezzo(A, 1006, 355, 160, 130, W - 200, 355);     // freccia ›
-      pezzo(A, 300, 485, 606, 70, (W - 606) / 2, 485); // «mese in corso · …»
-      pezzo(A, 0, 560, 1206, 1460, 0, 570);            // pagina 1: il mosaico
-      pezzo(B, 0, 560, 1206, 1210, 1206, 570);         // pagina 2: le fasce orarie
-      pezzo(A, 150, 2365, 906, 225, (W - 906) / 2, H - 245); // una sola barra delle tab
+      const pezzo = (img, sx, sy, sw, sh, dx, dy, k = 1) => g.drawImage(img, sx, sy, sw, sh, dx, dy, sw * k, sh * k);
+      const cx = W / 2;
+      pezzo(A, 0, 0, 420, 170, 0, 0);                  // ora
+      pezzo(A, 786, 0, 420, 170, W - 420, 0);           // segnale, wi-fi, batteria
+      pezzo(A, 0, 220, 700, 130, 0, 175);               // «Riepilogo»
+      pezzo(A, 40, 355, 160, 130, cx - 470, 175);       // freccia ‹
+      pezzo(A, 380, 380, 446, 90, cx - 223, 195);       // «Ottobre 2026»
+      pezzo(A, 1006, 355, 160, 130, cx + 310, 175);     // freccia ›
+      const k = 0.92, m = (1206 - 1206 * k) / 2;        // le due pagine, un filo più piccole per stare nel vetro
+      pezzo(A, 0, 560, 1206, 1135, m, 330, k);          // pagina 1: il mosaico (fino a Diurne e Notturne)
+      pezzo(B, 0, 560, 1206, 1210, 1206 + m, 330, k);   // pagina 2: le fasce orarie
+      pezzo(A, 150, 2365, 906, 225, cx - 453, H - 235); // una sola barra delle tab
       return c.toDataURL("image/png");
     })();
   </script>`);
