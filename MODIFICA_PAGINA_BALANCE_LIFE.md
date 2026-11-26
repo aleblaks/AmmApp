@@ -92,7 +92,7 @@ Dal 2026-11-25, subito dopo il capitolo «Oggi», c'è una sezione con una chip 
 
 ## 7. Le card «Piccole cose. Fatte bene.»
 
-Ogni card ha una grafica: uno screenshot (`shot`, card grande col telefono) oppure un'illustrazione (`art`, card larga con l'immagine a destra). Le illustrazioni stanno in `src/AmmAppMockups/tessere/` (`<nome>.png` e, se serve, `<nome>-dark.png` per il tema scuro): widget «La tua giornata», settimana dei dati d'esempio, guida «Come si usa», iPhone Duo (anche quello di AirportShift). La schermata dei Calendari è invece `shots/bl-calendari.png`. Si rigenerano tutte con:
+Ogni card ha una grafica: uno screenshot (`shot`, card grande col telefono) oppure un'illustrazione (`art`, card larga con l'immagine a destra). Le illustrazioni stanno in `src/AmmAppMockups/tessere/` (`<nome>.png` e, se serve, `<nome>-dark.png` per il tema scuro): widget «La tua giornata», settimana dei dati d'esempio, guida «Come si usa», iPhone Duo (anche quello di AirportShift). Il Duo mostra una sola schermata larga, con una barra di stato, un'intestazione e una barra delle tab, e il contenuto su due colonne: mai due telefoni affiancati. La schermata dei Calendari è invece `shots/bl-calendari.png`. Si rigenerano tutte con:
 
 ```bash
 node risorse/tessere/tessere.cjs ../balance-life src/AmmAppMockups/tessere

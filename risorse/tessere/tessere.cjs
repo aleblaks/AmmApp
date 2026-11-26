@@ -81,13 +81,83 @@ const GUIDA = `<div id="art"><div style="width:360px;background:#F7F4EF;border-r
   <div style="display:flex;gap:10px;margin-top:16px"><span style="flex:1;height:44px;border-radius:22px;background:#F0EDE8;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:#B4501F">Provalo</span><span style="flex:1;height:44px;border-radius:22px;background:#E8713A;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:#fff">Avanti</span></div>
 </div></div>`;
 
-// iPhone Duo aperto a libro: due screenshot veri affiancati, con la piega in mezzo.
-const duo = (a, b, scuro) => `<div id="art"><div style="position:relative;display:flex;padding:14px;border-radius:44px;background:${scuro ? "#2a2a2c" : "#1c1c1e"};box-shadow:0 40px 70px -30px rgba(0,0,0,.55),inset 0 0 0 2px #3a3a3c">
-  <div style="display:flex;border-radius:32px;overflow:hidden;position:relative">
-    <img src="${uri(a)}" style="height:640px;display:block"><img src="${uri(b)}" style="height:640px;display:block">
-    <i style="position:absolute;left:50%;top:0;bottom:0;width:26px;margin-left:-13px;background:linear-gradient(90deg,transparent,rgba(0,0,0,.18) 45%,rgba(255,255,255,.10) 55%,transparent)"></i>
-  </div></div></div>`;
+// ── iPhone Duo ───────────────────────────────────────────────────────────────
+// Non due telefoni affiancati: UNA schermata larga, con una sola barra di stato, una sola
+// intestazione e una sola barra delle tab, e il contenuto su due colonne come lo dispone l'app.
+
+// Il corpo del Duo aperto attorno a un'immagine della schermata (data URI), con la piega in mezzo.
+// Lo screenshot nel tema chiesto, se c'è la variante scura.
 const shot = (n, scuro) => { const d = path.join(shots, `${n}-dark.png`); return scuro && fs.existsSync(d) ? d : path.join(shots, `${n}.png`); };
+
+const corpoDuo = (src, scuro) => `<div id="art"><div style="position:relative;padding:16px;border-radius:46px;background:${scuro ? "#2a2a2c" : "#1c1c1e"};box-shadow:0 40px 70px -30px rgba(0,0,0,.55),inset 0 0 0 2px #3a3a3c">
+  <div style="position:relative;border-radius:32px;overflow:hidden;line-height:0">
+    <img src="${src}" style="width:820px;display:block">
+    <i style="position:absolute;left:50%;top:0;bottom:0;width:18px;margin-left:-9px;background:linear-gradient(90deg,transparent,rgba(0,0,0,.10) 45%,rgba(255,255,255,.08) 55%,transparent)"></i>
+  </div></div></div>`;
+
+// Balance Life, Home sul Duo (app/(tabs)/home/index.tsx, `colonne`): intestazione e nastro della giornata
+// su tutta la larghezza; a sinistra ciò che è previsto, a destra ciò che è accaduto. Disegnata col kit.
+async function homeDuo(page, scuro) {
+  const kit = (f) => file(path.join(social, "kit", f));
+  const html = `<!doctype html><html><head><meta charset="utf-8">
+    ${["kit.css", "brand.css", "real.css", "temi.css"].map((f) => `<link rel="stylesheet" href="${kit(f)}">`).join("")}
+    ${["icons.js", "kit.js", "screens.js", "real.js"].map((f) => `<script src="${kit(f)}"></script>`).join("")}
+    <style>html,body{margin:0;background:transparent}
+      #scr{position:relative;width:820px;height:650px;overflow:hidden;background:var(--bg);color:var(--text)}
+      #scr .tabbar{left:50%;right:auto;width:470px;margin-left:-235px}
+      #scr .fab{right:28px;bottom:27px}
+      #scr .col{position:absolute;top:196px;bottom:0}</style></head>
+    <body><div id="scr" class="${scuro ? "t-dark" : ""}"></div><script>
+      window.ORA = "09:41";
+      const sinistra = pCard({ type: "reading", righe: [TIT.libro, "Cap. 4 → 5", "Pag. 214 → 240"], ora: "21:30", quando: "Tra 2 h", aperta: true })
+        + pCard({ type: "tv", righe: ["Stranger Things", "S1 · Ep. 5"], ora: "22:30", quando: "Tra 3 h" });
+      const destra = rSec("In corso") + aCard({ type: "gym", title: "Palestra", live: true, elapsed: "35:12" })
+        + rSec("La giornata") + CARDS.podcast() + CARDS.work();
+      document.getElementById("scr").innerHTML = statusBar("09:41") + homeNav("Oggi")
+        + '<div class="home-head"><div class="subrow"><span>3 attività</span><span>2 / 4 obiettivi</span></div>'
+        + timeline([...BARS_OGGI.slice(0, 3), { type: "gym", from: 18.5, to: 19.08 }, { type: "reading", from: 21.5, to: 22, pred: true }, { type: "tv", from: 22.5, to: 23.3, pred: true }], 19.08) + '</div>'
+        + '<div class="col" style="left:0;right:50%;padding-top:4px">' + rSec("In programma") + sinistra + '</div>'
+        + '<div class="col" style="left:50%;right:0">' + destra + '</div>'
+        + fab() + tabBar("home");
+    </script></body></html>`;
+  const tmp = path.join(require("os").tmpdir(), `home-duo-${process.pid}.html`);
+  fs.writeFileSync(tmp, html);
+  await page.goto(file(tmp));
+  await page.evaluate(() => document.fonts.ready);
+  const png = await page.locator("#scr").screenshot();
+  fs.unlinkSync(tmp);
+  return "data:image/png;base64," + png.toString("base64");
+}
+
+// AirportShift, Riepilogo sul Duo: le due pagine (mosaico e fasce orarie) affiancate sotto
+// un'intestazione sola. Ricomposto ritagliando gli screenshot veri (1206×2622).
+async function riepilogoDuo(page, scuro) {
+  const a = uri(shot("as-riepilogo", scuro)), b = uri(shot("as-fasce", scuro));
+  await page.setContent(`<canvas id="c"></canvas><script>
+    const carica = (s) => new Promise((ok) => { const i = new Image(); i.onload = () => ok(i); i.src = s; });
+    window.fatto = (async () => {
+      const [A, B] = await Promise.all([carica(${JSON.stringify(a)}), carica(${JSON.stringify(b)})]);
+      const W = 2412, H = 2340, c = document.getElementById("c"); c.width = W; c.height = H;
+      const g = c.getContext("2d");
+      // sfondo: il colore dell'app, preso da un punto vuoto dello screenshot
+      const t = document.createElement("canvas"); t.width = t.height = 1; t.getContext("2d").drawImage(A, 600, 1, 1, 1, 0, 0, 1, 1);
+      const [r, gg, bb] = t.getContext("2d").getImageData(0, 0, 1, 1).data; g.fillStyle = "rgb(" + r + "," + gg + "," + bb + ")"; g.fillRect(0, 0, W, H);
+      const pezzo = (img, sx, sy, sw, sh, dx, dy) => g.drawImage(img, sx, sy, sw, sh, dx, dy, sw, sh);
+      pezzo(A, 0, 0, 420, 170, 0, 0);                 // ora
+      pezzo(A, 786, 0, 420, 170, W - 420, 0);          // segnale, wi-fi, batteria
+      pezzo(A, 0, 220, 700, 130, 0, 220);              // «Riepilogo»
+      pezzo(A, 40, 355, 160, 130, 40, 355);            // freccia ‹
+      pezzo(A, 380, 380, 446, 90, (W - 446) / 2, 380); // «Ottobre 2026»
+      pezzo(A, 1006, 355, 160, 130, W - 200, 355);     // freccia ›
+      pezzo(A, 300, 485, 606, 70, (W - 606) / 2, 485); // «mese in corso · …»
+      pezzo(A, 0, 560, 1206, 1460, 0, 570);            // pagina 1: il mosaico
+      pezzo(B, 0, 560, 1206, 1210, 1206, 570);         // pagina 2: le fasce orarie
+      pezzo(A, 150, 2365, 906, 225, (W - 906) / 2, H - 245); // una sola barra delle tab
+      return c.toDataURL("image/png");
+    })();
+  </script>`);
+  return page.evaluate(() => window.fatto);
+}
 
 (async () => {
   const browser = await chromium.launch({ args: ["--allow-file-access-from-files"] });
@@ -98,10 +168,11 @@ const shot = (n, scuro) => { const d = path.join(shots, `${n}-dark.png`); return
   await schermata(reel, "v10-calendario", 18.5, "bl-calendari"); // Impostazioni › Calendari
   const art = await browser.newPage({ viewport: { width: 1600, height: 1200 }, deviceScaleFactor: 2 });
   await disegno(art, GUIDA, "bl-guida");
+  const schermo = await browser.newPage({ viewport: { width: 1600, height: 1200 }, deviceScaleFactor: 2 });
   for (const scuro of [false, true]) {
     const s = scuro ? "-dark" : "";
-    await disegno(art, duo(shot("bl-hero", scuro), shot("bl-trends", scuro), scuro), "bl-duo" + s);
-    await disegno(art, duo(shot("as-riepilogo", scuro), shot("as-fasce", scuro), scuro), "as-duo" + s);
+    await disegno(art, corpoDuo(await homeDuo(schermo, scuro), scuro), "bl-duo" + s);
+    await disegno(art, corpoDuo(await riepilogoDuo(schermo, scuro), scuro), "as-duo" + s);
   }
   await browser.close();
   console.log("immagini →", out);
