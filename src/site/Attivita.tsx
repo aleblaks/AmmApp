@@ -1,4 +1,4 @@
-import { useRef, useState, type CSSProperties, type KeyboardEvent } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from 'react'
 import { lines, useT, type Bi } from './lang'
 
 // Ritagli dei componenti dello Step 2 (PNG con lo sfondo trasparente) in AmmAppMockups/step2/,
@@ -34,6 +34,22 @@ export function ActivitiesSection({ data, id }: { data: Activities; id: string }
   const t = useT()
   const [on, setOn] = useState(0)
   const row = useRef<HTMLDivElement>(null)
+  const sezione = useRef<HTMLElement>(null)
+
+  // Le immagini di tutte le attività si scaricano (e si decodificano) quando la sezione si avvicina allo
+  // schermo, non al tocco della chip: così cambiando attività compaiono subito, senza un vuoto.
+  useEffect(() => {
+    const el = sezione.current
+    if (!el) return
+    const tutte = data.items.flatMap(it => pezzi(`${data.prefix}-${it.key}`))
+    const io = new IntersectionObserver(([e]) => {
+      if (!e.isIntersecting) return
+      io.disconnect()
+      for (const src of tutte) { const img = new Image(); img.src = src; img.decode().catch(() => {}) }
+    }, { rootMargin: '800px 0px' })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [data])
   const a = data.items[on]
   const imgs = pezzi(`${data.prefix}-${a.key}`)
 
@@ -47,7 +63,7 @@ export function ActivitiesSection({ data, id }: { data: Activities; id: string }
   }
 
   return (
-    <section id={id} className="act" style={{ '--act': a.color, '--fx-accent': a.color } as CSSProperties}>
+    <section ref={sezione} id={id} className="act" style={{ '--act': a.color, '--fx-accent': a.color } as CSSProperties}>
       <div className="act-head fx-reveal">
         <h2 className="fx-title">{lines(t(data.title))}</h2>
         <p className="fx-desc">{t(data.intro)}</p>
@@ -70,7 +86,7 @@ export function ActivitiesSection({ data, id }: { data: Activities; id: string }
           <ul className="fx-points">{a.points.map((p, j) => <li key={j}>{t(p)}</li>)}</ul>
         </div>
         <div className={`act-shots act-n${imgs.length}`}>
-          {imgs.map((src, j) => <img key={src} src={src} alt="" loading="lazy" style={{ '--i': j } as CSSProperties} />)}
+          {imgs.map((src, j) => <img key={src} src={src} alt="" decoding="sync" style={{ '--i': j } as CSSProperties} />)}
         </div>
       </div>
     </section>

@@ -720,7 +720,7 @@ a:hover .fx-more .material-symbols-outlined { translate: 6px 0; }
    Tra una pagina e l'altra: icona e telefono volano al loro nuovo posto (View Transitions).
    ================================================================ */
 
-@keyframes act-in { from { opacity: 0; translate: 0 36px; scale: 0.96; } }
+@keyframes act-in { from { opacity: 0; translate: 0 18px; scale: 0.98; } }
 @keyframes rise { from { opacity: 0; transform: translateY(18px); } }
 @keyframes sweep { from { background-size: 0% 100%; color: var(--fg-strong); } }
 @keyframes flap { 0% { transform: perspective(500px) rotateX(-92deg); opacity: 0; } 55% { opacity: 1; } }
@@ -826,11 +826,11 @@ a:hover .fx-more .material-symbols-outlined { translate: 6px 0; }
   }
 
   /* Attività: cambiando chip il testo sale e i componenti arrivano uno dopo l'altro. */
-  .act-copy > * { animation: rise 0.6s var(--ease) both; }
-  .act-copy > :nth-child(2) { animation-delay: 50ms; }
-  .act-copy > :nth-child(3) { animation-delay: 100ms; }
-  .act-copy > :nth-child(4) { animation-delay: 150ms; }
-  .act-shots img { animation: act-in 0.8s var(--ease) both; animation-delay: calc(var(--i) * 90ms + 60ms); }
+  .act-copy > * { animation: rise 0.4s var(--ease) both; }
+  .act-copy > :nth-child(2) { animation-delay: 30ms; }
+  .act-copy > :nth-child(3) { animation-delay: 60ms; }
+  .act-copy > :nth-child(4) { animation-delay: 90ms; }
+  .act-shots img { animation: act-in 0.45s var(--ease) both; animation-delay: calc(var(--i) * 50ms); }
 
   /* Cambio pagina */
   ::view-transition-old(root) { animation: vt-out 0.22s ease-in both; }
